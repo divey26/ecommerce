@@ -1,55 +1,24 @@
 import React, { useState, useEffect } from "react";
 import {
   ShoppingCartOutlined,
-  HomeOutlined,
-  CalendarOutlined,
-  AppstoreAddOutlined,
-  CheckCircleOutlined,
-  ApartmentOutlined,
-  StockOutlined,
-  SyncOutlined,
+  EnvironmentOutlined,
   SearchOutlined,
-  EnvironmentOutlined
-  
 } from "@ant-design/icons";
-import { Layout, Menu, theme, Button, Input, Badge } from "antd";
+import { Layout, Button, Badge, Select } from "antd";
 import { FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
 import imageSrc from "./Images/logo.png";
+import { TextField } from "@mui/material"; // MUI TextField for the search bar
+import Flag from "react-world-flags"; // Import Flag component
 
-const { Search } = Input;
 const { Header, Content, Footer } = Layout;
-
-const adminUserItems = [
-  { key: "dashboard", icon: <HomeOutlined />, label: "Home" },
-  { key: "Category", icon: <HomeOutlined />, label: "Category" },
-  { key: "Complaint", icon: <HomeOutlined />, label: "Complaint" },
-  { key: "FeedBack", icon: <HomeOutlined />, label: "FeedBack" },
-  { key: "My Profile", icon: <HomeOutlined />, label: "My Profile" },
-  {
-    key: "AboutUs",
-    icon: <CalendarOutlined />,
-    label: "About Us",
-    children: [
-      { key: "Branches", icon: <AppstoreAddOutlined />, label: "Our Branches" },
-      { key: "About", icon: <CheckCircleOutlined />, label: "Who we are" },
-    ],
-  },
-  {
-    key: "ContactUs",
-    icon: <ApartmentOutlined />,
-    label: "Contact Us",
-    children: [
-      { key: "Customer", icon: <StockOutlined />, label: "As a customer" },
-      { key: "Employee", icon: <SyncOutlined />, label: "As an Employee" },
-    ],
-  },
-];
+const { Option } = Select;
 
 const App = ({ children, userType }) => {
   const navigate = useNavigate();
   const [isBackTopVisible, setIsBackTopVisible] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [language, setLanguage] = useState("en"); // Default language is English
 
   const handleHeaderClick = (key) => {
     if (key === "1") {
@@ -77,35 +46,8 @@ const App = ({ children, userType }) => {
     };
   }, []);
 
-  const handleMenuClick = (item) => {
-    switch (item.key) {
-      case "dashboard":
-        navigate("/dashboard");
-        break;
-      case "Category":
-        navigate("/");
-        break;
-      case "ContactUs":
-        navigate("/contact");
-        break;
-      case "Customer":
-        navigate("/customerc");
-        break;
-      case "Employee":
-        navigate("/employeec");
-        break;
-      case "About":
-        navigate("/about");
-        break;
-      case "Feedback":
-        navigate("/feed");
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleSearch = (value) => {
+  const handleSearch = (event) => {
+    const value = event.target.value;
     setSearchLoading(true);
     setTimeout(() => {
       console.log("Search:", value);
@@ -113,107 +55,184 @@ const App = ({ children, userType }) => {
     }, 1000); // Simulate search loading for 1 second
   };
 
-  const {
-    token: { borderRadiusLG },
-  } = theme.useToken();
+  const handleSearchButtonClick = () => {
+    console.log("Search Button Clicked");
+    // Handle search button action, e.g., trigger the same search functionality
+  };
 
   const handleNavigateToCart = () => {
     navigate("/cart");
   };
 
+  const handleLanguageChange = (value) => {
+    setLanguage(value);
+    console.log("Selected Language:", value); // You can also implement language change functionality here
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Layout>
-      <Header
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100px",
-          backgroundColor: "#2E5077",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          zIndex: 1,
-          paddingLeft: "20px",
-          paddingRight: "20px",
-        }}
-      >
-        {/* Logo and HALO text on the left */}
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <img
-            src={imageSrc}
-            alt="Logo"
-            style={{ marginLeft: "40px", width: "50px", height: "50px" }}
-          />
-          <span
+        <Header
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100px",
+            backgroundColor: "#2E5077",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            zIndex: 1,
+            paddingLeft: "20px",
+            paddingRight: "20px",
+          }}
+        >
+          {/* Logo and HALO text on the left */}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src={imageSrc}
+              alt="Logo"
+              style={{ marginLeft: "10px", width: "50px", height: "50px" }}
+            />
+            <span
+              style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                marginLeft: "15px",
+                color: "#F3C623",
+              }}
+            >
+              HALO
+            </span>
+          </div>
+
+          {/* Delivery text */}
+          <div
             style={{
-              fontSize: "24px",
-              fontWeight: "bold",
-              marginLeft: "15px",
-              color: "#F3C623",
+              display: "flex",
+              alignItems: "center",
+              color: "white",
+              fontSize: "15px",
+              marginLeft: "150px", // Reduced margin to move it closer to the search bar
             }}
           >
-            HALO
-          </span>
-        </div>
+            <EnvironmentOutlined
+              style={{ color: "yellow", fontSize: "30px", marginRight: "20px" }}
+            />
+            Delivery to
+            <span
+              style={{
+                fontWeight: "bold",
+                fontSize: "15px",
+                marginLeft: "10px",
+              }}
+            >
+              SRILANKA
+            </span>
+          </div>
 
-        {/* Delivery text */}
-        <div style={{ display: "flex", alignItems: "center", color: "white", fontSize: "20px", marginLeft: "250px" }}>
-          <EnvironmentOutlined
-            style={{ color: "yellow", fontSize: "30px", marginRight: "10px" }}
-          />
-          delivery to
-          <span style={{ fontWeight: "bold", fontSize: "24px", marginLeft: "5px" }}> SRILANKA</span>
-        </div>
-
-        {/* Search Bar in the middle */}
-        <div style={{ flex: 2, display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Search
+          {/* Search Bar and Language Selector in the middle */}
+          <div
             style={{
-              width: "100%",
-              maxWidth: "1200px",
-              fontSize: "18px",
-              height: "50px",
-              marginTop: "10px",
+              display: "flex",
+              alignItems: "center",
+              flexGrow: 1,
+              justifyContent: "center",
+              
             }}
-            placeholder="Search everything at Halo"
-            enterButton={
-              <Button
-                type="primary"
-                style={{
-                  backgroundColor: "#79D7BE",
-                  borderColor: "#79D7BE",
-                  color: "#fff",
-                  height: "42px",
-                  fontSize: "20px",
-                  marginRight: "250px",
-                }}
-              >
-                <SearchOutlined />
-              </Button>
-            }
-            size="large"
-            loading={searchLoading}
-            onSearch={handleSearch}
-          />
-        </div>
-
-        {/* Cart Icon on the right */}
-        <div style={{ textAlign: "right" }}>
-          <Button
-            type="default"
-            onClick={handleNavigateToCart}
-            style={{ marginTop: "15px", height: "40px", marginRight: "50px" }}
           >
-            <Badge count={1}>
-              <ShoppingCartOutlined style={{ fontSize: "25px" }} name="cartButton" />
-            </Badge>
-          </Button>
-        </div>
-      </Header>
+            <TextField
+              label="Search"
+              variant="outlined"
+              onChange={handleSearch}
+              style={{
+                width: "60%",
+                backgroundColor: "white",
+                borderRadius: "2px",
+                marginTop: "10px",
+                marginBottom: "10px",
+              }}
+              InputProps={{
+                endAdornment: searchLoading && (
+                  <SearchOutlined style={{ color: "#1890ff" }} />
+                ),
+              }}
+            />
+            {/* Search Button */}
+            <Button
+              type="primary"
+              icon={<SearchOutlined style={{ fontSize: "24px" }} />}
+              onClick={handleSearchButtonClick}
+              style={{
+                backgroundColor: "#79D7BE",
+                borderColor: "#79D7BE",
+                height: "56px",
+                width: "70px",
+                borderTopLeftRadius: "0px",
+                borderBottomLeftRadius: "0px",
+              }}
+            ></Button>
 
+            {/* Language Selector */}
+            <Select
+              defaultValue={language}
+              style={{
+                width: 90,
+                marginLeft: "60px",
+                height: "40px",
+                fontSize:"16px"
+              }}
+              onChange={handleLanguageChange}
+            >
+              <Option value="en">
+                <Flag code="US" style={{ width: "20px", marginRight: "10px", }} />
+                EN
+              </Option>
+              <Option value="ta">
+                <Flag code="IN" style={{ width: "20px", marginRight: "10px" }} />
+                TAM
+              </Option>
+              <Option value="zh">
+                <Flag code="CN" style={{ width: "20px", marginRight: "10px" }} />
+                ZH
+              </Option>
+              <Option value="fr">
+                <Flag code="FR" style={{ width: "20px", marginRight: "10px" }} />
+                FR
+              </Option>
+              <Option value="si">
+                <Flag code="LK" style={{ width: "20px", marginRight: "10px" }} />
+                SI
+              </Option>
+              <Option value="de">
+                <Flag code="DE" style={{ width: "20px", marginRight: "10px" }} />
+                DE
+              </Option>
+              <Option value="es">
+                <Flag code="ES" style={{ width: "20px", marginRight: "10px" }} />
+                ES
+              </Option>
+              <Option value="it">
+                <Flag code="IT" style={{ width: "20px", marginRight: "10px" }} />
+                IT
+              </Option>
+            </Select>
+          </div>
+
+          {/* Cart Icon on the right */}
+          <div style={{ textAlign: "right" }}>
+            <Button
+              type="default"
+              onClick={handleNavigateToCart}
+              style={{ marginTop: "10px", height: "60px", marginRight: "5px" }}
+            >
+              <Badge count={1}>
+                <ShoppingCartOutlined style={{ fontSize: "30px" }} />
+              </Badge>
+            </Button>
+          </div>
+        </Header>
 
         <Content style={{ marginTop: 64, padding: 24 }}>
           <div
@@ -222,7 +241,6 @@ const App = ({ children, userType }) => {
               minHeight: 360,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              borderRadius: borderRadiusLG,
             }}
           >
             {isBackTopVisible && (
