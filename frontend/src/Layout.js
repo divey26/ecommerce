@@ -124,81 +124,96 @@ const App = ({ children, userType }) => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Layout>
-        <Header
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "70px",
-            backgroundColor: "#2E5077",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            zIndex: 1,
-            paddingLeft: "20px",
-            paddingRight: "20px",
-          }}
-        >
-          {/* Logo on the left */}
-          <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
-            <img src={imageSrc} alt="Logo" style={{ marginLeft:"40px",width: "50px", height: "50px" }} />
-          </div>
-
-          <div><h4><EnvironmentOutlined/>delivery to</h4></div>
-
-          {/* Search Bar in the middle */}
-          <div
+      <Header
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100px",
+          backgroundColor: "#2E5077",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          zIndex: 1,
+          paddingLeft: "20px",
+          paddingRight: "20px",
+        }}
+      >
+        {/* Logo and HALO text on the left */}
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={imageSrc}
+            alt="Logo"
+            style={{ marginLeft: "40px", width: "50px", height: "50px" }}
+          />
+          <span
             style={{
-              flex: 2,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              fontSize: "24px",
+              fontWeight: "bold",
+              marginLeft: "15px",
+              color: "#F3C623",
             }}
           >
-            <Search
-              style={{
-                width: "100%",
-                maxWidth: "1200px",
-                fontSize: "18px",
-                height: "50px",
-                marginTop: "10px",
-              }}
-              placeholder="Search everything at Halo"
-              enterButton={
-                <Button
-                  type="primary"
-                  style={{
-                    backgroundColor: "#79D7BE", // Change this to your preferred color
-                    borderColor: "#79D7BE", // Match the border color
-                    color: "#fff", // Text color
-                    height: "40px",
-                    fontSize: "16px",
-                    marginRight:"250px"
-                  }}
-                >
-                  <SearchOutlined />
-                </Button>
-              }
-              size="large"
-              loading={searchLoading}
-              onSearch={handleSearch}
-            />
-          </div>
+            HALO
+          </span>
+        </div>
 
-          {/* Cart Icon on the right */}
-          <div style={{ textAlign: "right" }}>
-            <Button
-              type="default"
-              onClick={handleNavigateToCart}
-              style={{ marginTop: "15px", height: "40px" ,marginRight:"50px" }}
-            >
-              <Badge count={1}>
-                <ShoppingCartOutlined style={{ fontSize: "25px" }} name="cartButton" />
-              </Badge>
-            </Button>
-          </div>
-        </Header>
+        {/* Delivery text */}
+        <div style={{ display: "flex", alignItems: "center", color: "white", fontSize: "20px", marginLeft: "250px" }}>
+          <EnvironmentOutlined
+            style={{ color: "yellow", fontSize: "30px", marginRight: "10px" }}
+          />
+          delivery to
+          <span style={{ fontWeight: "bold", fontSize: "24px", marginLeft: "5px" }}> SRILANKA</span>
+        </div>
+
+        {/* Search Bar in the middle */}
+        <div style={{ flex: 2, display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <Search
+            style={{
+              width: "100%",
+              maxWidth: "1200px",
+              fontSize: "18px",
+              height: "50px",
+              marginTop: "10px",
+            }}
+            placeholder="Search everything at Halo"
+            enterButton={
+              <Button
+                type="primary"
+                style={{
+                  backgroundColor: "#79D7BE",
+                  borderColor: "#79D7BE",
+                  color: "#fff",
+                  height: "42px",
+                  fontSize: "20px",
+                  marginRight: "250px",
+                }}
+              >
+                <SearchOutlined />
+              </Button>
+            }
+            size="large"
+            loading={searchLoading}
+            onSearch={handleSearch}
+          />
+        </div>
+
+        {/* Cart Icon on the right */}
+        <div style={{ textAlign: "right" }}>
+          <Button
+            type="default"
+            onClick={handleNavigateToCart}
+            style={{ marginTop: "15px", height: "40px", marginRight: "50px" }}
+          >
+            <Badge count={1}>
+              <ShoppingCartOutlined style={{ fontSize: "25px" }} name="cartButton" />
+            </Badge>
+          </Button>
+        </div>
+      </Header>
+
 
         <Content style={{ marginTop: 64, padding: 24 }}>
           <div

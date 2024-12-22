@@ -7,6 +7,9 @@ const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 
+const categoryRoutes = require('./Src/routes/categoryRoutes');
+
+
 dotenv.config();
 
 const app = express();
@@ -186,6 +189,8 @@ app.get('/api/items', async (req, res) => {
     res.status(500).json({ error: 'Error fetching items' });
   }
 });
+
+app.use('/api/cat', categoryRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

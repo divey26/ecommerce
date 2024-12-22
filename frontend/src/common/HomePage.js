@@ -1,7 +1,9 @@
-import { Layout, Row, Card as AntCard, Col, Button, Carousel } from 'antd';
+import React, { useState, useEffect } from 'react'; // For useState and useEffect
+import { Typography } from 'antd'; // For Typography
+import { Layout, Row, Card as AntCard, message, Card, Col, Button, Carousel } from 'antd';
 import LayoutNew from '../Layout';
+import axios from 'axios'; 
 import styled from 'styled-components';
-import React from 'react';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import videoSrc from '../Video/video.mp4';
@@ -14,6 +16,11 @@ import p4 from "../Images/p4.jpg";
 import prod1 from "../Images/prod1.png"
 import banner1 from "../Images/valBanner.jpg"
 
+
+//department
+
+
+
 import {
   LogoutOutlined,
   UserSwitchOutlined,
@@ -24,6 +31,9 @@ import backgroundImage from "./../p1.jpg";
 const { Header, Content } = Layout;
 const { Meta } = AntCard;
 
+const { Title } = Typography;
+
+
 const headerIteam = [
   { key: "1", text: "Department" },
   { key: "2", text: "Help & Support" },
@@ -33,6 +43,7 @@ const headerIteam = [
 ];
 
 const HomePage = () => {
+    const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const handleHeaderClick = (key) => {
     if (key === "3") {
@@ -42,6 +53,21 @@ const HomePage = () => {
       navigate("/");
     }
   };
+
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/cat');
+      setCategories(response.data); // Store categories from the API
+    } catch (error) {
+      console.error('Error fetching categories:', error.response ? error.response.data : error.message);
+      message.error('Failed to fetch categories. Please try again.');
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories(); // Fetch categories on component mount
+  }, []);
 
   return (
     <LayoutNew>
@@ -73,7 +99,7 @@ const HomePage = () => {
 
         {/* Add a header */}
         <StyledHeader>
-          <h1>40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY (12.02.2024) - Hurry, grab your favorite items now! </h1>
+          <h1>UP TO 40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY (12.02.2024) - Hurry, grab your favorite items now! </h1>
         </StyledHeader>
 
         {/* Carousel Component */}
@@ -91,7 +117,7 @@ const HomePage = () => {
             <img src={p4} alt="p4" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
           </div>
         </Carousel>
-
+{/*}
         <ContentSection>
           <StyledRow gutter={[16, 16]}>
             <Col xs={24} sm={12} md={8}>
@@ -150,7 +176,45 @@ const HomePage = () => {
             </Col>
           </StyledRow>
         </ContentSection>
-        
+*/}
+
+          {/* Display categories in cards */}
+          {/* Display categories in cards */}
+          <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap' }}>
+            {categories.map((category) => (
+              <Card
+                key={category.categoryId}
+                hoverable
+                cover={
+                  <img
+                    alt={category.categoryName}
+                    src={category.imageURL}
+                    style={{
+                      height: '250px',
+                      objectFit: 'cover',
+                      width: '100%',
+                      borderTopLeftRadius: '1px', // Optional: Rounded corners for image
+                      borderTopRightRadius: '1px', // Optional: Rounded corners for image
+                      border: '1px solid grey', // Black border for image
+                    }}
+                  />
+                }
+                style={{
+                  width: 350,
+                  height: 400,
+                  margin: '10px',
+                  border: '1px solid grey', // Black border for card
+                  borderRadius: '1px', // Optional: Rounded corners for card
+                }}
+              >
+                  <Title level={4} style={{ textAlign: 'center', marginTop: '15px', marginBottom: '0' }}>
+                    {category.categoryName}
+                  </Title>
+              </Card>
+              ))}
+           </div>
+
+
         <div >
             <img src={banner1} style={{ width: "100%", height: "10%" }} />
           </div>
@@ -211,11 +275,11 @@ const StyledHeader = styled(Header)`
 const StyledHeader1 = styled(Header)`
   background-color: #E3F4F4 !important;
   color: white;
-  height: auto !important;
+  height: 60px !important;
   padding: 5px 0 !important;
   margin-bottom: 5px;
   line-height: 1;
-  margin-top: 5px;
+  margin-top: 25px;
 
   h1 {
     margin: 0 !important;
