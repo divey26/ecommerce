@@ -125,10 +125,10 @@ const App = ({ children, userType }) => {
               style={{
                 fontWeight: "bold",
                 fontSize: "15px",
-                marginLeft: "10px",
+                marginLeft: "5px",
               }}
             >
-              SRILANKA
+            SRILANKA
             </span>
           </div>
 

@@ -34,7 +34,7 @@ const { Meta } = AntCard;
 const { Title } = Typography;
 
 
-const headerIteam = [
+const headerItem = [
   { key: "1", text: "Department" },
   { key: "2", text: "Help & Support" },
   { key: "3", text: "Sign up", icon: <UserSwitchOutlined /> },
@@ -83,7 +83,7 @@ const HomePage = () => {
               paddingTop: 0
             }}
           >
-            {headerIteam.map((item) => (
+            {headerItem.map((item) => (
               <Button
                 key={item.key}
                 type="text"
@@ -117,102 +117,30 @@ const HomePage = () => {
             <img src={p4} alt="p4" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
           </div>
         </Carousel>
-{/*}
-        <ContentSection>
-          <StyledRow gutter={[16, 16]}>
-            <Col xs={24} sm={12} md={8}>
-              <StyledCard
-                hoverable
-                cover={<img alt="example" src="https://wallpapercave.com/w/wp12749476.jpg" />}
-                onClick={() => navigate('/bread')}
-              >
-                <Meta title={<span style={{ fontSize: '20px' }}>Breads</span>} />
-              </StyledCard>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <StyledCard
-                hoverable
-                cover={<img alt="example" src="https://wallpapercave.com/w/wp2378609.jpg" />}
-                onClick={() => navigate('/croissants')}
-              >
-                <Meta title={<span style={{ fontSize: '20px' }}>Croissants</span>} />
-              </StyledCard>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <StyledCard
-                hoverable
-                cover={<img alt="example" src="https://wallpapercave.com/w/wp3055487.jpg" />}
-                onClick={() => navigate('/cookies')}
-              >
-                <Meta title={<span style={{ fontSize: '20px' }}>Cookies</span>} />
-              </StyledCard>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <StyledCard
-                hoverable
-                cover={<img alt="example" src="https://wallpapercave.com/w/wp12766510.jpg" />}
-                onClick={() => navigate('/buns')}
-              >
-                <Meta title={<span style={{ fontSize: '20px' }}>Buns</span>} />
-              </StyledCard>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <StyledCard
-                hoverable
-                cover={<img alt="example" src="https://wallpapercave.com/w/wp2053450.jpg" />}
-                onClick={() => navigate('/sandwiches')}
-              >
-                <Meta title={<span style={{ fontSize: '20px' }}>Sandwiches</span>} />
-              </StyledCard>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <StyledCard
-                hoverable
-                cover={<img alt="example" src="https://wallpapercave.com/w/wp2954058.jpg" />}
-                onClick={() => navigate('/cakes')}
-              >
-                <Meta title={<span style={{ fontSize: '20px' }}>Cakes</span>} />
-              </StyledCard>
-            </Col>
-          </StyledRow>
-        </ContentSection>
-*/}
 
           {/* Display categories in cards */}
-          {/* Display categories in cards */}
-          <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap' }}>
+          <Content style={{marginTop:"15px" , marginBottom:"15px"}}>
+          <Row gutter={[16, 16]} justify="center">
             {categories.map((category) => (
-              <Card
-                key={category.categoryId}
-                hoverable
-                cover={
-                  <img
-                    alt={category.categoryName}
-                    src={category.imageURL}
-                    style={{
-                      height: '250px',
-                      objectFit: 'cover',
-                      width: '100%',
-                      borderTopLeftRadius: '1px', // Optional: Rounded corners for image
-                      borderTopRightRadius: '1px', // Optional: Rounded corners for image
-                      border: '1px solid grey', // Black border for image
-                    }}
-                  />
-                }
-                style={{
-                  width: 350,
-                  height: 400,
-                  margin: '10px',
-                  border: '1px solid grey', // Black border for card
-                  borderRadius: '1px', // Optional: Rounded corners for card
-                }}
-              >
-                  <Title level={4} style={{ textAlign: 'center', marginTop: '15px', marginBottom: '0' }}>
+              <Col xs={24} sm={12} lg={8} xl={4} key={category.categoryId}>
+                <StyledCard
+                  hoverable
+                  cover={
+                    <img
+                      alt={category.categoryName}
+                      src={category.imageURL}
+                    />
+                  }
+                >
+                  <TitleStyle level={4} style={{ marginBottom:"50%"}}>
                     {category.categoryName}
-                  </Title>
-              </Card>
-              ))}
-           </div>
+                  </TitleStyle>
+                </StyledCard>
+              </Col>
+            ))}
+          </Row>
+
+        </Content>
 
 
         <div >
@@ -290,12 +218,7 @@ const StyledHeader1 = styled(Header)`
   }
 `;
 
-const ContentSection = styled.div`
-  background-color: #00000;
-  margin-top: 5px;
-  padding: 10px;
-  width: 100%;
-`;
+
 
 const VideoAndImageContainer = styled.div`
   display: flex;
@@ -315,36 +238,40 @@ const VideoAndImageContainer = styled.div`
     }
 `;
 
-
 const StyledCard = styled(AntCard)`
-  background-color: rgba(160, 147, 125, 0.5);
-  padding:10px;
-  
-  .ant-card-meta-title {
-    color: #000000;
-  }
-  .ant-card-meta-description {
-    color: #000000;
-  }
+  border: 1px solid  #d9d9d9;
+  border-radius: 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 350px; /* Ensure uniform height for all cards */
+  padding: 1px;
+
+
   .ant-card-cover img {
-    border-radius: 5px;
+    border-bottom: 1px solid #d9d9d9;
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
   }
 
   .ant-card-body {
-    transition: none;
-  }
-
-  &:hover {
-    background-color: #A0937D;
-    box-shadow: none;
-    cursor: default;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 `;
 
-
-const StyledRow = styled(Row)`
-  display: flex;
-  flex-wrap: wrap;
+const TitleStyle = styled(Title)`
+  text-align: center;
+  margin-top: 15px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #333; /* Adjust color as needed */
 `;
 
 export default HomePage;

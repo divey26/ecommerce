@@ -4,6 +4,9 @@ import Bread from './com/Bread'
 import Bun from './com/Bun'
 import CategoryPage from './com/Category';
 
+import ProductPage from './com/Products';
+
+
 import Dashboard from './com/dashboard'
 
 
@@ -18,6 +21,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/category" element={<CategoryPage/>} />
 
+        <Route path="/add-product" element={<ProductPage/>} />
          
 
         </Routes>
