@@ -1,65 +1,38 @@
-//Layout.js
 import React, { useState, useEffect } from "react";
 import {
   ShoppingCartOutlined,
   HomeOutlined,
-  LogoutOutlined,
-  UserSwitchOutlined,
   CalendarOutlined,
   AppstoreAddOutlined,
   CheckCircleOutlined,
   ApartmentOutlined,
   StockOutlined,
   SyncOutlined,
+  SearchOutlined,
+  EnvironmentOutlined
+  
 } from "@ant-design/icons";
-import { Layout, Menu, theme, Button } from "antd";
-import { FloatButton,Badge } from "antd";
+import { Layout, Menu, theme, Button, Input, Badge } from "antd";
+import { FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
-import imageSrc from "./logo.png";
+import imageSrc from "./Images/logo.png";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Search } = Input;
+const { Header, Content, Footer } = Layout;
 
 const adminUserItems = [
-  {
-    key: "dashboard",
-    icon: <HomeOutlined />,
-    label: "Home",
-  },
-  {
-    key: "Category",
-    icon: <HomeOutlined />,
-    label: "Category",
-  },
-  {
-    key: "Complaint",
-    icon: <HomeOutlined />,
-    label: "Complaint",
-  },
-  {
-    key: "FeedBack",
-    icon: <HomeOutlined />,
-    label: "FeedBack",
-  },
-  {
-    key: "My Profile",
-    icon: <HomeOutlined />,
-    label: "My Profile",
-  },
+  { key: "dashboard", icon: <HomeOutlined />, label: "Home" },
+  { key: "Category", icon: <HomeOutlined />, label: "Category" },
+  { key: "Complaint", icon: <HomeOutlined />, label: "Complaint" },
+  { key: "FeedBack", icon: <HomeOutlined />, label: "FeedBack" },
+  { key: "My Profile", icon: <HomeOutlined />, label: "My Profile" },
   {
     key: "AboutUs",
     icon: <CalendarOutlined />,
     label: "About Us",
     children: [
-      {
-        key: "Branches",
-        icon: <AppstoreAddOutlined />,
-        label: "Our Branches",
-      },
-      {
-        key: "About",
-        icon: <CheckCircleOutlined />,
-        label: "Who we are",
-      },
+      { key: "Branches", icon: <AppstoreAddOutlined />, label: "Our Branches" },
+      { key: "About", icon: <CheckCircleOutlined />, label: "Who we are" },
     ],
   },
   {
@@ -67,46 +40,28 @@ const adminUserItems = [
     icon: <ApartmentOutlined />,
     label: "Contact Us",
     children: [
-      {
-        key: "Customer",
-        icon: <StockOutlined />,
-        label: "As a customer",
-      },
-      {
-        key: "Employee",
-        icon: <SyncOutlined />,
-        label: "As a Employee",
-      },
+      { key: "Customer", icon: <StockOutlined />, label: "As a customer" },
+      { key: "Employee", icon: <SyncOutlined />, label: "As an Employee" },
     ],
   },
 ];
 
-const headerIteam = [
-  { key: "1", text: "Department" },
-  { key: "2", text: "Help & Support" },
-  { key: "3", text: "Sign up", icon: <UserSwitchOutlined /> },
-  { key: "4", text: "Login", icon: <LogoutOutlined /> },
-  { key: "5", text: "Language" },
-];
-
 const App = ({ children, userType }) => {
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState(false);
+  const [isBackTopVisible, setIsBackTopVisible] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const handleHeaderClick = (key) => {
     if (key === "1") {
       localStorage.setItem("authToken", null);
       localStorage.setItem("loggedInUserType", null);
       navigate("/sign");
-    }
-    else if(key==='2'){
+    } else if (key === "2") {
       localStorage.setItem("authToken", null);
       localStorage.setItem("loggedInUserType", null);
       navigate("/login");
     }
   };
-
-  const [isBackTopVisible, setIsBackTopVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -123,110 +78,129 @@ const App = ({ children, userType }) => {
   }, []);
 
   const handleMenuClick = (item) => {
-    if (item.key === "dashboard") {
-      navigate("/dashboard");
+    switch (item.key) {
+      case "dashboard":
+        navigate("/dashboard");
+        break;
+      case "Category":
+        navigate("/");
+        break;
+      case "ContactUs":
+        navigate("/contact");
+        break;
+      case "Customer":
+        navigate("/customerc");
+        break;
+      case "Employee":
+        navigate("/employeec");
+        break;
+      case "About":
+        navigate("/about");
+        break;
+      case "Feedback":
+        navigate("/feed");
+        break;
+      default:
+        break;
     }
-    if (item.key === "Category") {
-      navigate("/");
-    }
-    if (item.key === "ContactUs") {
-      navigate("/contact");
-    }
-    if (item.key === "Customer") {
-      navigate("/customerc");
-    }
-    if (item.key === "Employee") {
-      navigate("/employeec");
-    }
-    if (item.key === "About") {
-      navigate("/about");
-    }
-    if (item.key === "Feedback") {
-      navigate("/feed");
-    }
+  };
+
+  const handleSearch = (value) => {
+    setSearchLoading(true);
+    setTimeout(() => {
+      console.log("Search:", value);
+      setSearchLoading(false);
+    }, 1000); // Simulate search loading for 1 second
   };
 
   const {
     token: { borderRadiusLG },
   } = theme.useToken();
 
-
   const handleNavigateToCart = () => {
-    navigate('/cart');
+    navigate("/cart");
   };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        width={200}
-        style={{ backgroundColor: "#543310", overflow: "hidden", position: "fixed", height: "100vh", left: 0 }}
-      >
-        <div style={{ textAlign: "center", padding: "20px 0" }}>
-          <img src={imageSrc} alt="Logo" style={{ width: "80%" }} />
-        </div>
-        <Menu
-          theme="light"
-          defaultSelectedKeys={["dashboard"]}
-          mode="inline"
-          items={userType === "admin" ? adminUserItems : adminUserItems}
-          onClick={handleMenuClick}
-          style={{ backgroundColor: "#DAC0A3" }}
-        />
-      </Sider>
-
-      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+      <Layout>
         <Header
           style={{
             position: "fixed",
             top: 0,
-            left: collapsed ? 80 : 200,
-            width: `calc(100% - ${collapsed ? 80 : 200}px)`,
-            height: "64px",
-            backgroundColor: "#DAC0A3",
+            left: 0,
+            width: "100%",
+            height: "70px",
+            backgroundColor: "#2E5077",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             zIndex: 1,
-            top:10
+            paddingLeft: "20px",
+            paddingRight: "20px",
           }}
         >
+          {/* Logo on the left */}
+          <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
+            <img src={imageSrc} alt="Logo" style={{ marginLeft:"40px",width: "50px", height: "50px" }} />
+          </div>
+
+          <div><h4><EnvironmentOutlined/>delivery to</h4></div>
+
+          {/* Search Bar in the middle */}
           <div
             style={{
-              flex: 1,
-              minWidth: 0,
+              flex: 2,
               display: "flex",
-              justifyContent: "flex-end",
-              paddingTop:0
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            {headerIteam.map((item) => (
-              <Button
-                key={item.key}
-                type="text"
-                icon={item.icon}
-                style={{ color: "Black", fontSize: "20px" }}
-                onClick={() => handleHeaderClick(item.key)}
-              >
-                {item.text}
-              </Button>
-            ))}
-            
-          
+            <Search
+              style={{
+                width: "100%",
+                maxWidth: "1200px",
+                fontSize: "18px",
+                height: "50px",
+                marginTop: "10px",
+              }}
+              placeholder="Search everything at Halo"
+              enterButton={
+                <Button
+                  type="primary"
+                  style={{
+                    backgroundColor: "#79D7BE", // Change this to your preferred color
+                    borderColor: "#79D7BE", // Match the border color
+                    color: "#fff", // Text color
+                    height: "40px",
+                    fontSize: "16px",
+                    marginRight:"250px"
+                  }}
+                >
+                  <SearchOutlined />
+                </Button>
+              }
+              size="large"
+              loading={searchLoading}
+              onSearch={handleSearch}
+            />
           </div>
+
+          {/* Cart Icon on the right */}
           <div style={{ textAlign: "right" }}>
-          <Button type="default" onClick={handleNavigateToCart} style={{marginTop:"15px",height:"40px"}}>
-            <Badge
-              count={1}
+            <Button
+              type="default"
+              onClick={handleNavigateToCart}
+              style={{ marginTop: "15px", height: "40px" ,marginRight:"50px" }}
             >
-              <ShoppingCartOutlined style={{ fontSize: "25px" }} name="cartButton" />
-            </Badge>
-          </Button>
-        </div>
+              <Badge count={1}>
+                <ShoppingCartOutlined style={{ fontSize: "25px" }} name="cartButton" />
+              </Badge>
+            </Button>
+          </div>
         </Header>
 
-        <Content style={{ marginTop: 64, padding: 24  }}>
+        <Content style={{ marginTop: 64, padding: 24 }}>
           <div
             style={{
               padding: 0,

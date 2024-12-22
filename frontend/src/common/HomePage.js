@@ -1,11 +1,18 @@
-//homepage.js
-import { Layout, Row, Card as AntCard, Col,Button } from 'antd';
+import { Layout, Row, Card as AntCard, Col, Button, Carousel } from 'antd';
 import LayoutNew from '../Layout';
 import styled from 'styled-components';
 import React from 'react';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
-import videoSrc from './../video.mp4';
+import videoSrc from '../Video/video.mp4';
+
+// Import images for the carousel
+import p1 from "../Images/p1.jpg";
+import p2 from "../Images/p2.jpg";
+import p3 from "../Images/p3.jpg";
+import p4 from "../Images/p4.jpg";
+import prod1 from "../Images/prod1.png"
+import banner1 from "../Images/valBanner.jpg"
 
 import {
   LogoutOutlined,
@@ -13,10 +20,9 @@ import {
 } from "@ant-design/icons";
 
 // Import images from the specified directory
-import backgroundImage from "./../p1.jpg"
+import backgroundImage from "./../p1.jpg";
 const { Header, Content } = Layout;
 const { Meta } = AntCard;
-
 
 const headerIteam = [
   { key: "1", text: "Department" },
@@ -32,7 +38,7 @@ const HomePage = () => {
     if (key === "3") {
       navigate("/sign");
     }
-    else if(key==='4'){
+    else if (key === '4') {
       navigate("/");
     }
   };
@@ -42,13 +48,13 @@ const HomePage = () => {
       <Layout>
         {/* Add a header */}
         <StyledHeader1>
-        <div
+          <div
             style={{
               flex: 1,
               minWidth: 0,
               display: "flex",
               justifyContent: "flex-end",
-              paddingTop:0
+              paddingTop: 0
             }}
           >
             {headerIteam.map((item) => (
@@ -63,21 +69,28 @@ const HomePage = () => {
               </Button>
             ))}
           </div>
-
-
         </StyledHeader1>
+
         {/* Add a header */}
         <StyledHeader>
           <h1>40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY (12.02.2024) - Hurry, grab your favorite items now! </h1>
         </StyledHeader>
-        <BackgroundContainer>
-          <ContentWrapper>
-            <h1 style={{ fontSize:"50px",marginTop:"10px"}}>Welcome to Sweet Street Bakery</h1>
-            <p style={{fontSize:"17px",marginTop:"1px",marginLeft:"10px"}}>
-              At Sweet Street Bakery, we believe that every bite should be a delightful experience. Our passion for baking shines through in each and every treat we create, from our freshly baked bread to our decadent cakes and pastries. Whether you're stopping by for a quick snack or planning a special occasion, we have something to satisfy every craving.
-            </p>
-          </ContentWrapper>
-        </BackgroundContainer>
+
+        {/* Carousel Component */}
+        <Carousel autoplay dotPosition="bottom" autoplaySpeed={2000}>
+          <div>
+            <img src={p1} alt="p1" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
+          </div>
+          <div>
+            <img src={p2} alt="p2" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
+          </div>
+          <div>
+            <img src={p3} alt="p3" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
+          </div>
+          <div>
+            <img src={p4} alt="p4" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
+          </div>
+        </Carousel>
 
         <ContentSection>
           <StyledRow gutter={[16, 16]}>
@@ -137,93 +150,80 @@ const HomePage = () => {
             </Col>
           </StyledRow>
         </ContentSection>
+        
+        <div >
+            <img src={banner1} style={{ width: "100%", height: "10%" }} />
+          </div>
 
-        <VideoContainer>
-          <ReactPlayer
-            url={videoSrc}
-            width="100%"
-            height="auto"
-            controls
-          />
-        </VideoContainer>
+        {/* Video and Image Side by Side */}
+        <VideoAndImageContainer>
+          <div className="video-container">
+            <ReactPlayer
+              url={videoSrc}
+              width="100%"
+              height="auto"
+              muted
+              playing
+              loop
+            />
+          </div>
+          
+          <div className="image-container">
+            <img src={prod1} alt="p2" style={{ width: "100%", height: "10%" }} />
+          </div>
+        </VideoAndImageContainer>
+
       </Layout>
     </LayoutNew>
   );
 };
 
 const StyledHeader = styled(Header)`
-  background-color: #a0937d !important; /* Ensure custom styles are applied */
+  background-color: #F3C623 !important;
   color: white;
-  height: auto !important; /* Remove any predefined height from Ant Design */
-  padding: 5px 0 !important; /* Minimized padding for a thinner header */
-  margin-bottom: 15px; /* Reduced space below the header */
-  line-height: 1; /* Compact line height */
-  overflow: hidden; /* Hide overflowing text */
+  height: auto !important;
+  padding: 5px 0 !important;
+  margin-bottom: 15px;
+  line-height: 1;
+  overflow: hidden;
   position: relative;
 
   h1 {
-    margin: 0 !important; /* Remove margin */
-    font-size: 18px !important; /* Adjust font size */
-    font-weight: 600 !important; /* Maintain lighter font weight */
-    padding: 0 !important; /* Remove padding */
-    line-height: 1.2 !important; /* Ensure proper alignment */
-    white-space: nowrap; /* Prevent text wrapping */
-    animation: scrollText 17s linear infinite; /* Apply animation */
+    margin: 0 !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap;
+    animation: scrollText 17s linear infinite;
   }
 
   @keyframes scrollText {
     from {
-      transform: translateX(100%); /* Start from the right */
+      transform: translateX(100%);
     }
     to {
-      transform: translateX(-100%); /* End off-screen on the left */
+      transform: translateX(-100%);
     }
   }
 `;
 
 const StyledHeader1 = styled(Header)`
-  background-color: #4DA1A9 !important; /* Ensure custom styles are applied */
+  background-color: #E3F4F4 !important;
   color: white;
-  height: auto !important; /* Remove any predefined height from Ant Design */
-  padding: 5px 0 !important; /* Minimized padding for a thinner header */
-  margin-bottom: 5px; /* Reduced space below the header */
-  line-height: 1; /* Compact line height */
+  height: auto !important;
+  padding: 5px 0 !important;
+  margin-bottom: 5px;
+  line-height: 1;
   margin-top: 5px;
 
   h1 {
-    margin: 0 !important; /* Remove margin */
-    font-size: 14px !important; /* Further reduced font size */
-    font-weight: 600 !important; /* Maintain lighter font weight */
-    padding: 0 !important; /* Remove padding */
-    line-height: 1.2 !important; /* Ensure proper alignment */
+    margin: 0 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
   }
-`;
-
-
-
-
-
-const BackgroundContainer = styled.div`
-  background-image: url(${backgroundImage});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ContentWrapper = styled.div`
-  background-color: rgba(214, 218, 200, 0.70); /* RGBA color with alpha for transparency */
-  padding: 1px;
-  border-radius: 8px;
-  
-  text-align: center;
-  margin-top: 50px;
-  max-width: 90%;
-  width:100%; /* Ensure this is not too wide for mobile */
 `;
 
 const ContentSection = styled.div`
@@ -233,34 +233,50 @@ const ContentSection = styled.div`
   width: 100%;
 `;
 
-const VideoContainer = styled.div`
-  width: 100%;
+const VideoAndImageContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: #4DA1A9 !important;
+  padding: 20px;
   margin-top: 40px;
+
+  .video-container {
+    width: 63%;
+  }
+
+  .image-container {
+    width: 35.5%;
+    height: 50%;  // Set the height to 100% to match the height of the video
+    margin-right:10px:
+    }
 `;
+
 
 const StyledCard = styled(AntCard)`
   background-color: rgba(160, 147, 125, 0.5);
   padding:10px;
   
   .ant-card-meta-title {
-    color: #000000; /* Change this color to your desired title color */
+    color: #000000;
   }
   .ant-card-meta-description {
-    color: #000000; /* Change this color to your desired description color */
+    color: #000000;
   }
   .ant-card-cover img {
-    border-radius: 5px; /* Adjust this value to curve the edges more or less */
+    border-radius: 5px;
   }
-      .ant-card-body {
+
+  .ant-card-body {
     transition: none;
   }
 
   &:hover {
-    background-color: #A0937D; /* Same as the background color */
+    background-color: #A0937D;
     box-shadow: none;
     cursor: default;
   }
 `;
+
 
 const StyledRow = styled(Row)`
   display: flex;
