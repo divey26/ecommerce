@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 
 const categoryRoutes = require('./Src/routes/categoryRoutes');
 const productRoutes = require('./Src/routes/productRoutes');
+const videoRoutes = require('./Src/routes/shortsRoutes'); // Import the video routes
 
 
 
@@ -150,6 +151,7 @@ app.get('/api/deadline', (req, res) => {
   //////////////////////////////////////////
 app.use('/api/cat', categoryRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/videos', videoRoutes);
 
 
 const PORT = process.env.PORT || 5000;

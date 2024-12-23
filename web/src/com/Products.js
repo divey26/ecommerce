@@ -159,9 +159,10 @@ const CategoryModal = () => {
 
           <Space
             style={{
-              background: "#65451F",
+              background: "rgb(224, 245, 249)",
               color: "black",
               padding: "12px",
+              border:"1px solid rgba(30, 96, 157, 0.13)",
               borderRadius: "8px",
               justifyContent: "space-between",
               display: "flex",
@@ -169,7 +170,7 @@ const CategoryModal = () => {
           >
             <Space>
               <StockOutlined style={{ fontSize: "24px", marginRight: "8px" }} />
-              <Title level={2} style={{ fontSize: "24px", marginTop: "8px", color: "black" }}>
+              <Title level={2} style={{ fontSize: "24px", marginTop: "8px", color: "#004f9a" }}>
                 Products
               </Title>
             </Space>
@@ -177,8 +178,8 @@ const CategoryModal = () => {
 
             <br/>
           {/* Button to Open Modal */}
-          <Button type="primary" onClick={showModal}>
-            Add new products
+          <Button type="primary" onClick={showModal} style={{backgroundColor:"#ffc221",color:"black",fontSize:"16px"}}>
+            Add products
           </Button>
 
           {/* Modal */}

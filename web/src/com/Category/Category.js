@@ -78,10 +78,11 @@ const CategoryPage = () => {
         <Layout>
           <Space
             style={{
-              background: "#65451F",
+              background: "rgb(224, 245, 249)",
               color: "black",
               padding: "12px",
               borderRadius: "8px",
+              border:"1px solid rgba(30, 96, 157, 0.13)",
               justifyContent: "space-between",
               display: "flex",
             }}
@@ -90,12 +91,12 @@ const CategoryPage = () => {
               <StockOutlined style={{ fontSize: "24px", marginRight: "8px" }} />
               <Title
                 level={2}
-                style={{ fontSize: "24px", marginTop: "8px", color: "black" }}
+                style={{ fontSize: "24px", marginTop: "8px", color: "#004f9a" }}
               >
                 Department
               </Title>
             </Space>
-            <Button type="primary" onClick={() => setIsAddItemModalVisible(true)}>
+            <Button type="primary" onClick={() => setIsAddItemModalVisible(true)} style={{backgroundColor:"#ffc221",color:"black"}}>
               Add Department
             </Button>
           </Space>

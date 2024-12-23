@@ -16,6 +16,7 @@ import prod1 from "../Images/prod1.png"
 import banner1 from "../Images/valBanner.jpg"
 
 import Banner from "./banner" 
+import Shorts from "./Home/ProShorts" 
 
 
 import {
@@ -200,6 +201,8 @@ const HomePage = () => {
             <img src={prod1} alt="p2" style={{ width: "100%", height: "10%" }} />
           </div>
         </VideoAndImageContainer>
+
+        <Shorts/>
 
         {/* Drawer for Slider Navigation */}
         <Drawer

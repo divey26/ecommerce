@@ -1,31 +1,26 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Bread from './com/Bread'
-import Bun from './com/Bun'
 import CategoryPage from './com/Category/Category';
 
 import ProductPage from './com/Products';
-
-
 import Dashboard from './com/dashboard'
-
-
-import Summa from './com/Products'
+import Shorts from './com/Shorts/Shorts'
 import Timer from './com/Timer/Timer'
+import Summa from './com/summa';
+
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-        <Route path="/" element={<Bread/>} />
-        <Route path="/bun" element={<Bun/>} />
+        <Route path="/" element={<Summa/>} />
       
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/category" element={<CategoryPage/>} />
 
 
-        <Route path="/summa" element={<Summa/>} />
+        <Route path="/shorts" element={<Shorts/>} />
         <Route path="/timer" element={<Timer/>} />
 
         <Route path="/add-product" element={<ProductPage/>} />

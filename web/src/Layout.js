@@ -24,11 +24,11 @@ const adminUserItems = [
     icon: <HomeOutlined />,
     label: "Home",
   },
-  
+  /*
   {
     key: "Category",
     icon: <CalendarOutlined />,
-    label: "Category",
+    label: "blaahh",
     children: [
       {
         key: "Bread",
@@ -40,28 +40,36 @@ const adminUserItems = [
         icon: <CheckCircleOutlined />,
         label: "Cake",
       },
-      {
-        key: "Bun",
-        icon: <AppstoreAddOutlined />,
-        label: "Bun",
-      },
-      {
-        key: "Croissant",
-        icon: <AppstoreAddOutlined />,
-        label: "Croissant",
-      },
-      {
-        key: "Sandwich",
-        icon: <AppstoreAddOutlined />,
-        label: "Sandwich",
-      },
-      {
-        key: "Cookie",
-        icon: <AppstoreAddOutlined />,
-        label: "Cookie",
-      },
+ 
     ],
+  },*/
+  {
+    key: "categories",
+    icon: <HomeOutlined />,
+    label: "Category",
   },
+  {
+
+    key: "shorts",
+    icon: <HomeOutlined />,
+    label: "Shorts",
+  
+  },
+
+  {
+    key: "timer",
+    icon: <HomeOutlined />,
+    label: "Timer",
+  
+  },
+  
+  {
+  key: "addpro",
+  icon: <HomeOutlined />,
+  label: "Add Products",
+
+},
+  
   
 ];
 
@@ -105,20 +113,21 @@ const App = ({ children, userType }) => {
 
   const handleMenuClick = (item) => {
     if (item.key === "dashboard") {
-      navigate("/dashboard");
-    }
-    if (item.key === "Category") {
-      navigate("");
-    }
-    if (item.key === "Bread") {
       navigate("/");
     }
-    if (item.key === "Cake") {
-      navigate("/cake");
+    if (item.key === "categories") {
+      navigate("category");
     }
-    if (item.key === "Cookie") {
-      navigate("/cookie");
+    if (item.key === "shorts") {
+      navigate("/shorts");
     }
+    if (item.key === "timer") {
+      navigate("/timer");
+    }
+    if (item.key === "addpro") {
+      navigate("/add-product");
+    }
+    /*
     if (item.key === "Sandwich") {
       navigate("/sandwich");
     }
@@ -127,7 +136,7 @@ const App = ({ children, userType }) => {
     }
     if (item.key === "Croissant") {
       navigate("/croissant");
-    }
+    }*/
   };
 
   const {
@@ -141,18 +150,18 @@ const App = ({ children, userType }) => {
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
         width={200}
-        style={{ backgroundColor: "#543310", overflow: "hidden", position: "fixed", height: "100vh", left: 0 }}
+        style={{ backgroundColor: "#004f9a", overflow: "hidden", position: "fixed", height: "100vh", left: 0 }}
       >
         <div style={{ textAlign: "center", padding: "20px 0" }}>
-          <img src={imageSrc} alt="Logo" style={{ width: "80%" }} />
+          <img src={imageSrc} alt="Logo" style={{ width: "30%" }} />
         </div>
         <Menu
           theme="light"
-          defaultSelectedKeys={["dashboard"]}
+         // defaultSelectedKeys={}
           mode="inline"
           items={userType === "admin" ? adminUserItems : adminUserItems}
           onClick={handleMenuClick}
-          style={{ backgroundColor: "#DAC0A3" }}
+          style={{ backgroundColor: "#ffc221" }}
         />
       </Sider>
 
@@ -164,7 +173,7 @@ const App = ({ children, userType }) => {
             left: collapsed ? 80 : 200,
             width: `calc(100% - ${collapsed ? 80 : 200}px)`,
             height: "64px",
-            backgroundColor: "#DAC0A3",
+            backgroundColor: "rgb(14, 193, 243)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
