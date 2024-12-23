@@ -6,6 +6,11 @@ import Contact from "./common/Contact"
 import HomePage from './common/HomePage';
 import Login from "./common/Login" 
 import Sign from "./common/Sign" 
+import Cart from './common/Cart';
+import { CartProvider } from './common/CartContext';
+import Banner from "./common/banner" 
+import Timer from "./common/summa" 
+
 
 import Bread from './Category/Bread/Bread';
 import Croisant from './Category/Croissant/Croissant';
@@ -14,8 +19,7 @@ import Buns from './Category/Bun/Bun';
 import Sandwich from './Category/Sandwich/Sandwich';
 import Cakes from './Category/Cake/Cakes';
 
-import Cart from './common/Cart';
-import { CartProvider } from './common/CartContext';
+
 
 
 function App() {
@@ -57,6 +61,9 @@ function App() {
 
         <Route path='/' element={<Login/>}/>
         <Route path='/sign' element={<Sign/>}/>
+        <Route path='/ban' element={<Banner/>}/>
+        <Route path='/tim' element={<Timer/>}/>
+
 
 
        </Routes>

@@ -78,8 +78,8 @@ const App = ({ children, userType }) => {
             top: 0,
             left: 0,
             width: "100%",
-            height: "100px",
-            backgroundColor: "#2E5077",
+            height: "80px",
+            backgroundColor: "#004f9a",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -118,7 +118,7 @@ const App = ({ children, userType }) => {
             }}
           >
             <EnvironmentOutlined
-              style={{ color: "yellow", fontSize: "30px", marginRight: "20px" }}
+              style={{ color: "#F3C623", fontSize: "30px", marginRight: "20px" }}
             />
             Delivery to
             <span

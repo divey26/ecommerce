@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'; // For useState and useEffect
-import { Typography } from 'antd'; // For Typography
-import { Layout, Row, Card as AntCard, message, Card, Col, Button, Carousel } from 'antd';
+import { Layout,Col, Row, Card as AntCard, message, Button, Carousel, Typography, Drawer } from 'antd'; // Added Typography and Drawer here
 import LayoutNew from '../Layout';
 import axios from 'axios'; 
 import styled from 'styled-components';
@@ -16,44 +15,42 @@ import p4 from "../Images/p4.jpg";
 import prod1 from "../Images/prod1.png"
 import banner1 from "../Images/valBanner.jpg"
 
-
-//department
-
+import Banner from "./banner" 
 
 
 import {
+  BarsOutlined,
   LogoutOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
 
-// Import images from the specified directory
-import backgroundImage from "./../p1.jpg";
 const { Header, Content } = Layout;
 const { Meta } = AntCard;
-
 const { Title } = Typography;
 
-
 const headerItem = [
-  { key: "1", text: "Department" },
-  { key: "2", text: "Help & Support" },
-  { key: "3", text: "Sign up", icon: <UserSwitchOutlined /> },
-  { key: "4", text: "Login", icon: <LogoutOutlined /> },
-  { key: "5", text: "Language" },
+ { key: "1", text: "All", icon: <BarsOutlined /> },
+  { key: "2", text: "Catagory" },
+  { key: "3", text: "Today's Deals" },
+  { key: "4", text: "Help & Support" },
+  { key: "5", text: "Sell" },
+  { key: "6", text: "Sign up", icon: <UserSwitchOutlined /> },
+
 ];
 
 const HomePage = () => {
-    const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [visible, setVisible] = useState(false);  // Drawer visibility state
   const navigate = useNavigate();
+
   const handleHeaderClick = (key) => {
-    if (key === "3") {
+    if (key === "6") {
       navigate("/sign");
     }
-    else if (key === '4') {
+    else if (key === '0') {
       navigate("/");
     }
   };
-
 
   const fetchCategories = async () => {
     try {
@@ -69,38 +66,66 @@ const HomePage = () => {
     fetchCategories(); // Fetch categories on component mount
   }, []);
 
+  const showSlider = () => {
+    setVisible(true);  // Open the drawer (slider)
+  };
+
+  const closeSlider = () => {
+    setVisible(false);  // Close the drawer (slider)
+  };
+
   return (
     <LayoutNew>
       <Layout>
-        {/* Add a header */}
+        {/* Header Section */}
         <StyledHeader1>
-          <div
+        <div style={{ display: "flex", justifyContent: "space-between"}}>
+        <div>
+          <Button
+            key="1"
+            type="text"
             style={{
-              flex: 1,
-              minWidth: 0,
-              display: "flex",
-              justifyContent: "flex-end",
-              paddingTop: 0
+              color: "#004f9a",
+              fontSize: "18px",
+              height: "20px",
+              padding: "20px",
+              
             }}
-          >
-            {headerItem.map((item) => (
+            onClick={showSlider} 
+                      >
+            <a></a>
+            <BarsOutlined /> All
+          </Button>
+       </div>
+
+          <div style={{ display: "flex", alignItems: "center" }}>
+          {headerItem
+        .filter((item) => item.key !== "1") // Exclude the "Category" button
+        .map((item) => (
               <Button
                 key={item.key}
                 type="text"
                 icon={item.icon}
-                style={{ color: "Black", fontSize: "20px" }}
+                style={{ color:"#004f9a", fontSize: "18px",height:"20px",padding:"20px" }}
                 onClick={() => handleHeaderClick(item.key)}
               >
                 {item.text}
               </Button>
             ))}
           </div>
-        </StyledHeader1>
+        </div>
+      </StyledHeader1>
 
-        {/* Add a header */}
+
+        {/* Discount and Banner Section */}
         <StyledHeader>
-          <h1>UP TO 40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY (12.02.2024) - Hurry, grab your favorite items now! </h1>
+          <h1>
+            UP TO 40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY (12.02.2024) - Hurry, grab your favorite items now! 
+            <span style={{ marginLeft: '300px' }}>FREE DELIVERY for purchase above 100$</span>
+          </h1>
         </StyledHeader>
+
+        <Banner/>
 
         {/* Carousel Component */}
         <Carousel autoplay dotPosition="bottom" autoplaySpeed={2000}>
@@ -118,34 +143,28 @@ const HomePage = () => {
           </div>
         </Carousel>
 
-          {/* Display categories in cards */}
-          <Content style={{marginTop:"15px" , marginBottom:"15px"}}>
+        {/* Display Categories */}
+        <Content style={{ marginTop: "15px", marginBottom: "15px" }}>
           <Row gutter={[16, 16]} justify="center">
             {categories.map((category) => (
               <Col xs={24} sm={12} lg={8} xl={4} key={category.categoryId}>
                 <StyledCard
                   hoverable
-                  cover={
-                    <img
-                      alt={category.categoryName}
-                      src={category.imageURL}
-                    />
-                  }
+                  cover={<img alt={category.categoryName} src={category.imageURL} />}
                 >
-                  <TitleStyle level={4} style={{ marginBottom:"50%"}}>
+                  <TitleStyle level={4}>
                     {category.categoryName}
                   </TitleStyle>
                 </StyledCard>
               </Col>
             ))}
           </Row>
-
         </Content>
 
-
-        <div >
-            <img src={banner1} style={{ width: "100%", height: "10%" }} />
-          </div>
+        {/* Banner Section */}
+        <div>
+          <img src={banner1} style={{ width: "100%", height: "10%" }} />
+        </div>
 
         {/* Video and Image Side by Side */}
         <VideoAndImageContainer>
@@ -159,20 +178,34 @@ const HomePage = () => {
               loop
             />
           </div>
-          
           <div className="image-container">
             <img src={prod1} alt="p2" style={{ width: "100%", height: "10%" }} />
           </div>
         </VideoAndImageContainer>
+
+        {/* Drawer for Slider Navigation */}
+        <Drawer
+          title="Navigation"
+          placement="left"
+          onClose={closeSlider}
+          open={visible}
+          width={400}
+        >
+          <p>Category 1</p>
+          <p>Category 2</p>
+          <p>Category 3</p>
+          <p>Category 4</p>
+        </Drawer>
 
       </Layout>
     </LayoutNew>
   );
 };
 
+// Styled Components
 const StyledHeader = styled(Header)`
-  background-color: #F3C623 !important;
-  color: white;
+  background-color: #ffc221 !important;
+  color:rgb(244, 65, 0);
   height: auto !important;
   padding: 5px 0 !important;
   margin-bottom: 15px;
@@ -183,11 +216,11 @@ const StyledHeader = styled(Header)`
   h1 {
     margin: 0 !important;
     font-size: 18px !important;
-    font-weight: 600 !important;
+    font-weight: 650 !important;
     padding: 0 !important;
     line-height: 1.2 !important;
     white-space: nowrap;
-    animation: scrollText 17s linear infinite;
+    animation: scrollText 16s linear infinite;
   }
 
   @keyframes scrollText {
@@ -201,23 +234,24 @@ const StyledHeader = styled(Header)`
 `;
 
 const StyledHeader1 = styled(Header)`
-  background-color: #E3F4F4 !important;
+  background-color: rgb(224, 245, 249);
   color: white;
-  height: 60px !important;
-  padding: 5px 0 !important;
+  height: 40px !important;
   margin-bottom: 5px;
   line-height: 1;
-  margin-top: 25px;
 
-  h1 {
-    margin: 0 !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    padding: 0 !important;
-    line-height: 1.2 !important;
+button {
+  border: none; /* Default border style */
+  border-radius: 4px; /* Adjust this value for reduced curvature */
+  transition: border 0.3s ease; /* Smooth transition for border and radius */
+
+  &:hover {
+    border: 1px solid #004f9a; /* Add black border on hover */
+    border-radius: 0px; /* Slightly reduce the curve on hover */
   }
-`;
+}
 
+`;
 
 
 const VideoAndImageContainer = styled.div`
@@ -233,20 +267,19 @@ const VideoAndImageContainer = styled.div`
 
   .image-container {
     width: 35.5%;
-    height: 50%;  // Set the height to 100% to match the height of the video
-    margin-right:10px:
-    }
+    height: 50%;
+    margin-right: 10px;
+  }
 `;
 
 const StyledCard = styled(AntCard)`
-  border: 1px solid  #d9d9d9;
+  border: 1px solid #d9d9d9;
   border-radius: 1px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 350px; /* Ensure uniform height for all cards */
+  height: 350px;
   padding: 1px;
-
 
   .ant-card-cover img {
     border-bottom: 1px solid #d9d9d9;
@@ -271,7 +304,7 @@ const TitleStyle = styled(Title)`
   margin-top: 15px;
   font-size: 15px;
   font-weight: bold;
-  color: #333; /* Adjust color as needed */
+  color: #333;
 `;
 
 export default HomePage;

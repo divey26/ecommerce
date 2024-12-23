@@ -1,0 +1,29 @@
+.all-button {
+    height: 50px;
+    border: none;
+    background-color: #ffffff;
+    color: black;
+    align-items: center;
+    font-size: 25px;
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+  }
+  
+  .all-button:hover {
+    background-color: #f0f0f0; /* Change background color on hover */
+    color: #1890ff; /* Change text color on hover */
+    transform: scale(1.05); /* Slightly enlarge the button */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+    cursor: pointer; /* Change cursor to pointer */
+  }
+  
+  .icon {
+    color: black;
+    font-size: 32px;
+    vertical-align: middle;
+    transition: color 0.3s ease; /* Smooth transition for icon color */
+  }
+  
+  .all-button:hover .icon {
+    color: #1890ff; /* Change icon color on hover */
+  }
+  

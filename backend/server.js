@@ -128,7 +128,26 @@ app.post('/api/login', async (req, res) => {
     res.status(500).send({ error: 'Error logging in' });
   }
 });
+///////////////////////////////////////////////////////////////////////
+// Variable to store the deadline
+let deadline = null;
 
+// API to set the deadline
+app.post('/api/deadline', (req, res) => {
+  deadline = req.body.deadline; // Save deadline sent from 'web'
+  res.status(200).json({ message: 'Deadline saved successfully' });
+});
+
+// API to get the deadline
+app.get('/api/deadline', (req, res) => {
+  if (deadline) {
+    res.status(200).json({ deadline });
+  } else {
+    res.status(404).json({ message: 'No deadline set' });
+  }
+
+});
+  //////////////////////////////////////////
 app.use('/api/cat', categoryRoutes);
 app.use('/api/products', productRoutes);
 

@@ -11,7 +11,7 @@ import Dashboard from './com/dashboard'
 
 
 import Summa from './com/Products'
-
+import Timer from './com/Timer/Timer'
 
 function App() {
   return (
@@ -26,6 +26,7 @@ function App() {
 
 
         <Route path="/summa" element={<Summa/>} />
+        <Route path="/timer" element={<Timer/>} />
 
         <Route path="/add-product" element={<ProductPage/>} />
          
