@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const Banner = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -9,7 +9,7 @@ const Banner = () => {
   useEffect(() => {
     const fetchDeadline = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/deadline');
+        const response = await fetch("http://localhost:5000/api/deadline");
         if (response.ok) {
           const data = await response.json();
           const parsedDeadline = new Date(data.deadline);
@@ -17,7 +17,7 @@ const Banner = () => {
           setShowBanner(new Date() < parsedDeadline);
         }
       } catch (error) {
-        console.error('Error fetching deadline:', error);
+        console.error("Error fetching deadline:", error);
       }
     };
 
@@ -41,9 +41,54 @@ const Banner = () => {
   return (
     <>
       {showBanner && deadline && (
-        <div style={{ background: 'yellow', padding: '10px', textAlign: 'center' }}>
-          <h2>Special Offer Ends At: {deadline.toLocaleString()}</h2>
-          <p>Time Remaining: {formatTimeRemaining(deadline - currentTime)}</p>
+        <div
+          style={{
+            backgroundColor: "#FFD700",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "15px 30px",
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src="https://icon-library.com/images/truck-icon/truck-icon-4.jpg" // Replace with your truck icon URL
+              alt="Truck Icon"
+              style={{ width: "30px", height: "30px", marginRight: "10px" }}
+            />
+            <p style={{ margin: 0, fontSize: "16px" }}>
+              <strong>Presents ready for pickup or delivery by</strong>{" "}
+              {deadline.toLocaleDateString()}
+            </p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+                color: "#000",
+              }}
+            >
+              You got this! Order by:{" "}
+              <span style={{ fontSize: "18px" }}>
+                {formatTimeRemaining(deadline - currentTime)}
+              </span>
+            </span>
+            <button
+              style={{
+                backgroundColor: "#fff",
+                color: "#000",
+                border: "1px solid #000",
+                borderRadius: "20px",
+                padding: "5px 15px",
+                cursor: "pointer",
+              }}
+              onClick={() => alert("Shop Now!")}
+            >
+              Shop Now
+            </button>
+          </div>
         </div>
       )}
     </>
@@ -52,14 +97,19 @@ const Banner = () => {
 
 // Helper Function to Format Time Remaining
 const formatTimeRemaining = (ms) => {
-  if (ms <= 0) return 'Expired';
+  if (ms <= 0) return "Expired";
 
-  const seconds = Math.floor((ms / 1000) % 60);
-  const minutes = Math.floor((ms / (1000 * 60)) % 60);
-  const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-  const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  const seconds = Math.floor((ms / 1000) % 60)
+    .toString()
+    .padStart(2, "0");
+  const minutes = Math.floor((ms / (1000 * 60)) % 60)
+    .toString()
+    .padStart(2, "0");
+  const hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
+    .toString()
+    .padStart(2, "0");
 
-  return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  return `${hours} : ${minutes} : ${seconds}`;
 };
 
 export default Banner;

@@ -144,7 +144,7 @@ const HomePage = () => {
         </Carousel>
 
         {/* Display Categories */}
-        <Content style={{ marginTop: "15px", marginBottom: "15px" }}>
+      {/*  <Content style={{ marginTop: "15px", marginBottom: "15px" }}>
           <Row gutter={[16, 16]} justify="center">
             {categories.map((category) => (
               <Col xs={24} sm={12} lg={8} xl={4} key={category.categoryId}>
@@ -159,7 +159,25 @@ const HomePage = () => {
               </Col>
             ))}
           </Row>
-        </Content>
+        </Content>*/}
+
+        {/* Display Categories */}
+<Content style={{ marginTop: "15px", marginBottom: "50px",marginTop:"50px" }}>
+<Row gutter={[16, 16]} justify="center">
+  {categories.map((category) => (
+    <Col xs={12} sm={10} md={8} lg={6} xl={3} key={category.categoryId}>
+      <StyledCard
+        hoverable
+        cover={<img alt={category.categoryName} src={category.imageURL} />}
+      >
+        <TitleStyle level={5} style={{color:"black",fontSize:"16px"}}>{category.categoryName}</TitleStyle>
+      </StyledCard>
+    </Col>
+  ))}
+</Row>
+
+</Content>
+
 
         {/* Banner Section */}
         <div>
@@ -271,19 +289,17 @@ const VideoAndImageContainer = styled.div`
     margin-right: 10px;
   }
 `;
-
 const StyledCard = styled(AntCard)`
   border: 1px solid #d9d9d9;
-  border-radius: 1px;
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 350px;
-  padding: 1px;
+  height: 220px;
+  padding: 5px;
 
   .ant-card-cover img {
-    border-bottom: 1px solid #d9d9d9;
-    height: 250px;
+    height: 140px;
     object-fit: cover;
     width: 100%;
     border-top-left-radius: 5px;
@@ -291,18 +307,19 @@ const StyledCard = styled(AntCard)`
   }
 
   .ant-card-body {
-    padding: 10px;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 10px;
   }
 `;
 
+
 const TitleStyle = styled(Title)`
   text-align: center;
-  margin-top: 15px;
-  font-size: 15px;
+  margin-top: 1px;
+  font-size: 20px;
   font-weight: bold;
   color: #333;
 `;
