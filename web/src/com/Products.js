@@ -175,11 +175,10 @@ const CategoryModal = () => {
             </Space>
           </Space>
 
-          <h1 className="text-xl font-bold mb-4">Select Category and Subcategory</h1>
-
+            <br/>
           {/* Button to Open Modal */}
           <Button type="primary" onClick={showModal}>
-            Open Selector
+            Add new products
           </Button>
 
           {/* Modal */}

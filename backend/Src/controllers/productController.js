@@ -37,21 +37,22 @@ exports.getProducts = async (req, res) => {
 
   // productController.js
 
-exports.editProduct = async (req, res) => {
-    const { productId } = req.params;
-    const updateData = req.body;
-  
+  exports.editProduct = async (req, res) => {
+    const { productId } = req.params; // Get productId from the URL
+    const updateData = req.body; // Get updated product data from the request body
+    
     try {
-      const updatedProduct = await Product.findByIdAndUpdate(
-        productId,
-        updateData,
-        { new: true } // Returns the updated product
+      // Find the product by productId (not by _id)
+      const updatedProduct = await Product.findOneAndUpdate(
+        { productId: productId }, // Match the productId in the database
+        updateData, // Updated data
+        { new: true } // Return the updated product
       );
-  
+    
       if (!updatedProduct) {
         return res.status(404).json({ message: 'Product not found' });
       }
-  
+    
       res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
     } catch (error) {
       console.error(error);
@@ -61,11 +62,12 @@ exports.editProduct = async (req, res) => {
   
   // productController.js
 
-exports.deleteProduct = async (req, res) => {
-    const { productId } = req.params;
-  
+  exports.deleteProduct = async (req, res) => {
+    const { productId } = req.params; // Get productId from the URL
+    
     try {
-      const deletedProduct = await Product.findByIdAndDelete(productId);
+      // Find and delete product by productId
+      const deletedProduct = await Product.findOneAndDelete({ productId: productId });
   
       if (!deletedProduct) {
         return res.status(404).json({ message: 'Product not found' });
@@ -77,4 +79,5 @@ exports.deleteProduct = async (req, res) => {
       res.status(500).json({ message: 'Error deleting product' });
     }
   };
+  
   

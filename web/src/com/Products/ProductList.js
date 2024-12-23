@@ -138,7 +138,7 @@ const ProductsList = () => {
        {/* Modal for Editing Product */}
        <Modal
         title="Edit Product"
-        visible={isEditing}
+        open={isEditing}
         onCancel={() => setIsEditing(false)}
         onOk={handleSaveEdit}
       >
