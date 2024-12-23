@@ -3,7 +3,6 @@ import { Layout, Space, Typography, Form, message, Button, Modal, Table, Image, 
 import axios from 'axios'; 
 import { StockOutlined } from '@ant-design/icons';
 import LayoutNew from '../Layout';
-import ItemForm from './AddEditItems'; // Ensure the import path is correct
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -151,7 +150,6 @@ const Dashboard = () => {
                 });
             }}
           >
-            <ItemForm form={form} onFinish={onFinish} />
           </Modal>
         </Layout>
       </LayoutNew>

@@ -8,6 +8,8 @@ const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 
 const categoryRoutes = require('./Src/routes/categoryRoutes');
+const productRoutes = require('./Src/routes/productRoutes');
+
 
 
 dotenv.config();
@@ -26,18 +28,6 @@ mongoose.connect(uri, {
 })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('MongoDB connection error:', err));
-
-// General item schema
-const itemSchema = new mongoose.Schema({
-  itemname: { type: String, required: true },
-  price: { type: String, required: true },
-  description: { type: String, required: true },
-  imageURL: { type: String, required: true },
-  type: { type: String, required: true } // General type field for distinguishing items
-});
-
-// Create models
-const Item = mongoose.model('Item', itemSchema);
 
 // Register section
 const formSchema = new mongoose.Schema({
@@ -68,7 +58,6 @@ const formValidationSchema = Joi.object({
   agreement: Joi.boolean().valid(true).required(),
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Register endpoint
 app.post('/api/register', async (req, res) => {
   console.log('Received request data:', req.body);
@@ -140,57 +129,9 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-// Item section
-app.post('/api/items', async (req, res) => {
-  try {
-    const { itemname, price, description, imageURL, type } = req.body;
-
-    if (!itemname || !price || !description || !type) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-
-    // Validate price to ensure it's a number
-    if (isNaN(price)) {
-      return res.status(400).json({ error: 'Price must be a number' });
-    }
-
-    // Create a new item with the provided type
-    const newItem = new Item({
-      itemname, 
-      price, 
-      description, 
-      imageURL, 
-      type
-    });
-
-    await newItem.save();
-    res.status(201).json(newItem);
-  } catch (error) {
-    console.error('Error creating item:', error);
-    res.status(500).json({ error: 'Error creating item' });
-  }
-});
-
-// Fetch all items
-app.get('/api/items', async (req, res) => {
-  try {
-    const { type } = req.query;
-
-    // If a type is provided, filter by that type
-    const filter = type ? { type } : {};
-
-    const items = await Item.find(filter);
-    res.status(200).json(items);
-  } catch (error) {
-    console.error('Error fetching items:', error);
-    res.status(500).json({ error: 'Error fetching items' });
-  }
-});
-
 app.use('/api/cat', categoryRoutes);
+app.use('/api/products', productRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

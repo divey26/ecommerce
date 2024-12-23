@@ -2,12 +2,15 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Bread from './com/Bread'
 import Bun from './com/Bun'
-import CategoryPage from './com/Category';
+import CategoryPage from './com/Category/Category';
 
 import ProductPage from './com/Products';
 
 
 import Dashboard from './com/dashboard'
+
+
+import Summa from './com/Products'
 
 
 function App() {
@@ -20,6 +23,9 @@ function App() {
       
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/category" element={<CategoryPage/>} />
+
+
+        <Route path="/summa" element={<Summa/>} />
 
         <Route path="/add-product" element={<ProductPage/>} />
          

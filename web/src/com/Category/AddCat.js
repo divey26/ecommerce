@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Form, Row, Col, Input, Button, Upload, message, Space } from 'antd';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'; // Import the icons
-import { storage, auth } from '../common/firebaseConfig';
+import { storage, auth } from '../../common/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 

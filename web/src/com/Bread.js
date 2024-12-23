@@ -3,7 +3,7 @@ import { Layout, Space, Typography, Form, message, Button, Modal, Table, Image }
 import axios from 'axios'; 
 import { StockOutlined } from '@ant-design/icons';
 import LayoutNew from '../Layout';
-import ItemForm from './AddEditItems'; // Make sure the import path is correct
+//import ItemForm from './AddEditItems'; // Make sure the import path is correct
 
 const { Title } = Typography;
 
@@ -126,7 +126,7 @@ const BreadManagementPage = () => {
                 });
             }}
           >
-            <ItemForm form={form} onFinish={onFinish} />
+            
           </Modal>
         </Layout>
       </LayoutNew>

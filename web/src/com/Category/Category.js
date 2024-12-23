@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Space, Typography, Form, message, Button, Modal, Table, Image } from "antd";
 import axios from 'axios'; 
 import { StockOutlined } from '@ant-design/icons';
-import LayoutNew from '../Layout';
+import LayoutNew from '../../Layout';
 import ItemForm from './AddCat'; // Make sure the import path is correct
 
 const { Title } = Typography;
