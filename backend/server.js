@@ -12,8 +12,6 @@ const productRoutes = require('./Src/routes/productRoutes');
 const videoRoutes = require('./Src/routes/shortsRoutes'); // Import the video routes
 const cartRoutes = require("./Src/routes/cartRoutes");
 
-
-
 dotenv.config();
 
 const app = express();
@@ -99,7 +97,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Login endpoint
+// Login endpoint (updated to return both token and userId)
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -116,45 +114,26 @@ app.post('/api/login', async (req, res) => {
   try {
     const user = await FormData.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email1 or password000' });
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password0000' });
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token });
+    res.status(200).json({ token, userId: user._id });  // Return both token and userId
   } catch (error) {
     res.status(500).send({ error: 'Error logging in' });
   }
 });
-///////////////////////////////////////////////////////////////////////
-// Variable to store the deadline
-let deadline = null;
 
-// API to set the deadline
-app.post('/api/deadline', (req, res) => {
-  deadline = req.body.deadline; // Save deadline sent from 'web'
-  res.status(200).json({ message: 'Deadline saved successfully' });
-});
-
-// API to get the deadline
-app.get('/api/deadline', (req, res) => {
-  if (deadline) {
-    res.status(200).json({ deadline });
-  } else {
-    res.status(404).json({ message: 'No deadline set' });
-  }
-
-});
-  //////////////////////////////////////////
+// Additional endpoints for category, product, video, cart
 app.use('/api/cat', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/videos', videoRoutes);
 app.use("/api/cart", cartRoutes);
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

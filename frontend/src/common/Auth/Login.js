@@ -4,8 +4,6 @@ import { Form, Input, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import imageSrc from "../../Images/logo.png";
 
-
-
 const Login = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -14,24 +12,24 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/login', values);
       console.log("Login Response:", response.data); // Log the response to debug
-  
+
       const { token, userId } = response.data;
-  
-      // Store token and userId
+
+      // Store token and userId in localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
-  
+      console.log("uid:", userId); // Log the response to debug
+
+      // Redirect user to the home page after successful login
       navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
       alert('Login failed. Please check your credentials.');
     }
   };
-  
 
   return (
     <div style={styles.container}>
-      
       <Form
         form={form}
         name="login"
@@ -95,6 +93,3 @@ const styles = {
 };
 
 export default Login;
-
-
-

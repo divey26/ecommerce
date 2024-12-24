@@ -10,6 +10,8 @@ export const CartProvider = ({ children }) => {
       const response = await fetch(`http://localhost:5000/api/cart/${userId}`);
       const data = await response.json();
       console.log("Fetched cart data:", data);
+
+      // Ensure cartItems exists and is properly set
       setCart(data.cartItems || []);
     } catch (error) {
       console.error("Failed to fetch cart:", error);
@@ -22,5 +24,6 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+
 
 export const useCart = () => useContext(CartContext);
