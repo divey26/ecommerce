@@ -25,30 +25,30 @@ const ProductsList = () => {
     fetchProducts();
   }, []);
 
-    // Handle Edit button click
-    const handleEditClick = (product) => {
-        setEditingProduct(product);
-        setIsEditing(true);
-      };
-    
-      // Handle Save Edit
-      const handleSaveEdit = async () => {
-        try {
-            const updatedProduct = await axios.put(
-                `http://localhost:5000/api/products/${editingProduct.productId}`,
-                editingProduct
-              );
-              
-          setProducts(products.map((p) => (p.productId === updatedProduct.data.product.productId ? updatedProduct.data.product : p)));
-          setIsEditing(false);
-          setEditingProduct(null);
-          message.success('Product updated successfully');
-        } catch (error) {
-          message.error('Error updating product');
-        }
-      };
-    
-        // Handle Delete button click
+  // Handle Edit button click
+  const handleEditClick = (product) => {
+    setEditingProduct(product);
+    setIsEditing(true);
+  };
+
+  // Handle Save Edit
+  const handleSaveEdit = async () => {
+    try {
+      const updatedProduct = await axios.put(
+        `http://localhost:5000/api/products/${editingProduct.productId}`,
+        editingProduct
+      );
+
+      setProducts(products.map((p) => (p.productId === updatedProduct.data.product.productId ? updatedProduct.data.product : p)));
+      setIsEditing(false);
+      setEditingProduct(null);
+      message.success('Product updated successfully');
+    } catch (error) {
+      message.error('Error updating product');
+    }
+  };
+
+  // Handle Delete button click
   const handleDeleteClick = async (productId) => {
     try {
       await axios.delete(`http://localhost:5000/api/products/${productId}`);
@@ -109,19 +109,19 @@ const ProductsList = () => {
       render: (imageURL) => <img src={imageURL} alt="Product" style={{ width: 50, height: 50 }} />,
     },
     {
-        title: 'Actions',
-        key: 'actions',
-        render: (text, record) => (
-          <Space>
-            <Button onClick={() => handleEditClick(record)} type="primary">
-              Edit
-            </Button>
-            <Button onClick={() => handleDeleteClick(record.productId)} type="danger">
-              Delete
-            </Button>
-          </Space>
-        ),
-      },
+      title: 'Actions',
+      key: 'actions',
+      render: (text, record) => (
+        <Space>
+          <Button onClick={() => handleEditClick(record)} type="primary">
+            Edit
+          </Button>
+          <Button onClick={() => handleDeleteClick(record.productId)} type="danger">
+            Delete
+          </Button>
+        </Space>
+      ),
+    },
   ];
 
   return (
@@ -135,8 +135,8 @@ const ProductsList = () => {
         pagination={{ pageSize: 10 }}
       />
 
-       {/* Modal for Editing Product */}
-       <Modal
+      {/* Modal for Editing Product */}
+      <Modal
         title="Edit Product"
         open={isEditing}
         onCancel={() => setIsEditing(false)}
@@ -152,6 +152,12 @@ const ProductsList = () => {
             value={editingProduct?.price}
             onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
             placeholder="Price"
+            style={{ marginTop: 10 }}
+          />
+          <Input
+            value={editingProduct?.discount}
+            onChange={(e) => setEditingProduct({ ...editingProduct, discount: e.target.value })}
+            placeholder="Discount"
             style={{ marginTop: 10 }}
           />
           <Input

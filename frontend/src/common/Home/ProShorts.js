@@ -134,6 +134,7 @@ const HomePage = () => {
                   backgroundColor: '#ffffff',
                   borderRadius: '10px',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  
                 }}
               >
                 {/* Product Image */}

@@ -16,17 +16,16 @@ import prod1 from "../Images/prod1.png"
 import banner1 from "../Images/valBanner.jpg"
 
 import Banner from "./banner" 
-import Shorts from "./Home/ProShorts" 
+import Shorts from "./Home/ProShorts"
+import AllProducts from "./Products/AllProList" 
 
 
 import {
   BarsOutlined,
-  LogoutOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
 
 const { Header, Content } = Layout;
-const { Meta } = AntCard;
 const { Title } = Typography;
 
 const headerItem = [
@@ -118,15 +117,20 @@ const HomePage = () => {
       </StyledHeader1>
 
 
-        {/* Discount and Banner Section */}
+       <div> {/* Discount and Banner Section */}
         <StyledHeader>
           <h1>
             UP TO 40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY (12.02.2024) - Hurry, grab your favorite items now! 
             <span style={{ marginLeft: '300px' }}>FREE DELIVERY for purchase above 100$</span>
           </h1>
         </StyledHeader>
-
         <Banner/>
+        </div>
+
+        
+
+        <br/>
+
 
         {/* Carousel Component */}
         <Carousel autoplay dotPosition="bottom" autoplaySpeed={2000}>
@@ -145,39 +149,21 @@ const HomePage = () => {
         </Carousel>
 
         {/* Display Categories */}
-      {/*  <Content style={{ marginTop: "15px", marginBottom: "15px" }}>
+          <Content style={{ marginTop: "15px", marginBottom: "50px",marginTop:"50px" }}>
           <Row gutter={[16, 16]} justify="center">
             {categories.map((category) => (
-              <Col xs={24} sm={12} lg={8} xl={4} key={category.categoryId}>
+              <Col xs={12} sm={10} md={8} lg={6} xl={3} key={category.categoryId}>
                 <StyledCard
                   hoverable
                   cover={<img alt={category.categoryName} src={category.imageURL} />}
                 >
-                  <TitleStyle level={4}>
-                    {category.categoryName}
-                  </TitleStyle>
+                  <TitleStyle level={5} style={{color:"black",fontSize:"16px"}}>{category.categoryName}</TitleStyle>
                 </StyledCard>
               </Col>
             ))}
           </Row>
-        </Content>*/}
 
-        {/* Display Categories */}
-<Content style={{ marginTop: "15px", marginBottom: "50px",marginTop:"50px" }}>
-<Row gutter={[16, 16]} justify="center">
-  {categories.map((category) => (
-    <Col xs={12} sm={10} md={8} lg={6} xl={3} key={category.categoryId}>
-      <StyledCard
-        hoverable
-        cover={<img alt={category.categoryName} src={category.imageURL} />}
-      >
-        <TitleStyle level={5} style={{color:"black",fontSize:"16px"}}>{category.categoryName}</TitleStyle>
-      </StyledCard>
-    </Col>
-  ))}
-</Row>
-
-</Content>
+          </Content>
 
 
         {/* Banner Section */}
@@ -203,6 +189,7 @@ const HomePage = () => {
         </VideoAndImageContainer>
 
         <Shorts/>
+        <AllProducts/>
 
         {/* Drawer for Slider Navigation */}
         <Drawer

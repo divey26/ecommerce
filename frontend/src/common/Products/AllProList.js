@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, Typography, message, Modal, Input } from 'antd';
+import { Card, Col, Row, Typography, message, Modal, Input } from 'antd';
 import axios from 'axios';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
@@ -25,118 +25,97 @@ const ProductsList = () => {
     fetchProducts();
   }, []);
 
-    // Handle Edit button click
-    const handleEditClick = (product) => {
-        setEditingProduct(product);
-        setIsEditing(true);
-      };
-    
-      // Handle Save Edit
-      const handleSaveEdit = async () => {
-        try {
-            const updatedProduct = await axios.put(
-                `http://localhost:5000/api/products/${editingProduct.productId}`,
-                editingProduct
-              );
-              
-          setProducts(products.map((p) => (p.productId === updatedProduct.data.product.productId ? updatedProduct.data.product : p)));
-          setIsEditing(false);
-          setEditingProduct(null);
-          message.success('Product updated successfully');
-        } catch (error) {
-          message.error('Error updating product');
-        }
-      };
-    
-        // Handle Delete button click
-  const handleDeleteClick = async (productId) => {
+
+  // Handle Save Edit
+  const handleSaveEdit = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/products/${productId}`);
-      setProducts(products.filter((product) => product.productId !== productId));
-      message.success('Product deleted successfully');
+      const updatedProduct = await axios.put(
+        `http://localhost:5000/api/products/${editingProduct.productId}`,
+        editingProduct
+      );
+
+      setProducts(
+        products.map((p) =>
+          p.productId === updatedProduct.data.product.productId
+            ? updatedProduct.data.product
+            : p
+        )
+      );
+      setIsEditing(false);
+      setEditingProduct(null);
+      message.success('Product updated successfully');
     } catch (error) {
-      message.error('Error deleting product');
+      message.error('Error updating product');
     }
   };
 
-  // Define columns for the table
-  const columns = [
-    {
-      title: 'Product ID',
-      dataIndex: 'productId',
-      key: 'productId',
-    },
-    {
-      title: 'Item Name',
-      dataIndex: 'itemName',
-      key: 'itemName',
-    },
-    {
-      title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-    },
-    {
-      title: 'Subcategory',
-      dataIndex: 'subcategory',
-      key: 'subcategory',
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-      render: (text) => `$${text}`, // Format price as currency
-    },
-    {
-      title: 'Rating',
-      dataIndex: 'rating',
-      key: 'rating',
-    },
-    {
-      title: 'Discount',
-      dataIndex: 'discount',
-      key: 'discount',
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
-      title: 'Image',
-      dataIndex: 'imageURL',
-      key: 'imageURL',
-      render: (imageURL) => <img src={imageURL} alt="Product" style={{ width: 50, height: 50 }} />,
-    },
-    {
-        title: 'Actions',
-        key: 'actions',
-        render: (text, record) => (
-          <Space>
-            <Button onClick={() => handleEditClick(record)} type="primary">
-              Edit
-            </Button>
-            <Button onClick={() => handleDeleteClick(record.productId)} type="danger">
-              Delete
-            </Button>
-          </Space>
-        ),
-      },
-  ];
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(i < rating ? '⭐' : '☆');
+    }
+    return stars.join(' ');
+  };
+
+  const trimDescription = (description, maxLength = 70) => {
+    if (description.length > maxLength) {
+      return description.substring(0, maxLength) + '...';
+    }
+    return description;
+  };
 
   return (
     <div style={{ padding: '20px' }}>
-      <Title level={2}>Products List</Title>
-      <Table
-        columns={columns}
-        dataSource={products}
-        rowKey="productId"
-        loading={loading}
-        pagination={{ pageSize: 10 }}
-      />
+      <Title level={2}>Products</Title>
+      <Row gutter={[16, 16]} justify="start" align="top">
+        {loading ? (
+          <Text>Loading products...</Text>
+        ) : (
+          products.map((product) => (
+            <Col xs={24} sm={12} md={8} lg={4} xl={4} key={product.productId}>
+              <Card
+                hoverable
+                cover={<img alt={product.itemName} src={product.imageURL} style={{ height: 150, objectFit: 'cover' }} />}
+                style={{ width: '100%', height: 400 }} // Set the fixed height here
+              >
+                <div style={{ textAlign: 'left', height: 'calc(100% - 100px)', overflow: 'hidden' }}>
+                <Row align="middle" justify="start">
+                    {product.discount > 0 ? (
+                      <>
+                        <Col>
+                          <Title level={4} style={{ color: 'Green', margin: 0 }}>
+                            ${product.price - (product.price * product.discount) / 100}
+                          </Title>
+                        </Col>
+                        <Col style={{ marginLeft: '10px' }}>
+                          <Text style={{ textDecoration: 'line-through', fontSize: '15px', color: '#a0a0a0' }}>
+                            ${product.price}
+                          </Text>
+                        </Col>
+                      </>
+                    ) : (
+                      <Col>
+                        <Title level={4} style={{ color: '#004f9a', margin: 0 }}>${product.price}</Title>
+                      </Col>
+                    )}
+                  </Row>
 
-       {/* Modal for Editing Product */}
-       <Modal
+                  <p style={{ fontSize: '15px' }}>
+                    {product.itemName} | {trimDescription(product.description)}
+                  </p>
+                  <Text style={{ fontSize: '15px' }}>
+                    {renderStars(product.rating)} {product.rating}
+                  </Text>
+                </div>
+              </Card>
+            </Col>
+          ))
+        )}
+      </Row>
+
+      {/* Modal for Editing Product */}
+      <Modal
         title="Edit Product"
         open={isEditing}
         onCancel={() => setIsEditing(false)}
@@ -145,18 +124,27 @@ const ProductsList = () => {
         <div>
           <Input
             value={editingProduct?.itemName}
-            onChange={(e) => setEditingProduct({ ...editingProduct, itemName: e.target.value })}
+            onChange={(e) =>
+              setEditingProduct({ ...editingProduct, itemName: e.target.value })
+            }
             placeholder="Item Name"
           />
           <Input
             value={editingProduct?.price}
-            onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
+            onChange={(e) =>
+              setEditingProduct({ ...editingProduct, price: e.target.value })
+            }
             placeholder="Price"
             style={{ marginTop: 10 }}
           />
           <Input
             value={editingProduct?.description}
-            onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
+            onChange={(e) =>
+              setEditingProduct({
+                ...editingProduct,
+                description: e.target.value,
+              })
+            }
             placeholder="Description"
             style={{ marginTop: 10 }}
           />

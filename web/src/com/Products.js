@@ -8,9 +8,7 @@ import 'antd/dist/reset.css';
 import LayoutNew from '../Layout';
 import ProductList from './Products/ProductList'; // Path to the ProductsList component
 
-
 const { Title } = Typography;
-
 const { Option } = Select;
 
 const CategoryModal = () => {
@@ -21,6 +19,7 @@ const CategoryModal = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [file, setFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null); // State to track product being edited
 
   // Fetch categories from the backend
   useEffect(() => {
@@ -107,9 +106,15 @@ const CategoryModal = () => {
     }
   };
 
-  // Show modal
-  const showModal = () => {
+  // Show modal with pre-filled data for editing
+  const showModal = (product = null) => {
+    setProductToEdit(product);
     setIsModalOpen(true);
+    if (product) {
+      setSelectedCategory(product.category);
+      setSelectedSubcategory(product.subcategory);
+      setFile(null); // Optional, reset file
+    }
   };
 
   // Hide modal
@@ -118,16 +123,15 @@ const CategoryModal = () => {
     setSelectedCategory('');
     setSelectedSubcategory('');
     setFile(null);
+    setProductToEdit(null); // Reset product to edit
   };
 
-  // Handle save and close modal
+  // Handle save or update product
   const handleSave = async (values) => {
     const imageURL = await handleUpload(file);
     if (imageURL) {
-      const productId = `PRO${Math.floor(1000 + Math.random() * 9000)}`; // Generate unique 4-digit ID starting with 'PRO'
-  
       const productData = {
-        productId: productId,
+        productId: productToEdit ? productToEdit.productId : `PRO${Math.floor(1000 + Math.random() * 9000)}`,
         itemName: values.itemName,
         category: selectedCategory,
         subcategory: selectedSubcategory,
@@ -136,11 +140,14 @@ const CategoryModal = () => {
         offerName: values.offerName,
         discount: values.discount,
         description: values.description,
-        imageURL: imageURL,
+        imageURL: imageURL || productToEdit?.imageURL, // Use existing image URL if no new image is uploaded
       };
-  
+
       try {
-        const response = await axios.post('http://localhost:5000/api/products', productData);
+        const apiUrl = productToEdit ? `http://localhost:5000/api/products/${productToEdit.productId}` : 'http://localhost:5000/api/products';
+        const method = productToEdit ? 'put' : 'post';
+
+        const response = await axios({ method, url: apiUrl, data: productData });
         console.log('Product saved successfully:', response.data);
         setIsModalOpen(false);
       } catch (error) {
@@ -150,13 +157,11 @@ const CategoryModal = () => {
       message.error('Image upload failed. Please try again.');
     }
   };
-  
 
   return (
     <LayoutNew>
       <Layout>
         <div className="p-4 max-w-md mx-auto bg-white shadow-md rounded">
-
           <Space
             style={{
               background: "rgb(224, 245, 249)",
@@ -174,23 +179,22 @@ const CategoryModal = () => {
                 Products
               </Title>
             </Space>
-                      {/* Button to Open Modal */}
-          <Button type="primary" onClick={showModal} style={{backgroundColor:"#ffc221",color:"black",fontSize:"16px"}}>
-            Add products
-          </Button>
+            {/* Button to Open Modal */}
+            <Button type="primary" onClick={() => showModal()} style={{backgroundColor:"#ffc221",color:"black",fontSize:"16px"}}>
+              Add products
+            </Button>
           </Space>
 
-            <br/>
-
+          <br />
 
           {/* Modal */}
           <Modal
-            title="Choose Category and Subcategory"
+            title={productToEdit ? "Edit Product" : "Add New Product"}
             open={isModalOpen}
             onCancel={handleCancel}
             footer={null}
           >
-            <Form layout="vertical" onFinish={handleSave}>
+            <Form layout="vertical" onFinish={handleSave} initialValues={productToEdit}>
               <Row gutter={[16, 16]}>
                 <Col span={24}>
                   <Form.Item
@@ -317,7 +321,6 @@ const CategoryModal = () => {
             </Form>
           </Modal>
           <ProductList />
-
         </div>
       </Layout>
     </LayoutNew>
