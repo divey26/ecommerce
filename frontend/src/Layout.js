@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import imageSrc from "./Images/logo.png";
 import { TextField } from "@mui/material"; // MUI TextField for the search bar
 import Flag from "react-world-flags"; // Import Flag component
+import styled from 'styled-components';
+
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
@@ -128,7 +130,7 @@ const App = ({ children, userType }) => {
                 marginLeft: "5px",
               }}
             >
-            SRILANKA
+              SRILANKA
             </span>
           </div>
 
@@ -139,7 +141,6 @@ const App = ({ children, userType }) => {
               alignItems: "center",
               flexGrow: 1,
               justifyContent: "center",
-              
             }}
           >
             <TextField
@@ -181,12 +182,12 @@ const App = ({ children, userType }) => {
                 width: 90,
                 marginLeft: "60px",
                 height: "40px",
-                fontSize:"16px"
+                fontSize: "16px",
               }}
               onChange={handleLanguageChange}
             >
               <Option value="en">
-                <Flag code="US" style={{ width: "20px", marginRight: "10px", }} />
+                <Flag code="US" style={{ width: "20px", marginRight: "10px" }} />
                 EN
               </Option>
               <Option value="ta">
@@ -252,10 +253,47 @@ const App = ({ children, userType }) => {
           </div>
         </Content>
 
-        <Footer style={{ textAlign: "center" }}></Footer>
+        <StyledFooter>
+        <div >
+        We’d love to hear what you think!
+        <br/><br/>
+        <Button style={{color:"#004f9a",borderColor:"#004f9a",borderRadius:"50px"}}>  Give feedback</Button>
+
+        </div>
+      </StyledFooter>
+        {/* Footer */}
+        <Footer
+         style={{
+            textAlign: "center",
+            backgroundColor: "#004f9a",
+            color: "white",
+            padding: "20px",
+            fontSize: "14px",
+          }}
+        >
+          <p>&copy; 2024 HALO. All rights reserved.</p>
+          <p>Powered by Your Dvenoph </p>
+          
+          
+        </Footer>
       </Layout>
     </Layout>
   );
 };
+
+
+const StyledFooter = styled(Header)`
+  background-color: rgb(224, 245, 249);
+  color: black;
+  height: 130px !important;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0;
+  line-height: 1;
+`;
 
 export default App;

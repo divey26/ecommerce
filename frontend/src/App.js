@@ -11,6 +11,9 @@ import { CartProvider } from './common/CartContext';
 import Banner from "./common/banner" 
 import Timer from "./common/summa" 
 
+import AllProducts from "./common/Products/AllProducts" 
+
+
 /*
 import Bread from './Category/Bread/Bread';
 import Croisant from './Category/Croissant/Croissant';
@@ -49,21 +52,13 @@ function App() {
           }
         />
         
-          
-      
-         {/*
-        <Route path='/bread' element={<Bread/>}/>
-        <Route path='/croissants' element={<Croisant/>}/>
-        <Route path='/cookies' element={<Cook/>}/>
-        <Route path='/buns' element={<Buns/>}/>
-        <Route path='/sandwiches' element={<Sandwich/>}/>
-        <Route path='/cakes' element={<Cakes/>}/>*/}
-
         <Route path='/' element={<Login/>}/>
         <Route path='/sign' element={<Sign/>}/>
         <Route path='/ban' element={<Banner/>}/>
         <Route path='/tim' element={<Timer/>}/>
 
+
+        <Route path='/all-pro' element={<AllProducts/>}/>
 
 
        </Routes>

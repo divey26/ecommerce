@@ -8,17 +8,54 @@ const { Title, Text } = Typography;
 const HomePage = () => {
   const [videos, setVideos] = useState([]);
 
-  // Fetch videos from API
   const fetchVideos = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/videos/get-all-videos');
-      setVideos(response.data.map(video => ({ ...video, isPlaying: false }))); // Add isPlaying state to each video
+      // Fetch video data from the API
+      const videoResponse = await axios.get('http://localhost:5000/api/videos/get-all-videos');
+      const videoData = videoResponse.data;
+  
+      const videosWithDetails = await Promise.all(
+        videoData.map(async (video) => {
+          try {            
+            // Fetch product details from the API
+            const productResponse = await axios.get(`http://localhost:5000/api/products/${video.productId}`);
+            const product = productResponse.data.product; // Accessing the 'product' field
+  
+            // Check if product data is valid
+            const productName = product.itemName ? product.itemName : 'Unknown Product';
+            const price = product.price ? product.price : 'N/A';
+            const imageURL = product.imageURL ? product.imageURL : '';
+  
+            // Return the video object with product details
+            return {
+              ...video,
+              productName,
+              price,
+              imageURL,
+              isPlaying: false,
+            };
+  
+          } catch (error) {
+            console.error(`Error fetching product details for productId: ${video.productId}`, error);
+            return {
+              ...video,
+              productName: 'Unknown Product',
+              price: 'N/A',
+              imageURL: '',
+              isPlaying: false,
+            };
+          }
+        })
+      );
+  
+      setVideos(videosWithDetails);
+  
     } catch (error) {
       console.error('Error fetching videos:', error);
       message.error('Failed to fetch videos. Please try again.');
     }
   };
-
+  
   const handleMouseEnter = (videoId) => {
     setVideos((prevVideos) =>
       prevVideos.map((video) =>
@@ -36,53 +73,115 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    fetchVideos(); // Fetch videos on component mount
+    fetchVideos();
   }, []);
 
   return (
     <Layout>
-      <div style={{ padding: '20px' }}>
-        <Title level={2} style={{ textAlign: 'center' }}>Trending Shorts</Title>
-        <Row gutter={[16, 16]} justify="center">
-          {videos.map((video) => (
-            <Col xs={24} sm={12} md={8} lg={6} key={video._id}>
+    
+<Title level={3} style={{ textAlign: 'left', marginTop: '50px', marginBottom: '0px'}}>Featured in videos</Title>
+<Text style={{ color: "black", textAlign: "left", fontSize: "14px", marginTop: '0', marginBottom: '10px' }}>See what creators are sharing</Text>
+
+    <div 
+      style={{ 
+        Width: '1200px',
+        backgroundColor:"#004f9a",
+        paddingBottom:"90px",
+        marginTop:"8px",
+        border:"1px solidrgba(4, 77, 146, 0.38)",
+        padding:"10px"
+        }}
+
+        >
+       <Row gutter={[8, 16]} justify="center" style={{ paddingLeft: 0, paddingRight: 0 }}>
+        {videos.map((video) => (
+          <Col xs={12} sm={12} md={8} lg={4} xl={4} key={video._id}>
+            <div
+              style={{
+                borderRadius: '10px',
+                overflow: 'hidden',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                backgroundColor: '#ffffff',
+              }}
+              onMouseEnter={() => handleMouseEnter(video._id)}
+              onMouseLeave={() => handleMouseLeave(video._id)}
+            >
+              {/* Video Section */}
+              <div style={{ position: 'relative', paddingBottom: '177%', height: 0 }}>
+                <ReactPlayer
+                  url={video.videoURL}
+                  playing={video.isPlaying}
+                  loop
+                  muted
+                  controls={false}
+                  width="100%"
+                  height="100%"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                  }}
+                />
+              </div>
+
+              {/* Product Details Section */}
               <div
                 style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '10px',
+                  gap: '10px',
+                  backgroundColor: '#ffffff',
                   borderRadius: '10px',
-                  overflow: 'hidden',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                  backgroundColor: '#fff',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 }}
-                onMouseEnter={() => handleMouseEnter(video._id)}
-                onMouseLeave={() => handleMouseLeave(video._id)}
               >
-                {/* Video Section */}
-                <div style={{ position: 'relative', paddingBottom: '177%', height: 0 }}>
-                  <ReactPlayer
-                    url={video.videoURL}
-                    playing={video.isPlaying}
-                    loop
-                    muted
-                    controls={false}
-                    width="100%"
-                    height="100%"
+                {/* Product Image */}
+                {video.imageURL && (
+                  <img
+                    src={video.imageURL}
+                    alt={video.productName}
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
+                      width: '50px',
+                      height: '50px',
+                      objectFit: 'cover',
+                      borderRadius: '5px',
                     }}
                   />
-                </div>
+                )}
 
-                {/* Product Information */}
-                <div style={{ padding: '10px', textAlign: 'center' }}>
-                  <Title level={5} style={{ marginBottom: '5px' }}>{`Product: ${video.productId}`}</Title>
-                  <Text style={{ color: '#555' }}>{video.productId}</Text>
+                {/* Product Details */}
+                <div style={{ textAlign: 'left', maxWidth: 'calc(100% - 70px)' }}>
+                  <Title
+                    level={5}
+                    style={{
+                      marginBottom: '5px',
+                      fontSize: '14px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    ${video.price}
+                  </Title>
+                  <Text
+                    style={{
+                      color: '#555',
+                      fontSize: '12px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {video.productName}
+                  </Text>
                 </div>
               </div>
-            </Col>
-          ))}
-        </Row>
+            </div>
+          </Col>
+        ))}
+</Row>
+
       </div>
     </Layout>
   );

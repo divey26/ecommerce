@@ -174,13 +174,14 @@ const CategoryModal = () => {
                 Products
               </Title>
             </Space>
-          </Space>
-
-            <br/>
-          {/* Button to Open Modal */}
+                      {/* Button to Open Modal */}
           <Button type="primary" onClick={showModal} style={{backgroundColor:"#ffc221",color:"black",fontSize:"16px"}}>
             Add products
           </Button>
+          </Space>
+
+            <br/>
+
 
           {/* Modal */}
           <Modal

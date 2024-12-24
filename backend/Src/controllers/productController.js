@@ -35,6 +35,26 @@ exports.getProducts = async (req, res) => {
     }
   };
 
+  exports.getProductById = async (req, res) => {
+    const { productId } = req.params; // Get productId from the URL
+  
+    try {
+      // Find the product by productId (not by _id)
+      const product = await Product.findOne({ productId: productId });
+  
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+      res.status(200).json({ product });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error fetching product details' });
+    }
+  };
+  
+
+
   // productController.js
 
   exports.editProduct = async (req, res) => {

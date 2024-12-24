@@ -43,22 +43,23 @@ const Banner = () => {
       {showBanner && deadline && (
         <div
           style={{
-            backgroundColor: "#FFD700",
+            backgroundColor: "black",
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            alignItems: "center", // Vertically center
+            justifyContent: "center", // Horizontally center
             padding: "15px 30px",
             fontFamily: "Arial, sans-serif",
+            color: "white",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", marginRight: "20px" }}>
             <img
               src="https://icon-library.com/images/truck-icon/truck-icon-4.jpg" // Replace with your truck icon URL
               alt="Truck Icon"
               style={{ width: "30px", height: "30px", marginRight: "10px" }}
             />
             <p style={{ margin: 0, fontSize: "16px" }}>
-              <strong>Presents ready for pickup or delivery by</strong>{" "}
+              <strong>Get 20% for all purchase on </strong>{" "}
               {deadline.toLocaleDateString()}
             </p>
           </div>
@@ -67,11 +68,11 @@ const Banner = () => {
               style={{
                 fontSize: "16px",
                 fontWeight: "bold",
-                color: "#000",
+                color: "#fff",
               }}
             >
-              You got this! Order by:{" "}
-              <span style={{ fontSize: "18px" }}>
+              You got this! Order before:{" "}
+              <span style={{ fontSize: "18px", color: "white" }}>
                 {formatTimeRemaining(deadline - currentTime)}
               </span>
             </span>

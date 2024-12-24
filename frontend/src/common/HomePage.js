@@ -268,6 +268,8 @@ button {
 
   &:hover {
     border: 1px solid #004f9a; /* Add black border on hover */
+    border: 1px solidrgb(14, 106, 192); /* Add black border on hover */
+
     border-radius: 0px; /* Slightly reduce the curve on hover */
   }
 }
@@ -326,5 +328,7 @@ const TitleStyle = styled(Title)`
   font-weight: bold;
   color: #333;
 `;
+
+
 
 export default HomePage;
