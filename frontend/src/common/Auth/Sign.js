@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import axios from 'axios'; 
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-import LayoutNew from '../Layout';
+import LayoutNew from '../../Layout';
 import {
   AutoComplete,
   Button,

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Form, Input, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import imageSrc from "../Images/logo.png";
+import imageSrc from "../../Images/logo.png";
 
 
 
@@ -13,18 +13,21 @@ const Login = () => {
   const onFinish = async (values) => {
     try {
       const response = await axios.post('http://localhost:5000/api/login', values);
-      const { token } = response.data;
-
-      // Store the token in localStorage or a state management tool
+      console.log("Login Response:", response.data); // Log the response to debug
+  
+      const { token, userId } = response.data;
+  
+      // Store token and userId
       localStorage.setItem('token', token);
-
-      // Redirect to the home page or dashboard
+      localStorage.setItem('userId', userId);
+  
       navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
       alert('Login failed. Please check your credentials.');
     }
   };
+  
 
   return (
     <div style={styles.container}>

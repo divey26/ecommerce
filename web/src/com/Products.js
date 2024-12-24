@@ -247,13 +247,22 @@ const CategoryModal = () => {
 
               <Row gutter={[16, 16]}>
                 <Col span={12}>
-                  <Form.Item
-                    name="price"
-                    label="Price"
-                    rules={[{ required: true, message: 'Please input the item price!' }]}
-                  >
-                    <Input type="number" />
-                  </Form.Item>
+                <Form.Item
+                  name="price"
+                  label="Price"
+                  rules={[{ required: true, message: 'Please input the item price!' }]}
+                >
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min={0}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value).toFixed(2);
+                      e.target.value = value; // Format input to `.00` on blur
+                    }}
+                  />
+                </Form.Item>
+
                 </Col>
                 <Col span={12}>
                   <Form.Item
@@ -261,7 +270,7 @@ const CategoryModal = () => {
                     label="Rating"
                     rules={[{ required: true, message: 'Please input the rating!' }]}
                   >
-                    <Input type="number" max={5} min={1} />
+                    <Input type="number" step="0.1" max={5} min={1} />
                   </Form.Item>
                 </Col>
               </Row>

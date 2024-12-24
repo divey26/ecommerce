@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react'; // For useState and useEffect
-import { Layout,Col, Row, Card as AntCard, message, Button, Carousel, Typography, Drawer } from 'antd'; // Added Typography and Drawer here
-import LayoutNew from '../Layout';
+import { Layout,Col, Row, Card as AntCard, message, Button, Carousel, Typography } from 'antd'; // Added Typography and Drawer here
+import LayoutNew from '../../Layout';
 import axios from 'axios'; 
 import styled from 'styled-components';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
-import videoSrc from '../Video/video.mp4';
+import videoSrc from '../../Video/video.mp4';
 
 // Import images for the carousel
-import p1 from "../Images/p1.jpg";
-import p2 from "../Images/p2.jpg";
-import p3 from "../Images/p3.jpg";
-import p4 from "../Images/p4.jpg";
-import prod1 from "../Images/prod1.png"
-import banner1 from "../Images/valBanner.jpg"
+import p1 from "../../Images/p1.jpg";
+import p2 from "../../Images/p2.jpg";
+import p3 from "../../Images/p3.jpg";
+import p4 from "../../Images/p4.jpg";
+import prod1 from "../../Images/prod1.png"
+import banner1 from "../../Images/valBanner.jpg"
 
 import Banner from "./banner" 
-import Shorts from "./Home/ProShorts"
-import AllProducts from "./Products/AllProList" 
+import Shorts from "./ProShorts"
+import HomeProducts from "../Products/AllProList" 
+import Drawer from "./Drawer"; // Import the Drawer component
+
 
 
 import {
@@ -66,14 +68,15 @@ const HomePage = () => {
     fetchCategories(); // Fetch categories on component mount
   }, []);
 
-  const showSlider = () => {
-    setVisible(true);  // Open the drawer (slider)
-  };
+  const showSlider = () => setVisible(true);
+  const closeSlider = () => setVisible(false);
 
-  const closeSlider = () => {
-    setVisible(false);  // Close the drawer (slider)
-  };
 
+  const handleNavigateToCart = () => {
+    const userId = localStorage.getItem('userId');  // Retrieve userId from localStorage
+    navigate(`/cart`, { state: { userId } });  // Pass userId as state to the Cart page
+  };
+  
   return (
     <LayoutNew>
       <Layout>
@@ -97,6 +100,14 @@ const HomePage = () => {
             <BarsOutlined /> All
           </Button>
        </div>
+
+                     <Button
+                     type="default"
+                     onClick={handleNavigateToCart}
+                     style={{ marginTop: "10px", height: "60px", marginRight: "5px" }}
+                   > 
+                   cart 
+                   </Button>
 
           <div style={{ display: "flex", alignItems: "center" }}>
           {headerItem
@@ -189,21 +200,10 @@ const HomePage = () => {
         </VideoAndImageContainer>
 
         <Shorts/>
-        <AllProducts/>
+        <HomeProducts/>
 
         {/* Drawer for Slider Navigation */}
-        <Drawer
-          title="Navigation"
-          placement="left"
-          onClose={closeSlider}
-          open={visible}
-          width={400}
-        >
-          <p>Category 1</p>
-          <p>Category 2</p>
-          <p>Category 3</p>
-          <p>Category 4</p>
-        </Drawer>
+        <Drawer visible={visible} onClose={closeSlider} />
 
       </Layout>
     </LayoutNew>
