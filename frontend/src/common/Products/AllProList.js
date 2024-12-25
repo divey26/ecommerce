@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Col, Row, Typography, message, Modal, Input, Button } from 'antd';
 import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
 
 const { Title, Text } = Typography;
 
@@ -10,16 +12,17 @@ const ProductsList = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [cart, setCart] = useState([]);
+  
+  const { authenticated } = useContext(AuthContext); // Access authenticated state
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
     setCart(savedCart);
   }, []);
-  
+
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
-  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,8 +39,6 @@ const ProductsList = () => {
     fetchProducts();
   }, []);
 
-
-  // Handle Save Edit
   const handleSaveEdit = async () => {
     try {
       const updatedProduct = await axios.put(
@@ -59,7 +60,6 @@ const ProductsList = () => {
       message.error('Error updating product');
     }
   };
-
 
   const renderStars = (rating) => {
     const stars = [];
@@ -85,8 +85,8 @@ const ProductsList = () => {
         ) : (
           products.map((product) => (
             <Col xs={24} sm={12} md={8} lg={4} xl={4} key={product.productId}>
-             <Card
-               hoverable
+              <Card
+                hoverable
                 cover={
                   <img
                     alt={product.itemName}
@@ -94,7 +94,7 @@ const ProductsList = () => {
                     style={{
                       height: 200,
                       objectFit: 'scale-down',
-                      width: '100%', // Make the image responsive
+                      width: '100%',
                       padding: '10px',
                     }}
                   />
@@ -145,37 +145,48 @@ const ProductsList = () => {
                   <p
                     style={{
                       fontSize: '12px',
-                      height: '40px', // Fixed height for consistency
-                      overflow: 'hidden', // Prevent overflow
+                      height: '40px',
+                      overflow: 'hidden',
                       textOverflow: 'ellipsis',
                     }}
                   >
                     {product.itemName} | {trimDescription(product.description)}
                   </p>
 
-                  <Text
-                    style={{
-                      fontSize: '15px',
-                      height: '20px', // Fixed height for the rating
-                      display: 'block',
-                    }}
-                  >
+                  <Text style={{ fontSize: '15px' }}>
                     {renderStars(product.rating)} {product.rating}
                   </Text>
                 </div>
-                <Button
-                style={{ marginTop: 'auto', borderRadius: "40px", color: "white", backgroundColor: "#004f9a" }}
-                onClick={() => {
-                  setCart((prevCart) => [...prevCart, product]);
-                  message.success(`${product.itemName} added to the cart`);
-                }}
-              >
-                + ADD
-              </Button>
 
+                {authenticated ? (
+                  <Button
+                    style={{
+                      marginTop: 'auto',
+                      borderRadius: '40px',
+                      color: 'white',
+                      backgroundColor: '#004f9a',
+                    }}
+                    onClick={() => {
+                      setCart((prevCart) => [...prevCart, product]);
+                      message.success(`${product.itemName} added to the cart`);
+                    }}
+                  >
+                    + ADD
+                  </Button>
+                ) : (
+                  <Button
+                    style={{
+                      marginTop: 'auto',
+                      borderRadius: '40px',
+                      color: 'white',
+                      backgroundColor: '#a0a0a0',
+                    }}
+                    disabled
+                  >
+                    Login to Add
+                  </Button>
+                )}
               </Card>
-
-
             </Col>
           ))
         )}

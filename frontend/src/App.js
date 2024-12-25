@@ -1,56 +1,43 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext, AuthProvider } from './utils/AuthContext';
 
-import About from "./common/About"
+import About from "./common/About";
 import HomePage from './common/Home/HomePage';
-import Login from "./common/Auth/Login" 
-import Sign from "./common/Auth/Sign" 
-
-//import { CartProvider } from './common/cart/Cartcontext';
-import Banner from "./common/Home/banner" 
-
-import All from "./common/Products/AllProducts" 
-
-import CartView from "./common/cart/CartView"
+import Login from "./common/Auth/Login";
+import Sign from "./common/Auth/Sign";
+import Banner from "./common/Home/banner";
+import All from "./common/Products/AllProducts";
+import CartView from "./common/cart/CartView";
+import Summa from "./utils/summa";
 
 function App() {
-
-  const isAdminAuthenticated = () => {
-    return true;
-  };
-  
   return (
-    <div className="App">
-       
-
-      <Router>
-        <Routes>
-        <Route
-           path="/home" 
-           element={
-          isAdminAuthenticated() ? <HomePage /> : <Navigate to="/" />
-        }
-        />
-          <Route
-          path="/about"
-          element={
-            isAdminAuthenticated() ? <About /> : <Navigate to="/" />
-          }
-        />
-        <Route path='/' element={<Login/>}/>
-        <Route path='/sign' element={<Sign/>}/>
-        <Route path='/ban' element={<Banner/>}/>
-        <Route path='/wat' element={<All/>}/>
-
-
-        <Route path="/cart" element={<CartView />} />
-
-        </Routes>
-      </Router>
-
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <Router>
+          <Routes>
+            <Route path="/home" element={<ProtectedRoute Component={HomePage} />} />
+            <Route path="/about" element={<ProtectedRoute Component={About} />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/sign" element={<Sign />} />
+            <Route path="/ban" element={<Banner />} />
+            <Route path="/wat" element={<All />} />
+            <Route path="/cart" element={<CartView />} />
+            <Route path="/summa" element={<Summa />} />
+          </Routes>
+        </Router>
+      </div>
+    </AuthProvider>
   );
 }
+
+// ProtectedRoute component to check authentication before rendering the component
+const ProtectedRoute = ({ Component }) => {
+  const { authenticated } = useContext(AuthContext);
+
+  return authenticated ? <Component /> : <Navigate to="/" />;
+};
 
 export default App;
