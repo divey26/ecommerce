@@ -126,8 +126,11 @@ app.post('/api/login', async (req, res) => {
     res.status(200).json({
       token,
       userId: user._id,
-      email: user.email // Return the user's email
+      email: user.email, // Return the user's email
+      address: user.address, // Add the address
+      phone: user.phone // Add the phone number
     });
+    
   } catch (error) {
     res.status(500).send({ error: 'Error logging in' });
   }

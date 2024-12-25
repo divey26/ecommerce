@@ -19,6 +19,8 @@ useEffect(() => {
   const address = localStorage.getItem('userAddress'); 
   const phone = localStorage.getItem('userPhone');
 
+
+
   if (token) {
     setAuthenticated(true);
     setUserDetails({ userId, email: userEmail, address, phone });

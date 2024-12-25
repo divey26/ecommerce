@@ -13,6 +13,7 @@ const Login = () => {
       const response = await axios.post('http://localhost:5000/api/login', values);
       console.log("Login Response:", response.data);
   
+
       const { token, userId, email, address, phone } = response.data;
   
       // Store token, userId, email, address, and phone in localStorage
@@ -21,8 +22,12 @@ const Login = () => {
       localStorage.setItem('userEmail', email); // Store the user's email
       localStorage.setItem('userAddress', address); // Store the user's address
       localStorage.setItem('userPhone', phone); // Store the user's phone number
+
+
+     
+      console.log(localStorage.getItem('userAddress'));  // Check if the address is stored correctly
+      console.log(localStorage.getItem('userPhone'));    // Check if the phone is stored correctly
   
-      console.log("uid:", userId);
   
       // Redirect user to the home page after successful login
       navigate('/home');
