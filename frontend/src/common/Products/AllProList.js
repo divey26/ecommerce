@@ -9,6 +9,17 @@ const ProductsList = () => {
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    setCart(savedCart);
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -152,29 +163,16 @@ const ProductsList = () => {
                     {renderStars(product.rating)} {product.rating}
                   </Text>
                 </div>
-                <br/>
                 <Button
                 style={{ marginTop: 'auto', borderRadius: "40px", color: "white", backgroundColor: "#004f9a" }}
-                onClick={async () => {
-                  const userId = localStorage.getItem("userId"); // Replace with your auth logic
-                  if (!userId) {
-                    return message.error("Please login to add products to the cart");
-                  }
-
-                  try {
-                    await fetch("http://localhost:5000/api/cart/add", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ userId, productId: product.productId }),
-                    });
-                    message.success("Product added to cart");
-                  } catch {
-                    message.error("Failed to add product to cart");
-                  }
+                onClick={() => {
+                  setCart((prevCart) => [...prevCart, product]);
+                  message.success(`${product.itemName} added to the cart`);
                 }}
               >
                 + ADD
               </Button>
+
               </Card>
 
 

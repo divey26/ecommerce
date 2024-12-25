@@ -6,17 +6,27 @@ const TimeLimitPage = () => {
 
   const saveDeadline = async () => {
     if (deadline) {
-      await fetch('http://localhost:5000/api/deadline', {  // change port to 5000
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ deadline }),
-      });
-      alert('Deadline saved successfully!');
+      try {
+        const response = await fetch('http://localhost:5000/api/deadline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ deadline }),
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        alert('Deadline saved successfully!');
+        setIsSaved(true);
+      } catch (error) {
+        console.error('Error saving deadline:', error);
+        alert('Failed to save deadline. Please try again.');
+      }
     } else {
       alert('Please select a valid date and time.');
     }
   };
-  
   
 
   return (
@@ -34,3 +44,8 @@ const TimeLimitPage = () => {
 };
 
 export default TimeLimitPage;
+
+
+
+
+

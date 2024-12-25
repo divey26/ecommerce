@@ -8,26 +8,28 @@ const Login = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const onFinish = async (values) => {
-    try {
-      const response = await axios.post('http://localhost:5000/api/login', values);
-      console.log("Login Response:", response.data); // Log the response to debug
-
-      const { token, userId } = response.data;
-
-      // Store token and userId in localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId);
-      console.log("uid:", userId); // Log the response to debug
-
-      // Redirect user to the home page after successful login
-      navigate('/home');
-    } catch (error) {
-      console.error('Error logging in:', error);
-      alert('Login failed. Please check your credentials.');
-    }
-  };
-
+    const onFinish = async (values) => {
+      try {
+        const response = await axios.post('http://localhost:5000/api/login', values);
+        console.log("Login Response:", response.data);
+    
+        const { token, userId, email } = response.data;
+    
+        // Store token, userId, and email in localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('userEmail', email); // Store the user's email
+    
+        console.log("uid:", userId);
+    
+        // Redirect user to the home page after successful login
+        navigate('/home');
+      } catch (error) {
+        console.error('Error logging in:', error);
+        alert('Login failed. Please check your credentials.');
+      }
+    };
+    
   return (
     <div style={styles.container}>
       <Form
@@ -48,6 +50,7 @@ const Login = () => {
             { required: true, message: 'Please input your E-mail!' },
           ]}
         >
+          
           <Input />
         </Form.Item>
 
@@ -74,13 +77,14 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
-    backgroundColor: '#f0f2f5', // Optional background color
+    backgroundColor: 'rgb(224, 245, 249)', // Optional form background color
+
   },
   form: {
     maxWidth: '400px',
     width: '100%',
     padding: '20px',
-    backgroundColor: '#fff', // Optional form background color
+    backgroundColor: '#004f9a', // Optional background color
     borderRadius: '8px', // Optional rounded corners
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', // Optional shadow effect
   },

@@ -73,8 +73,7 @@ const HomePage = () => {
 
 
   const handleNavigateToCart = () => {
-    const userId = localStorage.getItem('userId');  // Retrieve userId from localStorage
-    navigate(`/cart`, { state: { userId } });  // Pass userId as state to the Cart page
+    navigate(`/cart`);  // Pass userId as state to the Cart page
   };
   
   return (
@@ -135,6 +134,7 @@ const HomePage = () => {
             <span style={{ marginLeft: '300px' }}>FREE DELIVERY for purchase above 100$</span>
           </h1>
         </StyledHeader>
+        
         <Banner/>
         </div>
 
