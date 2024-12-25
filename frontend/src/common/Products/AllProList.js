@@ -3,26 +3,19 @@ import { Card, Col, Row, Typography, message, Modal, Input, Button } from 'antd'
 import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
+import { useCart } from '../cart/CartContext'; // Import CartContext
+
 
 const { Title, Text } = Typography;
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editingProduct, setEditingProduct] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [cart, setCart] = useState([]);
+  const { addToCart } = useCart(); // Access addToCart function
+
   
   const { authenticated } = useContext(AuthContext); // Access authenticated state
 
-  useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    setCart(savedCart);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -38,28 +31,7 @@ const ProductsList = () => {
 
     fetchProducts();
   }, []);
-
-  const handleSaveEdit = async () => {
-    try {
-      const updatedProduct = await axios.put(
-        `http://localhost:5000/api/products/${editingProduct.productId}`,
-        editingProduct
-      );
-
-      setProducts(
-        products.map((p) =>
-          p.productId === updatedProduct.data.product.productId
-            ? updatedProduct.data.product
-            : p
-        )
-      );
-      setIsEditing(false);
-      setEditingProduct(null);
-      message.success('Product updated successfully');
-    } catch (error) {
-      message.error('Error updating product');
-    }
-  };
+  
 
   const renderStars = (rating) => {
     const stars = [];
@@ -116,8 +88,7 @@ const ProductsList = () => {
                           <Title level={4} style={{ color: 'Green', margin: 0 }}>
                             $
                             {(
-                              product.price -
-                              (product.price * product.discount) / 100
+                              product.price - (product.price * product.discount) / 100
                             ).toFixed(2)}
                           </Title>
                         </Col>
@@ -167,9 +138,10 @@ const ProductsList = () => {
                       backgroundColor: '#004f9a',
                     }}
                     onClick={() => {
-                      setCart((prevCart) => [...prevCart, product]);
+                      addToCart(product);
                       message.success(`${product.itemName} added to the cart`);
                     }}
+                    
                   >
                     + ADD
                   </Button>
@@ -192,42 +164,7 @@ const ProductsList = () => {
         )}
       </Row>
 
-      {/* Modal for Editing Product */}
-      <Modal
-        title="Edit Product"
-        open={isEditing}
-        onCancel={() => setIsEditing(false)}
-        onOk={handleSaveEdit}
-      >
-        <div>
-          <Input
-            value={editingProduct?.itemName}
-            onChange={(e) =>
-              setEditingProduct({ ...editingProduct, itemName: e.target.value })
-            }
-            placeholder="Item Name"
-          />
-          <Input
-            value={editingProduct?.price}
-            onChange={(e) =>
-              setEditingProduct({ ...editingProduct, price: e.target.value })
-            }
-            placeholder="Price"
-            style={{ marginTop: 10 }}
-          />
-          <Input
-            value={editingProduct?.description}
-            onChange={(e) =>
-              setEditingProduct({
-                ...editingProduct,
-                description: e.target.value,
-              })
-            }
-            placeholder="Description"
-            style={{ marginTop: 10 }}
-          />
-        </div>
-      </Modal>
+     
     </div>
   );
 };

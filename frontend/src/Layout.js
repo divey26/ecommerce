@@ -11,6 +11,7 @@ import imageSrc from "./Images/logo.png";
 import { TextField } from "@mui/material"; // MUI TextField for the search bar
 import Flag from "react-world-flags"; // Import Flag component
 import styled from 'styled-components';
+import { useCart } from './common/cart/CartContext';
 
 
 const { Header, Content, Footer } = Layout;
@@ -21,6 +22,8 @@ const App = ({ children, userType }) => {
   const [isBackTopVisible, setIsBackTopVisible] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [language, setLanguage] = useState("en"); // Default language is English
+  const { cart } = useCart();
+
 
   const handleHeaderClick = (key) => {
     if (key === "1") {
@@ -228,7 +231,7 @@ const App = ({ children, userType }) => {
               onClick={handleNavigateToCart}
               style={{ marginTop: "10px", height: "60px", marginRight: "5px" }}
             >
-              <Badge count={1}>
+              <Badge count={cart.length}>
                 <ShoppingCartOutlined style={{ fontSize: "30px" }} />
               </Badge>
             </Button>

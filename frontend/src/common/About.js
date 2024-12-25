@@ -40,8 +40,26 @@ const About = () => {
 </Layout>
    </LayoutNew>
 
+
+{/*
+
+<div style={{ marginRight: '20px' }}>
+                <img
+                  src={item.image}
+                  alt={item.itemName}
+                  style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }}
+                />
+              </div>
+              */}
       </div>
   );
 }
 
 export default About;
+
+
+
+
+
+
+

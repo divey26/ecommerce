@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import truck from "../../Images/truck-.png"
 
 const Banner = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -54,7 +55,7 @@ const Banner = () => {
         >
           <div style={{ display: "flex", alignItems: "center", marginRight: "20px" }}>
             <img
-              src="https://icon-library.com/images/truck-icon/truck-icon-4.jpg" // Replace with your truck icon URL
+              src={truck} Replace with your truck icon URL
               alt="Truck Icon"
               style={{ width: "30px", height: "30px", marginRight: "10px" }}
             />

@@ -100,13 +100,6 @@ const HomePage = () => {
           </Button>
        </div>
 
-                     <Button
-                     type="default"
-                     onClick={handleNavigateToCart}
-                     style={{ marginTop: "10px", height: "60px", marginRight: "5px" }}
-                   > 
-                   cart 
-                   </Button>
 
           <div style={{ display: "flex", alignItems: "center" }}>
           {headerItem
