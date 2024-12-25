@@ -8,27 +8,30 @@ const Login = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-    const onFinish = async (values) => {
-      try {
-        const response = await axios.post('http://localhost:5000/api/login', values);
-        console.log("Login Response:", response.data);
-    
-        const { token, userId, email } = response.data;
-    
-        // Store token, userId, and email in localStorage
-        localStorage.setItem('token', token);
-        localStorage.setItem('userId', userId);
-        localStorage.setItem('userEmail', email); // Store the user's email
-    
-        console.log("uid:", userId);
-    
-        // Redirect user to the home page after successful login
-        navigate('/home');
-      } catch (error) {
-        console.error('Error logging in:', error);
-        alert('Login failed. Please check your credentials.');
-      }
-    };
+  const onFinish = async (values) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/login', values);
+      console.log("Login Response:", response.data);
+  
+      const { token, userId, email, address, phone } = response.data;
+  
+      // Store token, userId, email, address, and phone in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('userEmail', email); // Store the user's email
+      localStorage.setItem('userAddress', address); // Store the user's address
+      localStorage.setItem('userPhone', phone); // Store the user's phone number
+  
+      console.log("uid:", userId);
+  
+      // Redirect user to the home page after successful login
+      navigate('/home');
+    } catch (error) {
+      console.error('Error logging in:', error);
+      alert('Login failed. Please check your credentials.');
+    }
+  };
+  
     
   return (
     <div style={styles.container}>

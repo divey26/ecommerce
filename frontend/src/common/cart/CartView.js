@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Layout, Col, Row, Card, Button, Typography, List } from 'antd';
 import { useCart } from './CartContext';
 import LayoutNew from '../../Layout';
+import { AuthContext } from '../../utils/AuthContext';  
 
 import truck from "../../Images/truck-.png";
 import car from "../../Images/car.png";
@@ -12,6 +13,7 @@ const { Content } = Layout;
 
 const CartView = () => {
   const { cart, removeFromCart } = useCart();
+  const { userDetails } = useContext(AuthContext);  // Access user details from the context
 
   const trimDescription = (description, maxLength = 50) => {
     if (description.length > maxLength) {
@@ -185,52 +187,62 @@ const CartView = () => {
               />
             )}
           </div>
-         
-         
+
           <div
-              style={{
-                flex: 1,
-                padding: '20px',
-                border: '1px solid #ddd',
-                borderRadius: '10px',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                textAlign: 'left',
-                backgroundColor: '#f8f9fa',
-                height: 'fit-content',
-              }}
-            >
-              <Title level={3} style={{ textAlign: 'center' }}>Order Summary</Title>
-              <div style={{ marginBottom: '20px' }}>
-                <Text style={{ fontSize: '16px' }}>
-                  <strong>Subtotal ({cart.length} items)</strong>
-                </Text>
-                <span style={{ float: 'right', textDecoration: 'line-through', color: 'gray' }}>
-                  ${cart.reduce((total, item) => total + item.price, 0).toFixed(2)}
-                </span>
-              </div>
-              <div style={{ marginBottom: '20px' }}>
-                <Text style={{ fontSize: '16px', color: 'green' }}>
-                  <strong>Savings</strong>
-                </Text>
-                <span style={{ float: 'right', color: 'green' }}>
-                  -${cart.reduce((total, item) => total + (item.price * item.discount) / 100, 0).toFixed(2)}
-                </span>
-              </div>
-              <div style={{ marginBottom: '20px', borderTop: '1px solid #ddd', paddingTop: '10px' }}>
-                <Text style={{ fontSize: '18px' }}>
-                  <strong>Total</strong>
-                </Text>
-                <span style={{ float: 'right', color: 'green', fontSize: '18px' }}>
-                  ${cart.reduce((total, item) => total + (item.price - (item.price * item.discount) / 100), 0).toFixed(2)}
-                </span>
-              </div>
-              <Button
-                type="primary"
-                style={{ marginTop: '20px', width: '100%' }}
-              >
-                Proceed to Checkout
-              </Button>
+            style={{
+              flex: 1,
+              padding: '20px',
+              border: '1px solid #ddd',
+              borderRadius: '10px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              textAlign: 'left',
+              backgroundColor: '#f8f9fa',
+              height: 'fit-content',
+            }}
+          >
+            <Title level={3} style={{ textAlign: 'center' }}>Order Summary</Title>
+
+            {/* Displaying user address and phone */}
+            <div style={{ marginBottom: '20px' }}>
+              <Text style={{ fontSize: '16px' }}><strong>Shipping Address:</strong></Text>
+              <Text style={{ float: 'right', fontSize: '16px' }}>
+                {userDetails ? userDetails.address : 'N/A'}
+              </Text>
             </div>
+            <div style={{ marginBottom: '20px' }}>
+              <Text style={{ fontSize: '16px' }}><strong>Phone Number:</strong></Text>
+              <Text style={{ float: 'right', fontSize: '16px' }}>
+                {userDetails ? userDetails.phone : 'N/A'}
+              </Text>
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
+              <Text style={{ fontSize: '16px' }}>
+                <strong>Subtotal ({cart.length} items)</strong>
+              </Text>
+              <span style={{ float: 'right', textDecoration: 'line-through', color: 'gray' }}>
+                ${cart.reduce((total, item) => total + item.price, 0).toFixed(2)}
+              </span>
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+              <Text style={{ fontSize: '16px', color: 'green' }}><strong>Savings</strong></Text>
+              <span style={{ float: 'right', color: 'green' }}>
+                -${cart.reduce((total, item) => total + (item.price * item.discount) / 100, 0).toFixed(2)}
+              </span>
+            </div>
+            <div style={{ marginBottom: '20px', borderTop: '1px solid #ddd', paddingTop: '10px' }}>
+              <Text style={{ fontSize: '18px' }}><strong>Total</strong></Text>
+              <span style={{ float: 'right', color: 'green', fontSize: '18px' }}>
+                ${cart.reduce((total, item) => total + (item.price - (item.price * item.discount) / 100), 0).toFixed(2)}
+              </span>
+            </div>
+            <Button
+              type="primary"
+              style={{ marginTop: '20px', width: '100%' }}
+            >
+              Proceed to Checkout
+            </Button>
+          </div>
 
         </div>
       </Layout>
