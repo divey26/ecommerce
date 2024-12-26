@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import truck from "../../Images/truck-.png"
+import truck from "../../Images/truck-.png";
 
 const Banner = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -15,6 +15,8 @@ const Banner = () => {
           const data = await response.json();
           const parsedDeadline = new Date(data.deadline);
           setDeadline(parsedDeadline);
+
+          // Show banner if current time is before the deadline
           setShowBanner(new Date() < parsedDeadline);
         }
       } catch (error) {
@@ -32,22 +34,15 @@ const Banner = () => {
     return () => clearInterval(timer); // Cleanup interval
   }, []);
 
-  // Update showBanner if current time changes
-  useEffect(() => {
-    if (deadline) {
-      setShowBanner(currentTime < deadline);
-    }
-  }, [currentTime, deadline]);
-
   return (
     <>
-      {showBanner && deadline && (
+      {showBanner && deadline ? (
         <div
           style={{
             backgroundColor: "black",
             display: "flex",
-            alignItems: "center", // Vertically center
-            justifyContent: "center", // Horizontally center
+            alignItems: "center",
+            justifyContent: "center",
             padding: "15px 30px",
             fontFamily: "Arial, sans-serif",
             color: "white",
@@ -55,12 +50,12 @@ const Banner = () => {
         >
           <div style={{ display: "flex", alignItems: "center", marginRight: "20px" }}>
             <img
-              src={truck} Replace with your truck icon URL
+              src={truck}
               alt="Truck Icon"
               style={{ width: "30px", height: "30px", marginRight: "10px" }}
             />
             <p style={{ margin: 0, fontSize: "16px" }}>
-              <strong>Get 20% for all purchase on </strong>{" "}
+              <strong>Get 20% for all purchases on </strong>
               {deadline.toLocaleDateString()}
             </p>
           </div>
@@ -86,11 +81,15 @@ const Banner = () => {
                 padding: "5px 15px",
                 cursor: "pointer",
               }}
-              onClick={() => alert("Shop Now!")}
+              onClick={() => console.log("Shop Now Clicked!")}
             >
               Shop Now
             </button>
           </div>
+        </div>
+      ) : (
+        <div style={{ textAlign: "center", padding: "20px", color: "gray" }}>
+          Loading banner...
         </div>
       )}
     </>
@@ -111,7 +110,7 @@ const formatTimeRemaining = (ms) => {
     .toString()
     .padStart(2, "0");
 
-  return `${hours} : ${minutes} : ${seconds}`;
+  return `${hours}:${minutes}:${seconds}`;
 };
 
 export default Banner;

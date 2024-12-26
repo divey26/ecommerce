@@ -3,6 +3,8 @@ import { Layout, Col, Row, Card, Button, Typography, List } from 'antd';
 import { useCart } from './CartContext';
 import LayoutNew from '../../Layout';
 import { AuthContext } from '../../utils/AuthContext';  
+import { useDeadline } from "../DeadlineContext/DeadlineContext"; // Import Deadline Context
+
 
 import truck from "../../Images/truck-.png";
 import car from "../../Images/car.png";
@@ -15,8 +17,8 @@ const { Content } = Layout;
 const CartView = () => {
   const { cart, removeFromCart } = useCart();
   const { userDetails } = useContext(AuthContext);  // Access user details from the context
+  const { deadline } = useDeadline(); // Access deadline from shared state
 
-  const appear=null;
 
   const trimDescription = (description, maxLength = 50) => {
     if (description.length > maxLength) {
@@ -25,7 +27,20 @@ const CartView = () => {
     return description;
   };
 
+  // Calculate Subtotal and Savings
+  const subtotal = cart.reduce((total, item) => total + item.price, 0).toFixed(2);
+  const savings = cart.reduce((total, item) => total + (item.price * item.discount) / 100, 0).toFixed(2);
+  const Total = cart.reduce(
+    (total, item) => total + (item.price - (item.price * item.discount) / 100),
+    0
+  );
 
+  // Apply additional 12% increase if deadline is true
+  const flashOfferIncrease = deadline ? Total * 0.12 : 0;
+  const newTotal = (Total - flashOfferIncrease).toFixed(2);
+
+  console.log("flashOfferIncrease",flashOfferIncrease)
+  console.log("deadline",deadline)
 
   return (
     <LayoutNew>
@@ -216,13 +231,13 @@ const CartView = () => {
                 <strong>Subtotal ({cart.length} items)</strong>
               </Text>
               <span style={{ float: 'right', textDecoration: 'line-through', color: 'gray' }}>
-                ${cart.reduce((total, item) => total + item.price, 0).toFixed(2)}
+                ${subtotal}
               </span>
             </div>
             <div style={{ marginBottom: '10px' }}>
               <Text style={{ fontSize: '16px', color: 'green' }}><strong>Savings</strong></Text>
               <span style={{ float: 'right', color: 'green' }}>
-                -${cart.reduce((total, item) => total + (item.price * item.discount) / 100, 0).toFixed(2)}
+                -${savings}
               </span>
             </div>
 
@@ -246,15 +261,27 @@ const CartView = () => {
               <span style={{ float: 'right', color: 'grey',fontSize:"16px" }}>
                 Calulated at checkout
               </span>
+              <br/>
+              <br/>
+              <br/>
+              {deadline && (
+              <div style={{ marginBottom: '10px' }}>
+                <Text><strong>Flash Offer Increase (12%)</strong></Text>
+                <span style={{ float: 'right', color: 'red' }}> -${flashOfferIncrease.toFixed(2)}</span>
+              </div>
+            )}
             </div>
             <br/>
 
             <div style={{ marginBottom: '20px', borderTop: '1px solid #ddd', paddingTop: '10px',marginTop:"20px" }}>
               <Text style={{ fontSize: '18px' }}><strong>Total</strong></Text>
               <span style={{ float: 'right', color: 'green', fontSize: '18px' }}>
-                ${cart.reduce((total, item) => total + (item.price - (item.price * item.discount) / 100), 0).toFixed(2)}
+                ${newTotal}
               </span>
             </div>
+            
+
+
             <Button
               type="primary"
               style={{ marginTop: '20px', width: '100%' }}

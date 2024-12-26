@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { useContext } from 'react';
 import { AuthContext, AuthProvider } from './utils/AuthContext';
 import { CartProvider } from './common/cart/CartContext'; // Import CartContext
+import { DeadlineProvider } from "./common/DeadlineContext/DeadlineContext";
 
 import About from "./common/About";
 import HomePage from './common/Home/HomePage';
@@ -16,23 +17,26 @@ import Summa from "./utils/summa";
 function App() {
   return (
     <AuthProvider>
-      <CartProvider> {/* Wrap entire app with CartProvider */}
+    <DeadlineProvider>
+      <CartProvider>
         <div className="App">
           <Router>
             <Routes>
-              <Route path="/home" element={<ProtectedRoute Component={HomePage} />} />
-              <Route path="/about" element={<ProtectedRoute Component={About} />} />
               <Route path="/" element={<Login />} />
               <Route path="/sign" element={<Sign />} />
+              <Route path="/home" element={<ProtectedRoute Component={HomePage} />} />
+              <Route path="/about" element={<ProtectedRoute Component={About} />} />
               <Route path="/ban" element={<Banner />} />
               <Route path="/wat" element={<All />} />
               <Route path="/cart" element={<CartView />} />
               <Route path="/summa" element={<Summa />} />
+              <Route path="*" element={<div>404 - Page Not Found</div>} />
             </Routes>
           </Router>
         </div>
       </CartProvider>
-    </AuthProvider>
+    </DeadlineProvider>
+  </AuthProvider>
   );
 }
 
