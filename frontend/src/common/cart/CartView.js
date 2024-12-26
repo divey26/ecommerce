@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Layout, Col, Row, Card, Button, Typography, List } from 'antd';
 import { useCart } from './CartContext';
+import { useNavigate } from 'react-router-dom';
 import LayoutNew from '../../Layout';
 import { AuthContext } from '../../utils/AuthContext';  
 import { useDeadline } from "../DeadlineContext/DeadlineContext"; // Import Deadline Context
@@ -18,6 +19,7 @@ const CartView = () => {
   const { cart, removeFromCart } = useCart();
   const { userDetails } = useContext(AuthContext);  // Access user details from the context
   const { deadline } = useDeadline(); // Access deadline from shared state
+   const navigate = useNavigate();
 
 
   const trimDescription = (description, maxLength = 50) => {
@@ -285,6 +287,7 @@ const CartView = () => {
             <Button
               type="primary"
               style={{ marginTop: '20px', width: '100%' }}
+              onClick={() => navigate('/checkout')}
             >
               Proceed to Checkout
             </Button>

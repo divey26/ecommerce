@@ -14,6 +14,8 @@ import All from "./common/Products/AllProducts";
 import CartView from "./common/cart/CartView";
 import Summa from "./utils/summa";
 
+import Checkout from "./common/Payment/Checkout";
+
 function App() {
   return (
     <AuthProvider>
@@ -30,6 +32,10 @@ function App() {
               <Route path="/wat" element={<All />} />
               <Route path="/cart" element={<CartView />} />
               <Route path="/summa" element={<Summa />} />
+
+              <Route path="/checkout" element={<Checkout />} />
+
+              
               <Route path="*" element={<div>404 - Page Not Found</div>} />
             </Routes>
           </Router>

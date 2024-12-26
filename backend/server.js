@@ -10,6 +10,12 @@ const jwt = require('jsonwebtoken');
 const categoryRoutes = require('./Src/routes/categoryRoutes');
 const productRoutes = require('./Src/routes/productRoutes');
 const videoRoutes = require('./Src/routes/shortsRoutes'); // Import the video routes
+const paymentRoutes = require('./Src/routes/PaymentRoutes');
+const webhookRoutes = require('./Src/routes/webhook');
+
+
+
+
 //const cartRoutes = require("./Src/routes/cartRoutes");
 
 dotenv.config();
@@ -162,6 +168,9 @@ app.get('/api/deadline', (req, res) => {
 app.use('/api/cat', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api', webhookRoutes); // Adding webhook route here
+
 //app.use("/api/cart", cartRoutes);
 
 const PORT = process.env.PORT || 5000;
