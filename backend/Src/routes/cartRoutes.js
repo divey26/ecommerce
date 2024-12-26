@@ -1,14 +1,9 @@
-const express = require("express");
+// cart.routes.js
+const express = require('express');
 const router = express.Router();
-const cartController = require("../controllers/cartController");
+const { addItemToCart } = require('../controllers/cartController');
 
-// Add to cart
-router.post("/add", cartController.addToCart);
-
-// Get user's cart
-router.get("/:userId", cartController.getCart);
-
-// Clear cart
-router.delete("/clear", cartController.clearCart);
+// Route to add an item to the cart
+router.post('/add', addItemToCart);
 
 module.exports = router;

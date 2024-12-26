@@ -88,9 +88,7 @@ const Banner = () => {
           </div>
         </div>
       ) : (
-        <div style={{ textAlign: "center", padding: "20px", color: "gray" }}>
-          Loading banner...
-        </div>
+       <></> 
       )}
     </>
   );

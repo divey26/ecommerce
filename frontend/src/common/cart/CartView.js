@@ -1,34 +1,23 @@
-import React, { useContext } from 'react';
-import { Layout, Col, Row, Card, Button, Typography,InputNumber, List } from 'antd';
+import React, { useContext, useEffect } from 'react';
+import { Layout, Col, Row, Card, Button, Typography, InputNumber, List } from 'antd';
 import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
 import LayoutNew from '../../Layout';
 import { AuthContext } from '../../utils/AuthContext';  
 import { useDeadline } from "../DeadlineContext/DeadlineContext"; // Import Deadline Context
-
-
 import truck from "../../Images/truck-.png";
 import car from "../../Images/car.png";
 import deliver from "../../Images/supplier.png";
-
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
 
 const CartView = () => {
-  const { cart, removeFromCart ,updateQuantity} = useCart();
+  const { cart, removeFromCart, updateQuantity, addToCart } = useCart();
   const { userDetails } = useContext(AuthContext);  // Access user details from the context
   const { deadline } = useDeadline(); // Access deadline from shared state
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-/*
-   const confirmRemove = (productId) => {
-    Modal.confirm({
-      title: 'Are you sure you want to remove this item?',
-      onOk: () => removeFromCart(productId),
-    });
-  };*/
-  
   const trimDescription = (description, maxLength = 50) => {
     if (description.length > maxLength) {
       return description.substring(0, maxLength) + '...';
@@ -37,23 +26,42 @@ const CartView = () => {
   };
 
   // Calculate Subtotal and Savings
-// Calculate Subtotal and Savings considering quantity
-const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
-const savings = cart.reduce((total, item) => total + ((item.price * item.discount) / 100 * item.quantity), 0).toFixed(2);
+  const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+  const savings = cart.reduce((total, item) => total + ((item.price * item.discount) / 100 * item.quantity), 0).toFixed(2);
 
-// Calculate Total before Flash Offer
-const Total = cart.reduce(
-  (total, item) => total + ((item.price - (item.price * item.discount) / 100) * item.quantity),
-  0
-);
+  // Calculate Total before Flash Offer
+  const Total = cart.reduce(
+    (total, item) => total + ((item.price - (item.price * item.discount) / 100) * item.quantity),
+    0
+  );
 
-// Apply additional 12% increase if deadline is true
-const flashOfferIncrease = deadline ? Total * 0.12 : 0;
-const newTotal = (Total - flashOfferIncrease).toFixed(2);
+  // Apply additional 12% increase if deadline is true
+  const flashOfferIncrease = deadline ? Total * 0.12 : 0;
+  const newTotal = (Total - flashOfferIncrease).toFixed(2);
 
-console.log("flashOfferIncrease", flashOfferIncrease);
-console.log("deadline", deadline);
+  useEffect(() => {
+    // Sync cart with form schema model in backend, assuming a backend API exists
+    const syncCartWithBackend = async () => {
+      try {
+        // Example: Send the cart to your backend API to store it in your form schema model
+        await fetch('http://localhost:5000/api/cart/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ cart }),
+        });
 
+        console.log(cart)
+      } catch (error) {
+        console.error('Error syncing cart with backend:', error);
+      }
+    };
+
+    if (cart.length > 0) {
+      syncCartWithBackend();
+    }
+  }, [cart]);
 
   return (
     <LayoutNew>
@@ -64,84 +72,84 @@ console.log("deadline", deadline);
             {cart.length === 0 ? (
               <div/>
             ) : (
-            <div style={{ width: "830px", height: "250px", marginLeft: "200px", paddingTop: "23px" }}>
-              <Row gutter={[16, 16]} justify="center">
-                <Col xs={24} sm={12} md={8} lg={8} style={{ display: "flex", justifyContent: "center" }}>
-                  <Card
-                    style={{
-                      backgroundColor: "#f8f9fa",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      height: "200px",
-                      width: "300px",
-                      border: "1px solid #ddd",
-                      borderRadius: "10px",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                    }}
-                  >
-                    <img
-                      src={truck}
-                      alt="Shipping Icon"
-                      style={{ width: "100px", height: "100px", marginBottom: "10px" }}
-                    />
-                    <Text strong>Shipping</Text>
-                  </Card>
-                </Col>
+              <div style={{ width: "830px", height: "250px", marginLeft: "200px", paddingTop: "23px" }}>
+                <Row gutter={[16, 16]} justify="center">
+                  <Col xs={24} sm={12} md={8} lg={8} style={{ display: "flex", justifyContent: "center" }}>
+                    <Card
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        height: "200px",
+                        width: "300px",
+                        border: "1px solid #ddd",
+                        borderRadius: "10px",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      <img
+                        src={truck}
+                        alt="Shipping Icon"
+                        style={{ width: "100px", height: "100px", marginBottom: "10px" }}
+                      />
+                      <Text strong>Shipping</Text>
+                    </Card>
+                  </Col>
 
-                <Col xs={24} sm={12} md={8} lg={8} style={{ display: "flex", justifyContent: "center" }}>
-                  <Card
-                    style={{
-                      backgroundColor: "#f8f9fa",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      height: "200px",
-                      width: "300px",
-                      border: "1px solid #ddd",
-                      borderRadius: "10px",
-                      boxShadow: "0 2px 4px rgba(251, 54, 54, 0.1)",
-                    }}
-                  >
-                    <img
-                      src={car}
-                      alt="Pickup Icon"
-                      style={{ width: "100px", height: "100px", marginBottom: "10px" }}
-                    />
-                    <Text strong>Pickup</Text>
-                  </Card>
-                </Col>
+                  <Col xs={24} sm={12} md={8} lg={8} style={{ display: "flex", justifyContent: "center" }}>
+                    <Card
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        height: "200px",
+                        width: "300px",
+                        border: "1px solid #ddd",
+                        borderRadius: "10px",
+                        boxShadow: "0 2px 4px rgba(251, 54, 54, 0.1)",
+                      }}
+                    >
+                      <img
+                        src={car}
+                        alt="Pickup Icon"
+                        style={{ width: "100px", height: "100px", marginBottom: "10px" }}
+                      />
+                      <Text strong>Pickup</Text>
+                    </Card>
+                  </Col>
 
-                <Col xs={24} sm={12} md={8} lg={8} style={{ display: "flex", justifyContent: "center" }}>
-                  <Card
-                    style={{
-                      backgroundColor: "#f8f9fa",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      height: "200px",
-                      width: "300px",
-                      border: "1px solid #ddd",
-                      borderRadius: "10px",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                    }}
-                  >
-                    <img
-                      src={deliver}
-                      alt="Delivery Icon"
-                      style={{ width: "100px", height: "100px", marginBottom: "10px" }}
-                    />
-                    <Text strong>Delivery</Text>
-                  </Card>
-                </Col>
-              </Row>
-            </div>
+                  <Col xs={24} sm={12} md={8} lg={8} style={{ display: "flex", justifyContent: "center" }}>
+                    <Card
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        height: "200px",
+                        width: "300px",
+                        border: "1px solid #ddd",
+                        borderRadius: "10px",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      <img
+                        src={deliver}
+                        alt="Delivery Icon"
+                        style={{ width: "100px", height: "100px", marginBottom: "10px" }}
+                      />
+                      <Text strong>Delivery</Text>
+                    </Card>
+                  </Col>
+                </Row>
+              </div>
             )}
 
             {cart.length === 0 ? (
@@ -191,7 +199,6 @@ console.log("deadline", deadline);
                       </Text>
                     </div>
 
-
                     <div style={{ textAlign: 'right' }}>
                       <InputNumber
                         min={1}
@@ -199,7 +206,7 @@ console.log("deadline", deadline);
                         onChange={(value) => updateQuantity(item.productId, value)}
                         style={{ marginBottom: '10px', width: '60px' }}
                       />
-                      </div>
+                    </div>
                     <div style={{ textAlign: 'right' }}>
                       <Button
                         style={{
@@ -222,102 +229,64 @@ console.log("deadline", deadline);
           {cart.length === 0 ? (
               <div/>
             ) : (
-          <div
-            style={{
-              flex: 1,
-              padding: '20px',
-              border: '1px solid #ddd',
-              borderRadius: '10px',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              textAlign: 'left',
-              backgroundColor: '#f8f9fa',
-              height: 'fit-content',
-              marginTop:"103px"
-            }}
-          >
-            <Title level={3} style={{ textAlign: 'center' }}>Order Summary</Title>
-
-            {/* Displaying user address and phone */}
-            <div style={{ marginBottom: '20px' }}>
-              <Text style={{ fontSize: '16px' }}><strong>Shipping Address:</strong></Text>
-              <Text style={{ float: 'right', fontSize: '16px' }}>
-                {userDetails ? userDetails.address : 'Address not provided'}
-                {userDetails ? userDetails.phone : 'N/A'}
-
-              </Text>
-            </div>
-            <br/>
-
-
-            <div style={{ marginBottom: '20px',marginTop:"40px" }}>
-              <Text style={{ fontSize: '16px' }}>
-                <strong>Subtotal ({cart.length} items)</strong>
-              </Text>
-              <span style={{ float: 'right', textDecoration: 'line-through', color: 'gray' }}>
-                ${subtotal}
-              </span>
-            </div>
-            <div style={{ marginBottom: '10px' }}>
-              <Text style={{ fontSize: '16px', color: 'green' }}><strong>Savings</strong></Text>
-              <span style={{ float: 'right', color: 'green' }}>
-                -${savings}
-              </span>
-            </div>
-
-            <div style={{ marginBottom: '20px' }}>
-                
-              <span style={{ float: 'right', color: 'green', fontSize: '15px' }}>
-                ${cart.reduce((total, item) => total + (item.price - (item.price * item.discount) / 100), 0).toFixed(2)}
-              </span>
-              <br/>
-            </div>
-
-            <div style={{ marginBottom: '10px' }}>
-              <Text style={{ fontSize: '16px', color: 'grey' }}><strong>Shipping</strong></Text>
-              <span style={{ float: 'right', color: 'green' }}>
-                Free
-              </span>
-            </div>
-
-            <div style={{ marginBottom: '10px' }}>
-              <Text style={{ float :"left",fontSize: '16px', color: 'black' }}><strong>Taxes</strong></Text>
-              <span style={{ float: 'right', color: 'grey',fontSize:"16px" }}>
-                Calulated at checkout
-              </span>
-              <br/>
-              <br/>
-              <br/>
-              {deadline && (
-              <div style={{ marginBottom: '10px' }}>
-                <Text><strong>Flash Offer Increase (12%)</strong></Text>
-                <span style={{ float: 'right', color: 'red' }}> -${flashOfferIncrease.toFixed(2)}</span>
-              </div>
-            )}
-            </div>
-            <br/>
-
-            <div style={{ marginBottom: '20px', borderTop: '1px solid #ddd', paddingTop: '10px',marginTop:"20px" }}>
-              <Text style={{ fontSize: '18px' }}><strong>Total</strong></Text>
-              <span style={{ float: 'right', color: 'green', fontSize: '18px' }}>
-                ${newTotal}
-              </span>
-            </div>
-            
-
-
-            <Button
-              type="primary"
-              style={{ marginTop: '20px', width: '100%' }}
-              onClick={() => navigate('/checkout')}
+            <div
+              style={{
+                flex: 1,
+                padding: '20px',
+                border: '1px solid #ddd',
+                borderRadius: '10px',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                textAlign: 'left',
+                backgroundColor: '#f8f9fa',
+                height: 'fit-content',
+                marginTop:"103px"
+              }}
             >
-              Proceed to Checkout
-            </Button>
-          </div>
+              <Title level={3} style={{ textAlign: 'center' }}>Order Summary</Title>
+
+              {/* Displaying user address and phone */}
+              <div style={{ marginBottom: '20px' }}>
+                <Text style={{ fontSize: '16px' }}><strong>Shipping Address:</strong></Text>
+                <Text style={{ float: 'right', fontSize: '16px' }}>
+                  {userDetails ? userDetails.address : 'Address not provided'}
+                  {userDetails ? userDetails.phone : 'N/A'}
+                </Text>
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <Text style={{ fontSize: '16px' }}><strong>Subtotal ({cart.length} items)</strong></Text>
+                <span style={{ float: 'right', textDecoration: 'line-through', color: 'gray' }}>
+                  ${subtotal}
+                </span>
+              </div>
+              <div style={{ marginBottom: '10px' }}>
+                <Text style={{ fontSize: '16px', color: 'green' }}><strong>Savings</strong></Text>
+                <span style={{ float: 'right', color: 'green' }}>
+                  -${savings}
+                </span>
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <span style={{ float: 'right', color: 'green', fontSize: '20px' }}>
+                  ${newTotal}
+                </span>
+                <br />
+                <Text style={{ fontSize: '20px' }} strong>Total after Flash Offer</Text>
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <Button
+                  type="primary"
+                  size="large"
+                  style={{ width: '100%', backgroundColor: 'green' }}
+                  onClick={() => navigate('/checkout')}
+                >
+                  Proceed to Checkout
+                </Button>
+              </div>
+            </div>
           )}
-
         </div>
-
-        
       </Layout>
     </LayoutNew>
   );

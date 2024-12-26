@@ -11,10 +11,13 @@ const formSchema = new mongoose.Schema({
   prefix: { type: String, required: true },
   captcha: String,
   agreement: { type: Boolean, required: true },
-  cart: {
-    type: Array,
-    default: [],
-  },
+  cart: [
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+      quantity: { type: Number, required: true, default: 1 },
+    },
+  ],
+  
 });
 
 module.exports = mongoose.model('FormData', formSchema);
