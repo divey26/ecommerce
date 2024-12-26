@@ -10,7 +10,7 @@ const Login = () => {
 
   const onFinish = async (values) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/login', values);
+      const response = await axios.post('http://localhost:5000/api/user/login', values);
       console.log("Login Response:", response.data);
   
 

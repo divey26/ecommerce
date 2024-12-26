@@ -1,8 +1,9 @@
-const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const Joi = require('joi');
 const jwt = require('jsonwebtoken');
+const Joi = require('joi');
+const FormData = require('../models/User');
 
+// Validation schema
 const formValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
@@ -16,25 +17,23 @@ const formValidationSchema = Joi.object({
   agreement: Joi.boolean().valid(true).required(),
 });
 
-// Register endpoint
 exports.registerUser = async (req, res) => {
   const { email, password, firstname, lastname, residence, address, phone, prefix, captcha, agreement } = req.body;
 
-  // Validate form data
   const { error } = formValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await FormData.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 8);
 
-    const newUser = new User({
+    const newUser = new FormData({
       email,
       password: hashedPassword,
       firstname,
@@ -48,28 +47,17 @@ exports.registerUser = async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).send({ message: 'Form data saved successfully!' });
-  } catch (error) {
-    res.status(500).send({ error: 'Error saving form data' });
+    res.status(201).json({ message: 'User registered successfully!' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error saving user data' });
   }
 };
 
-// Login endpoint
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  const loginSchema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
-  });
-
-  const { error } = loginSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
-  }
-
   try {
-    const user = await User.findOne({ email });
+    const user = await FormData.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
@@ -83,11 +71,11 @@ exports.loginUser = async (req, res) => {
     res.status(200).json({
       token,
       userId: user._id,
-      email: user.email, // Return the user's email
-      address: user.address, // Add the address
-      phone: user.phone // Add the phone number
+      email: user.email,
+      address: user.address,
+      phone: user.phone,
     });
-  } catch (error) {
-    res.status(500).send({ error: 'Error logging in' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error logging in' });
   }
 };

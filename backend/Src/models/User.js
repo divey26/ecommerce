@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const formSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   firstname: String,
@@ -11,8 +11,10 @@ const userSchema = new mongoose.Schema({
   prefix: { type: String, required: true },
   captcha: String,
   agreement: { type: Boolean, required: true },
+  cart: {
+    type: Array,
+    default: [],
+  },
 });
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+module.exports = mongoose.model('FormData', formSchema);
