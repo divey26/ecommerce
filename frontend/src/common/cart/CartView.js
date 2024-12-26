@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Layout, Col, Row, Card, Button, Typography, List } from 'antd';
+import { Layout, Col, Row, Card, Button, Typography,InputNumber, List } from 'antd';
 import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
 import LayoutNew from '../../Layout';
@@ -16,12 +16,19 @@ const { Title, Text } = Typography;
 const { Content } = Layout;
 
 const CartView = () => {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart ,updateQuantity} = useCart();
   const { userDetails } = useContext(AuthContext);  // Access user details from the context
   const { deadline } = useDeadline(); // Access deadline from shared state
    const navigate = useNavigate();
 
-
+/*
+   const confirmRemove = (productId) => {
+    Modal.confirm({
+      title: 'Are you sure you want to remove this item?',
+      onOk: () => removeFromCart(productId),
+    });
+  };*/
+  
   const trimDescription = (description, maxLength = 50) => {
     if (description.length > maxLength) {
       return description.substring(0, maxLength) + '...';
@@ -30,19 +37,23 @@ const CartView = () => {
   };
 
   // Calculate Subtotal and Savings
-  const subtotal = cart.reduce((total, item) => total + item.price, 0).toFixed(2);
-  const savings = cart.reduce((total, item) => total + (item.price * item.discount) / 100, 0).toFixed(2);
-  const Total = cart.reduce(
-    (total, item) => total + (item.price - (item.price * item.discount) / 100),
-    0
-  );
+// Calculate Subtotal and Savings considering quantity
+const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+const savings = cart.reduce((total, item) => total + ((item.price * item.discount) / 100 * item.quantity), 0).toFixed(2);
 
-  // Apply additional 12% increase if deadline is true
-  const flashOfferIncrease = deadline ? Total * 0.12 : 0;
-  const newTotal = (Total - flashOfferIncrease).toFixed(2);
+// Calculate Total before Flash Offer
+const Total = cart.reduce(
+  (total, item) => total + ((item.price - (item.price * item.discount) / 100) * item.quantity),
+  0
+);
 
-  console.log("flashOfferIncrease",flashOfferIncrease)
-  console.log("deadline",deadline)
+// Apply additional 12% increase if deadline is true
+const flashOfferIncrease = deadline ? Total * 0.12 : 0;
+const newTotal = (Total - flashOfferIncrease).toFixed(2);
+
+console.log("flashOfferIncrease", flashOfferIncrease);
+console.log("deadline", deadline);
+
 
   return (
     <LayoutNew>
@@ -179,6 +190,16 @@ const CartView = () => {
                         Standard Delivery within 7 Days
                       </Text>
                     </div>
+
+
+                    <div style={{ textAlign: 'right' }}>
+                      <InputNumber
+                        min={1}
+                        value={item.quantity}
+                        onChange={(value) => updateQuantity(item.productId, value)}
+                        style={{ marginBottom: '10px', width: '60px' }}
+                      />
+                      </div>
                     <div style={{ textAlign: 'right' }}>
                       <Button
                         style={{
@@ -220,7 +241,7 @@ const CartView = () => {
             <div style={{ marginBottom: '20px' }}>
               <Text style={{ fontSize: '16px' }}><strong>Shipping Address:</strong></Text>
               <Text style={{ float: 'right', fontSize: '16px' }}>
-                {userDetails ? userDetails.address : 'N/A'}
+                {userDetails ? userDetails.address : 'Address not provided'}
                 {userDetails ? userDetails.phone : 'N/A'}
 
               </Text>

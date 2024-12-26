@@ -7,16 +7,15 @@ const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 
+
 const categoryRoutes = require('./Src/routes/categoryRoutes');
 const productRoutes = require('./Src/routes/productRoutes');
 const videoRoutes = require('./Src/routes/shortsRoutes'); // Import the video routes
 const paymentRoutes = require('./Src/routes/PaymentRoutes');
 const webhookRoutes = require('./Src/routes/webhook');
+const cartRoutes = require("./Src/routes/cartRoutes");
+//const cartRoutes = require('./routes/cartRoutes');
 
-
-
-
-//const cartRoutes = require("./Src/routes/cartRoutes");
 
 dotenv.config();
 
@@ -47,6 +46,7 @@ const formSchema = new mongoose.Schema({
   prefix: { type: String, required: true },
   captcha: String,
   agreement: { type: Boolean, required: true },
+  
 });
 const FormData = mongoose.model('FormData', formSchema);
 
@@ -170,8 +170,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api', webhookRoutes); // Adding webhook route here
+app.use('/api/cart', cartRoutes);
 
-//app.use("/api/cart", cartRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
