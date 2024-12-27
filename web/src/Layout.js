@@ -24,25 +24,7 @@ const adminUserItems = [
     icon: <HomeOutlined />,
     label: "Home",
   },
-  /*
-  {
-    key: "Category",
-    icon: <CalendarOutlined />,
-    label: "blaahh",
-    children: [
-      {
-        key: "Bread",
-        icon: <AppstoreAddOutlined />,
-        label: "Bread",
-      },
-      {
-        key: "Cake",
-        icon: <CheckCircleOutlined />,
-        label: "Cake",
-      },
- 
-    ],
-  },*/
+
   {
     key: "categories",
     icon: <HomeOutlined />,
@@ -127,16 +109,7 @@ const App = ({ children, userType }) => {
     if (item.key === "addpro") {
       navigate("/add-product");
     }
-    /*
-    if (item.key === "Sandwich") {
-      navigate("/sandwich");
-    }
-    if (item.key === "Bun") {
-      navigate("/bun");
-    }
-    if (item.key === "Croissant") {
-      navigate("/croissant");
-    }*/
+
   };
 
   const {

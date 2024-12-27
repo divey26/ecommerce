@@ -15,14 +15,10 @@ function App() {
       <Router>
         <Routes>
         <Route path="/" element={<Summa/>} />
-      
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/category" element={<CategoryPage/>} />
-
-
         <Route path="/shorts" element={<Shorts/>} />
         <Route path="/timer" element={<Timer/>} />
-
         <Route path="/add-product" element={<ProductPage/>} />
          
 

@@ -16,13 +16,12 @@ import {
   Row,
   Select,
 } from 'antd';
-//import common from './../design.css'
+
 
 const { Option } = Select;
 
 const residences = [
-  // Your residences data here...
-
+  
     {
       value: 'central',
       label: 'Central',
@@ -126,19 +125,20 @@ const tailFormItemLayout = {
 const Sign = () => {
   const [form] = Form.useForm();
   const [captchaValue, setCaptchaValue] = useState('');
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
+
 
   const onFinish = async (values) => {
-    // Exclude 'confirm' from the values object
-    const { confirm, ...formData } = values;
-  
+    const { confirm, ...formData } = values;  
+
     try {
       // Log the entered details
       console.log('Entered details:', formData);
-  
+    
       const response = await axios.post('http://localhost:5000/api/user/register', formData);
       console.log('Form data saved:', response.data);
-      navigate('/login');
+    
+      window.location.href = '/';
     } catch (error) {
       console.error('Error saving form data:', error.response ? error.response.data : error.message);
       message.error('Registration failed. Please try again.');
