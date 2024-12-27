@@ -26,7 +26,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/sign" element={<Sign />} />
-              <Route path="/home" element={<ProtectedRoute Component={HomePage} />} />
+              <Route path="/home" element={<HomePage />} />
               <Route path="/about" element={<ProtectedRoute Component={About} />} />
               <Route path="/ban" element={<Banner />} />
               <Route path="/wat" element={<All />} />

@@ -136,7 +136,7 @@ const Sign = () => {
       // Log the entered details
       console.log('Entered details:', formData);
   
-      const response = await axios.post('http://localhost:5000/api/userregister', formData);
+      const response = await axios.post('http://localhost:5000/api/user/register', formData);
       console.log('Form data saved:', response.data);
       navigate('/login');
     } catch (error) {

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Layout, Col, Row, Card, Button, Typography, InputNumber, List } from 'antd';
 import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
 import LayoutNew from '../../Layout';
-import { AuthContext } from '../../utils/AuthContext';  
+import { AuthContext } from '../../utils/AuthContext';
 import { useDeadline } from "../DeadlineContext/DeadlineContext"; // Import Deadline Context
 import truck from "../../Images/truck-.png";
 import car from "../../Images/car.png";
@@ -13,7 +13,7 @@ const { Title, Text } = Typography;
 const { Content } = Layout;
 
 const CartView = () => {
-  const { cart, removeFromCart, updateQuantity, addToCart } = useCart();
+  const { cart, removeFromCart, updateQuantity } = useCart(); // Access cart context
   const { userDetails } = useContext(AuthContext);  // Access user details from the context
   const { deadline } = useDeadline(); // Access deadline from shared state
   const navigate = useNavigate();
@@ -39,30 +39,6 @@ const CartView = () => {
   const flashOfferIncrease = deadline ? Total * 0.12 : 0;
   const newTotal = (Total - flashOfferIncrease).toFixed(2);
 
-  useEffect(() => {
-    // Sync cart with form schema model in backend, assuming a backend API exists
-    const syncCartWithBackend = async () => {
-      try {
-        // Example: Send the cart to your backend API to store it in your form schema model
-        await fetch('http://localhost:5000/api/cart/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ cart }),
-        });
-
-        console.log(cart)
-      } catch (error) {
-        console.error('Error syncing cart with backend:', error);
-      }
-    };
-
-    if (cart.length > 0) {
-      syncCartWithBackend();
-    }
-  }, [cart]);
-
   return (
     <LayoutNew>
       <Layout>
@@ -70,7 +46,7 @@ const CartView = () => {
           <div style={{ flex: 3, marginRight: '20px' }}>
             <Title level={2}>Your Cart</Title>
             {cart.length === 0 ? (
-              <div/>
+              <Text>No items in the cart  </Text>
             ) : (
               <div style={{ width: "830px", height: "250px", marginLeft: "200px", paddingTop: "23px" }}>
                 <Row gutter={[16, 16]} justify="center">
@@ -203,7 +179,7 @@ const CartView = () => {
                       <InputNumber
                         min={1}
                         value={item.quantity}
-                        onChange={(value) => updateQuantity(item.productId, value)}
+                        onChange={(value) => updateQuantity(item.productId, value)} // Directly calling updateQuantity
                         style={{ marginBottom: '10px', width: '60px' }}
                       />
                     </div>
@@ -215,7 +191,7 @@ const CartView = () => {
                           borderRadius: '5px',
                           marginBottom: '10px',
                         }}
-                        onClick={() => removeFromCart(item.productId)}
+                        onClick={() => removeFromCart(item.productId)} // Directly calling removeFromCart
                       >
                         Remove
                       </Button>
@@ -227,8 +203,8 @@ const CartView = () => {
           </div>
 
           {cart.length === 0 ? (
-              <div/>
-            ) : (
+            <div/>
+          ) : (
             <div
               style={{
                 flex: 1,

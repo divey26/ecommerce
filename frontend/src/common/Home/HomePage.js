@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // For useState and useEffect
+import React, { useState, useContext,useEffect } from 'react'; // For useState and useEffect
 import { Layout,Col, Row, Card as AntCard, message, Button, Carousel, Typography } from 'antd'; // Added Typography and Drawer here
 import LayoutNew from '../../Layout';
 import axios from 'axios'; 
@@ -19,7 +19,7 @@ import Banner from "./banner"
 import Shorts from "./ProShorts"
 import HomeProducts from "../Products/AllProList" 
 import Drawer from "./Drawer"; // Import the Drawer component
-
+import { AuthContext } from '../../utils/AuthContext'; // Import the context
 
 
 import {
@@ -35,7 +35,7 @@ const headerItem = [
   { key: "2", text: "Catagory" },
   { key: "3", text: "Today's Deals" },
   { key: "4", text: "Help & Support" },
-  { key: "5", text: "Sell" },
+  { key: "5", text: "log out" },
   { key: "6", text: "Sign up", icon: <UserSwitchOutlined /> },
 
 ];
@@ -43,13 +43,16 @@ const headerItem = [
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [visible, setVisible] = useState(false);  // Drawer visibility state
+  const { logout } = useContext(AuthContext); // Access the logout function from context
   const navigate = useNavigate();
 
   const handleHeaderClick = (key) => {
     if (key === "6") {
       navigate("/sign");
     }
-    else if (key === '0') {
+
+    else if (key === '5') {
+      logout();  // Clear localStorage and update context state
       navigate("/");
     }
   };
@@ -72,10 +75,6 @@ const HomePage = () => {
   const closeSlider = () => setVisible(false);
 
 
-  const handleNavigateToCart = () => {
-    navigate(`/cart`);  // Pass userId as state to the Cart page
-  };
-  
   return (
     <LayoutNew>
       <Layout>

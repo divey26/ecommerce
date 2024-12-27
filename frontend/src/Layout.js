@@ -25,17 +25,7 @@ const App = ({ children, userType }) => {
   const { cart } = useCart();
 
 
-  const handleHeaderClick = (key) => {
-    if (key === "1") {
-      localStorage.setItem("authToken", null);
-      localStorage.setItem("loggedInUserType", null);
-      navigate("/sign");
-    } else if (key === "2") {
-      localStorage.setItem("authToken", null);
-      localStorage.setItem("loggedInUserType", null);
-      navigate("/login");
-    }
-  };
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,21 +85,23 @@ const App = ({ children, userType }) => {
         >
           {/* Logo and HALO text on the left */}
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={imageSrc}
-              alt="Logo"
-              style={{ marginLeft: "10px", width: "50px", height: "50px" }}
-            />
-            <span
-              style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                marginLeft: "15px",
-                color: "#F3C623",
-              }}
-            >
-              HALO
-            </span>
+          <a href="/home" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+          <img
+            src={imageSrc}
+            alt="Logo"
+            style={{ marginLeft: "10px", width: "50px", height: "50px" }}
+          />
+          <span
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              marginLeft: "15px",
+              color: "#F3C623",
+            }}
+          >
+            HALO
+          </span>
+        </a>
           </div>
 
           {/* Delivery text */}

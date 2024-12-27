@@ -4,6 +4,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useCart } from '../cart/CartContext';
 import LayoutNew from '../../Layout';
+import imageSrc from '../../Images/logo.png'
+import StripImageSrc from '../../Images/StripeLogo.jpeg'
 
 const stripePromise = loadStripe('pk_test_51QaAO003ldnatOZanoghUvQrw76T9rnCg0YxqQaPffhxmc2LCX5rA2iKSu1p74ApieFr76sZBeDg7dyH8rMBzIOu00XLfTyJPL');
 
@@ -86,6 +88,9 @@ const CheckoutForm = () => {
           >
             Make Another Payment
           </button>,
+
+          <a href=" /home" >Visit Example</a>
+
         ]}
       />
     );
@@ -94,8 +99,23 @@ const CheckoutForm = () => {
   return (
     <LayoutNew>
       <Layout>
+        <br/>
         <form onSubmit={handleSubmit} style={formStyles}>
-          <div style={{ width: '400px', height: '500px' }}>
+          <div style={{ width: '400px', height: '500px', textAlign: 'left' }}>
+            <div style={{  marginBottom:"30px"}}>
+              <img
+                src={imageSrc}
+                alt="Logo"
+                style={{ marginLeft: "15px",marginBottom:"3px", width: "100px", height: "100px" }}
+              />
+              <span><img
+                src={StripImageSrc}
+                alt="Logo"
+                style={{   marginLeft:"100px",width: "180px", height: "100px" }}
+              /></span>
+              
+            </div>
+            
             <div style={formGroupStyles}>
               <label htmlFor="card-element" style={labelStyles}>Card Number</label>
               <CardNumberElement id="card-element" options={cardStyle} style={cardElementStyles} />
@@ -116,6 +136,10 @@ const CheckoutForm = () => {
           {paymentStatus && paymentStatus !== 'Processing...' && (
             <p style={statusStyles}>{paymentStatus}</p>
           )}
+
+          <div style={{ textAlign: 'center' }}>
+
+            </div>
         </form>
       </Layout>
     </LayoutNew>
@@ -134,21 +158,26 @@ const Checkout = () => {
 const formStyles = {
   maxWidth: '800px',
   margin: '0 auto',
-  padding: '40px',
+  paddingTop: '50px',
+  paddingLeft: '70px',
+  paddingRight: '50px',
   backgroundColor: '#f9f9f9',
   borderRadius: '8px',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  fontSize: '35px',
+  fontSize: '20px',
+  textAlign: 'left', // Align everything to the left
 };
 
 const formGroupStyles = {
   marginBottom: '20px',
+  marginLeft: '20px',
 };
 
 const labelStyles = {
   display: 'block',
-  marginBottom: '12px',
-  fontWeight: 'bold',
+  marginBottom: '20px',
+  fontWeight: 'normal',
+  
 };
 
 const cardElementStyles = {
@@ -160,7 +189,7 @@ const cardElementStyles = {
 };
 
 const payButtonStyles = {
-  backgroundColor: '#5469d4',
+  backgroundColor: '#004f9a',
   color: 'white',
   padding: '16px',
   width: '100%',
