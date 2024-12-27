@@ -48,30 +48,47 @@ const Login = () => {
         scrollToFirstError
       >
          <div style={{ textAlign: "center", padding: "20px 0" }}>
-          <img src={imageSrc} alt="Logo" style={{ width: "80%" }} />
+          <img src={imageSrc} alt="Logo" style={{ width: "45%" }} />
         </div>
+
+        <div
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#F3C623",
+              textAlign: "center", // Add centering for the title
+              paddingBottom: "20px", // Adjust spacing between title and form
+            }}
+          >
+            HALO
+
+            </div>
+      
+      <div style={{marginBottom:"8px",fontSize:"18px",color:"wheat",paddingTop:"15px",borderTop:"2px solid wheat"}}>Enter the Email</div>
         <Form.Item
           name="email"
-          label="E-mail"
+          labelCol={{ span: 24 }} // Full-width label
           rules={[
             { type: 'email', message: 'The input is not valid E-mail!' },
             { required: true, message: 'Please input your E-mail!' },
           ]}
         >
-          
           <Input />
         </Form.Item>
-
+        
+        <div style={{marginBottom:"8px",fontSize:"18px",color:"wheat"}}>Enter the </div>
         <Form.Item
           name="password"
-          label="Password"
+          labelCol={{ span: 24 }} // Full-width label
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input />
+          <Input.Password />
         </Form.Item>
 
+        <br/>
+        <br/>
         <Form.Item>
-          <Button type="primary" htmlType="submit">Login</Button>
+        <Button type="primary" htmlType="submit" style={{ width: '100%',backgroundColor:"#F3C623",color:"blue",fontSize:"20px" }}>Login</Button>
         </Form.Item>
       </Form>
     </div>
@@ -85,13 +102,13 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
-    backgroundColor: 'rgb(224, 245, 249)', // Optional form background color
+    backgroundColor: 'rgb(76, 149, 163)', // Optional form background color
 
   },
   form: {
-    maxWidth: '400px',
+    maxWidth: '500px',
     width: '100%',
-    padding: '20px',
+    padding: '60px',
     backgroundColor: '#004f9a', // Optional background color
     borderRadius: '8px', // Optional rounded corners
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', // Optional shadow effect

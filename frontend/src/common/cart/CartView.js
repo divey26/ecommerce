@@ -25,13 +25,12 @@ const CartView = () => {
     return description;
   };
 
-  // Calculate Subtotal and Savings
-  const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
-  const savings = cart.reduce((total, item) => total + ((item.price * item.discount) / 100 * item.quantity), 0).toFixed(2);
+  // Calculate Subtotal and Savings based on quantity
+  const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+  const savings = cart.reduce((total, item) => total + (item.price * item.discount / 100) * item.quantity, 0).toFixed(2);
 
-  // Calculate Total before Flash Offer
   const Total = cart.reduce(
-    (total, item) => total + ((item.price - (item.price * item.discount) / 100) * item.quantity),
+    (total, item) => total + (item.price - (item.price * item.discount / 100)) * item.quantity,
     0
   );
 
@@ -46,7 +45,7 @@ const CartView = () => {
           <div style={{ flex: 3, marginRight: '20px' }}>
             <Title level={2}>Your Cart</Title>
             {cart.length === 0 ? (
-              <Text>No items in the cart  </Text>
+              <Text>No items in the cart</Text>
             ) : (
               <div style={{ width: "830px", height: "250px", marginLeft: "200px", paddingTop: "23px" }}>
                 <Row gutter={[16, 16]} justify="center">
@@ -129,7 +128,7 @@ const CartView = () => {
             )}
 
             {cart.length === 0 ? (
-              <Text>No items in the cart  </Text>
+              <Text>No items in the cart</Text>
             ) : (
               <List
                 dataSource={cart}
@@ -203,7 +202,7 @@ const CartView = () => {
           </div>
 
           {cart.length === 0 ? (
-            <div/>
+            <div />
           ) : (
             <div
               style={{
@@ -215,7 +214,7 @@ const CartView = () => {
                 textAlign: 'left',
                 backgroundColor: '#f8f9fa',
                 height: 'fit-content',
-                marginTop:"103px"
+                marginTop: "103px"
               }}
             >
               <Title level={3} style={{ textAlign: 'center' }}>Order Summary</Title>
@@ -224,12 +223,13 @@ const CartView = () => {
               <div style={{ marginBottom: '20px' }}>
                 <Text style={{ fontSize: '16px' }}><strong>Shipping Address:</strong></Text>
                 <Text style={{ float: 'right', fontSize: '16px' }}>
-                  {userDetails ? userDetails.address : 'Address not provided'}
+                  {userDetails ? userDetails.address : 'N/A'}
                   {userDetails ? userDetails.phone : 'N/A'}
                 </Text>
               </div>
+              <br />
 
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: '20px', marginTop: "40px" }}>
                 <Text style={{ fontSize: '16px' }}><strong>Subtotal ({cart.length} items)</strong></Text>
                 <span style={{ float: 'right', textDecoration: 'line-through', color: 'gray' }}>
                   ${subtotal}
@@ -243,23 +243,50 @@ const CartView = () => {
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <span style={{ float: 'right', color: 'green', fontSize: '20px' }}>
-                  ${newTotal}
+                <span style={{ float: 'right', color: 'green', fontSize: '15px' }}>
+                  ${cart.reduce((total, item) => total + (item.price - (item.price * item.discount) / 100) * item.quantity, 0).toFixed(2)}
                 </span>
                 <br />
-                <Text style={{ fontSize: '20px' }} strong>Total after Flash Offer</Text>
               </div>
 
-              <div style={{ marginBottom: '20px' }}>
-                <Button
-                  type="primary"
-                  size="large"
-                  style={{ width: '100%', backgroundColor: 'green' }}
-                  onClick={() => navigate('/checkout')}
-                >
-                  Proceed to Checkout
-                </Button>
+              <div style={{ marginBottom: '10px' }}>
+                <Text style={{ fontSize: '16px', color: 'grey' }}><strong>Shipping</strong></Text>
+                <span style={{ float: 'right', color: 'green' }}>
+                  Free
+                </span>
               </div>
+
+              <div style={{ marginBottom: '10px' }}>
+                <Text style={{ float: "left", fontSize: '16px', color: 'black' }}><strong>Taxes</strong></Text>
+                <span style={{ float: 'right', color: 'grey', fontSize: "16px" }}>
+                  Calculated at checkout
+                </span>
+                <br />
+                <br />
+                <br />
+                {deadline && (
+                  <div style={{ marginBottom: '10px' }}>
+                    <Text><strong>Flash Offer Increase (12%)</strong></Text>
+                    <span style={{ float: 'right', color: 'red' }}> -${flashOfferIncrease.toFixed(2)}</span>
+                  </div>
+                )}
+              </div>
+              <br />
+
+              <div style={{ marginBottom: '20px', borderTop: '1px solid #ddd', paddingTop: '10px', marginTop: "20px" }}>
+                <Text style={{ fontSize: '18px' }}><strong>Total</strong></Text>
+                <span style={{ float: 'right', color: 'green', fontSize: '18px' }}>
+                  ${newTotal}
+                </span>
+              </div>
+
+              <Button
+                type="primary"
+                style={{ marginTop: '20px', width: '100%' }}
+                onClick={() => navigate('/checkout')}
+              >
+                Proceed to Checkout
+              </Button>
             </div>
           )}
         </div>
