@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Col, Row, Typography, message, Modal, Input, Button } from 'antd';
+import { Card, Col, Row, Typography,Skeleton, message, Modal, Input, Button } from 'antd';
 import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
@@ -12,8 +12,6 @@ const ProductsList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart(); // Access addToCart function
-
-  
   const { authenticated } = useContext(AuthContext); // Access authenticated state
 
 
@@ -48,6 +46,8 @@ const ProductsList = () => {
     return description;
   };
 
+  if (loading) return <Skeleton active />;
+  
   return (
     <div style={{ padding: '20px' }}>
       <Title level={2}>Products</Title>

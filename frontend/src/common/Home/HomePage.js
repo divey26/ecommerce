@@ -1,11 +1,18 @@
 import React, { useState, useContext,useEffect } from 'react'; // For useState and useEffect
-import { Layout,Col, Row, Card as AntCard, message, Button, Carousel, Typography } from 'antd'; // Added Typography and Drawer here
+import { Layout,Col, Row, Card as AntCard, message, Button,Badge, Carousel, Typography } from 'antd'; // Added Typography and Drawer here
 import LayoutNew from '../../Layout';
+import {
+  ShoppingCartOutlined,
+
+} from "@ant-design/icons";
+
 import axios from 'axios'; 
 import styled from 'styled-components';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import videoSrc from '../../Video/video.mp4';
+import { useCart } from '../cart/CartContext';
+
 
 // Import images for the carousel
 import p1 from "../../Images/p1.jpg";
@@ -45,6 +52,14 @@ const HomePage = () => {
   const [visible, setVisible] = useState(false);  // Drawer visibility state
   const { logout } = useContext(AuthContext); // Access the logout function from context
   const navigate = useNavigate();
+  const { cart } = useCart();
+
+
+
+  const handleNavigateToCart = () => {
+    navigate("/cart");
+  };
+  
 
   const handleHeaderClick = (key) => {
     if (key === "6") {
@@ -114,6 +129,21 @@ const HomePage = () => {
                 {item.text}
               </Button>
             ))}
+
+             {/* Cart Icon on the right 
+          <div style={{ textAlign: "right" }}>
+            <Button
+              type="default"
+              onClick={handleNavigateToCart}
+              style={{ marginTop: "10px", height: "60px", marginRight: "5px" }}
+            >
+              <Badge count={cart.length}>
+                <ShoppingCartOutlined style={{ fontSize: "30px" }} />
+              </Badge>
+            </Button>
+          </div>
+          */}
+
           </div>
         </div>
       </StyledHeader1>

@@ -35,8 +35,8 @@ function App() {
 
               <Route path="/checkout" element={<Checkout />} />
 
-              
-              <Route path="*" element={<div>404 - Page Not Found</div>} />
+              <Route path="*" element={<NotFound />} />
+
             </Routes>
           </Router>
         </div>
@@ -46,11 +46,22 @@ function App() {
   );
 }
 
+// Default Route Component
+const DefaultRoute = () => {
+  const { authenticated } = useContext(AuthContext);
+  return authenticated ? <Navigate to="/home" /> : <Navigate to="/" />;
+};
+
 // ProtectedRoute component to check authentication before rendering the component
 const ProtectedRoute = ({ Component }) => {
   const { authenticated } = useContext(AuthContext);
 
   return authenticated ? <Component /> : <Navigate to="/" />;
 };
+
+
+// NotFound Component for 404 error handling
+const NotFound = () => <div style={{ textAlign: 'center', marginTop: '20px' }}>404 - Page Not Found</div>;
+
 
 export default App;

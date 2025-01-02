@@ -1,5 +1,10 @@
 import React, { createContext, useState, useEffect } from 'react';
 
+// Helper functions for localStorage
+const getLocalStorage = (key) => localStorage.getItem(key);
+const setLocalStorage = (key, value) => localStorage.setItem(key, value);
+const removeLocalStorage = (keys) => keys.forEach((key) => localStorage.removeItem(key));
+
 // Create the AuthContext
 export const AuthContext = createContext({
   authenticated: false,
@@ -15,33 +20,23 @@ export const AuthProvider = ({ children }) => {
 
   // Check if the user is authenticated on app load
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    const userEmail = localStorage.getItem('userEmail');
-    const address = localStorage.getItem('userAddress'); 
-    const phone = localStorage.getItem('userPhone');
-
+    const token = getLocalStorage('token');
     if (token) {
       setAuthenticated(true);
-      setUserDetails({ userId, email: userEmail, address, phone });
-    } else {
-      setAuthenticated(false);
-      setUserDetails(null);
+      setUserDetails({
+        userId: getLocalStorage('userId'),
+        email: getLocalStorage('userEmail'),
+        address: getLocalStorage('userAddress'),
+        phone: getLocalStorage('userPhone'),
+      });
     }
   }, []);
 
   // Logout function
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userAddress');
-    localStorage.removeItem('userPhone');
-
+    removeLocalStorage(['cart', 'token', 'userId', 'userEmail', 'userAddress', 'userPhone']);
     setAuthenticated(false);
     setUserDetails(null);
-
-
   };
 
   return (
@@ -53,23 +48,17 @@ export const AuthProvider = ({ children }) => {
 
 // Function to check if the user is authenticated
 export const isAuthenticate = () => {
-  const token = localStorage.getItem('token');
-  const userId = localStorage.getItem('userId');
-  const userEmail = localStorage.getItem('userEmail');
-  const address = localStorage.getItem('userAddress');
-  const phone = localStorage.getItem('userPhone');
-
+  const token = getLocalStorage('token');
   if (token) {
     return {
       authenticated: true,
       userDetails: {
-        userId,
-        email: userEmail,
-        address,
-        phone,
+        userId: getLocalStorage('userId'),
+        email: getLocalStorage('userEmail'),
+        address: getLocalStorage('userAddress'),
+        phone: getLocalStorage('userPhone'),
       },
     };
   }
-
   return { authenticated: false, userDetails: null };
 };
