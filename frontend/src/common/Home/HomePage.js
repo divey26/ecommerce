@@ -24,7 +24,7 @@ import banner1 from "../../Images/valBanner.jpg"
 
 import Banner from "./banner" 
 import Shorts from "./ProShorts"
-import HomeProducts from "../Products/AllProList" 
+import TopRated from "../Home/TopRated" 
 import Drawer from "./Drawer"; // Import the Drawer component
 import { AuthContext } from '../../utils/AuthContext'; // Import the context
 
@@ -222,8 +222,7 @@ const HomePage = () => {
         </VideoAndImageContainer>
 
         <Shorts/>
-        <HomeProducts/>
-
+<TopRated/>
         {/* Drawer for Slider Navigation */}
         <Drawer visible={visible} onClose={closeSlider} />
 

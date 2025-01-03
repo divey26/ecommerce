@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Col, Row, Typography,Skeleton, message, Modal, Input, Button } from 'antd';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
 import { useCart } from '../cart/CartContext'; // Import CartContext
@@ -11,6 +12,7 @@ const { Title, Text } = Typography;
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const { addToCart } = useCart(); // Access addToCart function
   const { authenticated } = useContext(AuthContext); // Access authenticated state
 
@@ -79,6 +81,8 @@ const ProductsList = () => {
                   justifyContent: 'space-between',
                   padding: '10px',
                 }}
+                onClick={() => navigate(`/product/${product.productId}`)} // Navigate on card click
+
               >
                 <div>
                   <Row align="middle" justify="start" style={{ marginBottom: '10px' }}>
