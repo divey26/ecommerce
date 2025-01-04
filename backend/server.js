@@ -12,6 +12,8 @@ const paymentRoutes = require('./Src/routes/PaymentRoutes');
 const webhookRoutes = require('./Src/routes/webhook');
 const cartRoutes = require('./Src/routes/cartRoutes');
 const userRoutes = require('./Src/routes//userRoutes'); // New route for user-related operations
+const cardRoutes = require('./Src/routes/cardRoutes');
+
 
 dotenv.config();
 
@@ -57,6 +59,11 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api', webhookRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/user', userRoutes); // User routes
+app.use('/api/card', cardRoutes);
+
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

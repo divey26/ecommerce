@@ -7,7 +7,8 @@ import Dashboard from './com/dashboard'
 import Shorts from './com/Shorts/Shorts'
 import Timer from './com/Timer/Timer'
 import Summa from './com/summa';
-
+import View from './com/Summa/front'
+import Add from './com/Summa/admin'
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
         <Route path="/shorts" element={<Shorts/>} />
         <Route path="/timer" element={<Timer/>} />
         <Route path="/add-product" element={<ProductPage/>} />
+        <Route path="/view" element={<View/>} />
+        <Route path="/add" element={<Add/>} />
+
          
 
         </Routes>

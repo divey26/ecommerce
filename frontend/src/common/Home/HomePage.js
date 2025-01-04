@@ -222,7 +222,8 @@ const HomePage = () => {
         </VideoAndImageContainer>
 
         <Shorts/>
-<TopRated/>
+        <TopRated/>
+        
         {/* Drawer for Slider Navigation */}
         <Drawer visible={visible} onClose={closeSlider} />
 
