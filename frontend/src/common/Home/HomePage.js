@@ -34,9 +34,9 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const headerItem = [
- { key: "1", text: "All", icon: <BarsOutlined /> },
+  { key: "1", text: "All", icon: <BarsOutlined /> },
   { key: "2", text: "Catagory" },
-  { key: "3", text: "Today's Deals" },
+  { key: "3", text: "All Products" },
   { key: "4", text: "Help & Support" },
   { key: "5", text: "log out" },
   { key: "6", text: "Sign up", icon: <UserSwitchOutlined /> },
@@ -65,6 +65,10 @@ const HomePage = () => {
     else if (key === '5') {
       logout();  // Clear localStorage and update context state
       navigate("/");
+    }
+    else if (key ==="3"){
+      navigate("/all-pro");
+
     }
   };
 
@@ -142,26 +146,18 @@ const HomePage = () => {
         <Banner/>
 
 
+        </div>
+       
+        <br/>
+
         <SecondLayout/>
 
-        </div>
         <br/>
-        {/* Carousel Component */}
-        <Carousel autoplay dotPosition="bottom" autoplaySpeed={2000}>
-          <div>
-            <img src={p1} alt="p1" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
-          </div>
-          <div>
-            <img src={p2} alt="p2" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
-          </div>
-          <div>
-            <img src={p3} alt="p3" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
-          </div>
-          <div>
-            <img src={p4} alt="p4" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
-          </div>
-        </Carousel>
-        
+
+        {/* Banner Section */}
+        <div>
+          <img src={banner1} style={{ width: "100%", height: "10%" }} />
+        </div>
 
         {/* Display Categories */}
           <Content style={{ marginTop: "15px", marginBottom: "50px",marginTop:"50px" }}>
@@ -180,11 +176,7 @@ const HomePage = () => {
 
           </Content>
 
-
-        {/* Banner Section */}
-        <div>
-          <img src={banner1} style={{ width: "100%", height: "10%" }} />
-        </div>
+        <TopRated/>
 
         {/* Video and Image Side by Side */}
         <VideoAndImageContainer>
@@ -202,9 +194,26 @@ const HomePage = () => {
             <img src={prod1} alt="p2" style={{ width: "100%", height: "10%" }} />
           </div>
         </VideoAndImageContainer>
-
+        
         <Shorts/>
+
         <TopRated/>
+
+        {/* Carousel Component */}
+        <Carousel autoplay dotPosition="bottom" autoplaySpeed={2000}>
+          <div>
+            <img src={p1} alt="p1" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
+          </div>
+          <div>
+            <img src={p2} alt="p2" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
+          </div>
+          <div>
+            <img src={p3} alt="p3" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
+          </div>
+          <div>
+            <img src={p4} alt="p4" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
+          </div>
+        </Carousel>
 
         {/* Drawer for Slider Navigation */}
         <Drawer visible={visible} onClose={closeSlider} />
