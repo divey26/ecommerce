@@ -139,16 +139,20 @@ const ProductsList = () => {
                       marginTop: 'auto',
                       borderRadius: '40px',
                       color: 'white',
-                      backgroundColor: '#004f9a',
+                      backgroundColor: authenticated ? '#004f9a' : '#a0a0a0',
                     }}
-                    onClick={() => {
-                      addToCart(product);
-                      message.success(`${product.itemName} added to the cart`);
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card onClick from being triggered
+                      if (authenticated) {
+                        addToCart(product);
+                        message.success(`${product.itemName} added to the cart`);
+                      }
                     }}
-                    
+                    disabled={!authenticated}
                   >
-                    + ADD
+                    {authenticated ? '+ ADD' : 'Login to Add'}
                   </Button>
+
                 ) : (
                   <Button
                     style={{

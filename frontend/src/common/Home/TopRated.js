@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Typography, message } from 'antd';
+import { Row, Col, Card, Typography,Button, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
+import { useCart } from '../cart/CartContext'; // Import CartContext
 
 
-const { Title } = Typography;
+const { Title,Text } = Typography;
 
 const TopRated = () => {
   const [topRatedProducts, setTopRatedProducts] = useState([]);
   const navigate = useNavigate();
+  const { addToCart } = useCart(); // Access addToCart function
+  const { authenticated } = useContext(AuthContext); // Access authenticated state
+  
 
   useEffect(() => {
     const fetchTopRatedProducts = async () => {
@@ -28,6 +34,22 @@ const TopRated = () => {
 
     fetchTopRatedProducts();
   }, []);
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(i < rating ? '⭐' : '☆');
+    }
+    return stars.join(' ');
+  };
+
+  const trimDescription = (description, maxLength = 50) => {
+    if (description.length > maxLength) {
+      return description.substring(0, maxLength) + '...';
+    }
+    return description;
+  };
+
 
   return (
     <div>
@@ -66,12 +88,87 @@ const TopRated = () => {
 
               >
                 <div>
-                  <Title level={4} style={{ color: '#004f9a' }}>
-                    ${product.price}
-                  </Title>
-                  <p style={{ fontSize: '12px' }}>{product.itemName}</p>
-                  <p>{'⭐'.repeat(5)}</p>
+                  <Row align="middle" justify="start" style={{ marginBottom: '10px' }}>
+                    {product.discount > 0 ? (
+                      <>
+                        <Col>
+                          <Title level={4} style={{ color: 'Green', margin: 0 }}>
+                            $
+                            {(
+                              product.price - (product.price * product.discount) / 100
+                            ).toFixed(2)}
+                          </Title>
+                        </Col>
+                        <Col style={{ marginLeft: '10px' }}>
+                          <Text
+                            style={{
+                              textDecoration: 'line-through',
+                              fontSize: '15px',
+                              color: '#a0a0a0',
+                            }}
+                          >
+                            ${product.price}
+                          </Text>
+                        </Col>
+                      </>
+                    ) : (
+                      <Col>
+                        <Title level={4} style={{ color: '#004f9a', margin: 0 }}>
+                          ${product.price}
+                        </Title>
+                      </Col>
+                    )}
+                  </Row>
+
+                  <p
+                    style={{
+                      fontSize: '12px',
+                      height: '40px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {product.itemName} | {trimDescription(product.description)}
+                  </p>
+
+                  <Text style={{ fontSize: '15px' }}>
+                    {renderStars(product.rating)} {product.rating}
+                  </Text>
                 </div>
+
+            {authenticated ? (
+                <Button
+                    style={{
+                        marginTop: 'auto',
+                        borderRadius: '40px',
+                        color: 'white',
+                        backgroundColor: authenticated ? '#004f9a' : '#a0a0a0',
+                    }}
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent card onClick from being triggered
+                        if (authenticated) {
+                        addToCart(product);
+                        message.success(`${product.itemName} added to the cart`);
+                        }
+                    }}
+                    disabled={!authenticated}
+                    >
+                    {authenticated ? '+ ADD' : 'Login to Add'}
+                    </Button>
+
+                ) : (
+                  <Button
+                    style={{
+                      marginTop: 'auto',
+                      borderRadius: '40px',
+                      color: 'white',
+                      backgroundColor: '#a0a0a0',
+                    }}
+                    disabled
+                  >
+                    Login to Add
+                  </Button>
+                )}
               </Card>
             </Col>
           ))}
