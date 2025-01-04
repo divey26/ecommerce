@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Space ,Typography,Button, Form, Input, Upload, message, Table, Modal } from 'antd';
-import { storage } from '../../common/firebaseConfig';
+import { storage } from '../../Firebase/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import axios from 'axios';
 import LayoutNew from '../../Layout';

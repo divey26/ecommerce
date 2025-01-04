@@ -78,7 +78,7 @@ const App = ({ children, userType }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            zIndex: 1,
+            zIndex: 10,
             paddingLeft: "20px",
             paddingRight: "20px",
           }}

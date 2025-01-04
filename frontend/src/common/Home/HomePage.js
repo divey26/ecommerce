@@ -1,11 +1,6 @@
 import React, { useState, useContext,useEffect } from 'react'; // For useState and useEffect
 import { Layout,Col, Row, Card as AntCard, message, Button,Badge, Carousel, Typography } from 'antd'; // Added Typography and Drawer here
 import LayoutNew from '../../Layout';
-import {
-  ShoppingCartOutlined,
-
-} from "@ant-design/icons";
-
 import axios from 'axios'; 
 import styled from 'styled-components';
 import ReactPlayer from 'react-player';
@@ -13,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import videoSrc from '../../Video/video.mp4';
 import { useCart } from '../cart/CartContext';
 
+import SecondLayout from './SecondaryBanner'
 
 // Import images for the carousel
 import p1 from "../../Images/p1.jpg";
@@ -130,20 +126,6 @@ const HomePage = () => {
               </Button>
             ))}
 
-             {/* Cart Icon on the right 
-          <div style={{ textAlign: "right" }}>
-            <Button
-              type="default"
-              onClick={handleNavigateToCart}
-              style={{ marginTop: "10px", height: "60px", marginRight: "5px" }}
-            >
-              <Badge count={cart.length}>
-                <ShoppingCartOutlined style={{ fontSize: "30px" }} />
-              </Badge>
-            </Button>
-          </div>
-          */}
-
           </div>
         </div>
       </StyledHeader1>
@@ -156,15 +138,14 @@ const HomePage = () => {
             <span style={{ marginLeft: '300px' }}>FREE DELIVERY for purchase above 100$</span>
           </h1>
         </StyledHeader>
-        
+
         <Banner/>
+
+
+        <SecondLayout/>
+
         </div>
-
-        
-
         <br/>
-
-
         {/* Carousel Component */}
         <Carousel autoplay dotPosition="bottom" autoplaySpeed={2000}>
           <div>
@@ -180,6 +161,7 @@ const HomePage = () => {
             <img src={p4} alt="p4" style={{ width: "100%", height: "600px", objectFit: "cover" }} />
           </div>
         </Carousel>
+        
 
         {/* Display Categories */}
           <Content style={{ marginTop: "15px", marginBottom: "50px",marginTop:"50px" }}>
@@ -223,7 +205,7 @@ const HomePage = () => {
 
         <Shorts/>
         <TopRated/>
-        
+
         {/* Drawer for Slider Navigation */}
         <Drawer visible={visible} onClose={closeSlider} />
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Select, Space, Typography, Modal, Button, Form, Row, Col, Input, Upload, message } from 'antd';
 import axios from 'axios';
 import { StockOutlined } from '@ant-design/icons';
-import { storage } from '../common/firebaseConfig';
+import { storage } from '../Firebase/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import 'antd/dist/reset.css';
 import LayoutNew from '../Layout';

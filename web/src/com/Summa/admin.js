@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Form, message, Select, Table } from 'antd';
 import axios from 'axios';
-import { storage } from '../../common/firebaseConfig'; // Import storage from firebaseConfig
+import { storage } from '../../Firebase/firebaseConfig'; // Import storage from firebaseConfig
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'; // Import necessary Firebase storage functions
+
 
 const AdminPage = () => {
   const [title, setTitle] = useState('');
@@ -160,6 +161,8 @@ const AdminPage = () => {
           rowKey="_id" // Assuming your card model has an _id field
         />
       </div>
+
+
     </div>
   );
 };

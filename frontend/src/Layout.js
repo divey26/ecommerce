@@ -78,7 +78,7 @@ const App = ({ children, userType }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            zIndex: 1,
+            zIndex: 5,
             paddingLeft: "20px",
             paddingRight: "20px",
           }}
@@ -237,6 +237,7 @@ const App = ({ children, userType }) => {
               minHeight: 360,
               backgroundSize: "cover",
               backgroundPosition: "center",
+              
             }}
           >
             {isBackTopVisible && (

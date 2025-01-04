@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Button, Row, Col, Layout } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
-import LayoutNew from './Layout'
 
 const { Title } = Typography;
 
@@ -11,7 +10,7 @@ const CardContainer = styled.div`
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  height: 400px; // Set consistent card height
+  height: 260px; // Set consistent card height
   color: #ffffff;
   text-align: left;
 `;
@@ -59,14 +58,13 @@ const Page1 = () => {
   }, []);
 
   return (
-      <LayoutNew>
         <div style={{ marginLeft: "120px", marginTop:'15px', backgroundColor: '#f0f2f5' }}>
           <Row gutter={[16, 16]}>
             {/* Left column */}
             <Col xs={24} md={8}>
               {cards.map(card =>
                 card.layout === 'Left' && (
-                  <CardContainer key={card._id} style={{height:"615px"}}>
+                  <CardContainer key={card._id} style={{height:"515px"}}>
                     <CardImage src={card.image} alt={card.title} />
                     <TextContainer>
                       <div>
@@ -89,7 +87,7 @@ const Page1 = () => {
                 <Col xs={10} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   {cards.map(card =>
                     card.layout === 'M1' && (
-                      <CardContainer key={card._id} style={{height:"200px"}} >
+                      <CardContainer key={card._id} style={{height:"240px"}} >
                         <CardImage src={card.image} alt={card.title} />
                         <TextContainer>
                           <div>
@@ -143,7 +141,7 @@ const Page1 = () => {
                 {cards.map(card =>
                   card.layout === 'Right' && (
                     <Col xs={12} key={card._id}>
-                      <CardContainer style={{height:"615px"}}>
+                      <CardContainer style={{height:"515px"}}>
                         <CardImage src={card.image} alt={card.title} />
                         <TextContainer>
                           <div>
@@ -161,7 +159,6 @@ const Page1 = () => {
             </Col>
           </Row>
         </div>
-        </LayoutNew>
 
   );
 };
