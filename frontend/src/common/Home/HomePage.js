@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import videoSrc from '../../Video/video.mp4';
 import { useCart } from '../cart/CartContext';
 
-import SecondLayout from './SecondaryBanner'
+import SecondLayout from './Layouts/SecondaryBanner'
 
 // Import images for the carousel
 import p1 from "../../Images/p1.jpg";
@@ -19,8 +19,8 @@ import prod1 from "../../Images/prod1.png"
 import banner1 from "../../Images/valBanner.jpg"
 
 import Banner from "./banner" 
-import Shorts from "./ProShorts"
-import TopRated from "../Home/TopRated" 
+import Shorts from "./Layouts/ProShorts"
+import TopRated from "./Layouts/TopRated" 
 import Drawer from "./Drawer"; // Import the Drawer component
 import { AuthContext } from '../../utils/AuthContext'; // Import the context
 
@@ -49,13 +49,6 @@ const HomePage = () => {
   const { logout } = useContext(AuthContext); // Access the logout function from context
   const navigate = useNavigate();
   const { cart } = useCart();
-
-
-
-  const handleNavigateToCart = () => {
-    navigate("/cart");
-  };
-  
 
   const handleHeaderClick = (key) => {
     if (key === "6") {
@@ -160,7 +153,7 @@ const HomePage = () => {
         </div>
 
         {/* Display Categories */}
-          <Content style={{ marginTop: "15px", marginBottom: "50px",marginTop:"50px" }}>
+          <Content style={{ marginTop: "15px", marginBottom: "20px",marginTop:"50px" }}>
           <Row gutter={[16, 16]} justify="center">
             {categories.map((category) => (
               <Col xs={12} sm={10} md={8} lg={6} xl={3} key={category.categoryId}>
@@ -241,7 +234,7 @@ const StyledHeader = styled(Header)`
     padding: 0 !important;
     line-height: 1.2 !important;
     white-space: nowrap;
-    animation: scrollText 16s linear infinite;
+    animation: scrollText 28s linear infinite;
   }
 
   @keyframes scrollText {
@@ -300,7 +293,7 @@ const StyledCard = styled(AntCard)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 220px;
+  height: 250px;
   padding: 5px;
 
   .ant-card-cover img {

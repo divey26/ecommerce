@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Row, Col, Typography, message } from 'antd';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
 const HomePage = () => {
   const [videos, setVideos] = useState([]);
+  const navigate = useNavigate();
+
 
   const fetchVideos = async () => {
     try {
@@ -32,6 +35,7 @@ const HomePage = () => {
               productName,
               price,
               imageURL,
+              productId: video.productId,
               isPlaying: false,
             };
   
@@ -42,6 +46,7 @@ const HomePage = () => {
               productName: 'Unknown Product',
               price: 'N/A',
               imageURL: '',
+              productId: video.productId,
               isPlaying: false,
             };
           }
@@ -79,8 +84,8 @@ const HomePage = () => {
   return (
     <Layout>
     
-<Title level={3} style={{ textAlign: 'left', marginTop: '50px', marginBottom: '0px'}}>Featured in videos</Title>
-<Text style={{ color: "black", textAlign: "left", fontSize: "14px", marginTop: '0', marginBottom: '10px' }}>See what creators are sharing</Text>
+    <Title level={3} style={{ textAlign: 'left', marginTop: '50px', marginBottom: '0px'}}>Featured in videos</Title>
+    <Text style={{ color: "black", textAlign: "left", fontSize: "14px", marginTop: '0', marginBottom: '10px' }}>See what creators are sharing</Text>
 
     <div 
       style={{ 
@@ -102,9 +107,12 @@ const HomePage = () => {
                 overflow: 'hidden',
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
                 backgroundColor: '#ffffff',
+
               }}
               onMouseEnter={() => handleMouseEnter(video._id)}
               onMouseLeave={() => handleMouseLeave(video._id)}
+              onClick={() => navigate(`/product/${video.productId}`)} // Navigate on card click
+
             >
               {/* Video Section */}
               <div style={{ position: 'relative', paddingBottom: '177%', height: 0 }}>
@@ -134,8 +142,11 @@ const HomePage = () => {
                   backgroundColor: '#ffffff',
                   borderRadius: '10px',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                  
+                  cursor: 'pointer',
                 }}
+
+                onClick={() => navigate(`/product/${video.productId}`)} // Navigate on card click
+
               >
                 {/* Product Image */}
                 {video.imageURL && (
@@ -181,7 +192,7 @@ const HomePage = () => {
             </div>
           </Col>
         ))}
-</Row>
+    </Row>
 
       </div>
     </Layout>

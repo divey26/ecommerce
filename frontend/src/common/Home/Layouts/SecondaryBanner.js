@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Button, Row, Col } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
-// Styled Components
 const CardContainer = styled.div`
   position: relative;
   border-radius: 12px;
@@ -15,7 +15,9 @@ const CardContainer = styled.div`
   color: #ffffff;
   text-align: left;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 `;
+
 
 const CardImage = styled.img`
   width: 100%;
@@ -40,6 +42,8 @@ const TextContainer = styled.div`
 // Main Page Component
 const Page1 = () => {
   const [cards, setCards] = useState([]); // To store the fetched cards from the backend
+  const navigate = useNavigate();
+
 
   // Fetch stored cards
   const fetchCards = async () => {
@@ -57,7 +61,7 @@ const Page1 = () => {
   }, []);
 
   return (
-    <div style={{ margin: '0px', backgroundColor: '#f0f2f5' }}>
+    <div style={{ margin: '0px', backgroundColor: '#f0f2f5' }} onClick={() => navigate(`/all-pro`)}>
       <Row gutter={[16, 16]}>
         {/* Left column */}
         <Col xs={24} md={9}>

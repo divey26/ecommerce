@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import truck from "../../Images/truck-.png";
+import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [deadline, setDeadline] = useState(null);
   const [showBanner, setShowBanner] = useState(false);
-
+  const navigate= useNavigate();
+  
   // Fetch deadline from the backend
   useEffect(() => {
     const fetchDeadline = async () => {
@@ -81,8 +83,7 @@ const Banner = () => {
                 padding: "5px 15px",
                 cursor: "pointer",
               }}
-              onClick={() => console.log("Shop Now Clicked!")}
-            >
+              onClick={() => navigate(`/all-pro`)}            >
               Shop Now
             </button>
           </div>

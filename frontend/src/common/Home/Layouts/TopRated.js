@@ -4,8 +4,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { AuthContext } from '../../utils/AuthContext';
-import { useCart } from '../cart/CartContext'; // Import CartContext
+import { AuthContext } from '../../../utils/AuthContext';
+import { useCart } from '../../cart/CartContext'; // Import CartContext
 
 
 const { Title,Text } = Typography;

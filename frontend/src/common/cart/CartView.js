@@ -42,12 +42,12 @@ const CartView = () => {
     <LayoutNew>
       <Layout>
         <div style={{ display: 'flex', padding: '20px' }}>
-          <div style={{ flex: 3, marginRight: '20px' }}>
+          <div style={{ flex: 2, marginRight: '1px' }}>
             <Title level={2}>Your Cart</Title>
             {cart.length === 0 ? (
               <Text>No items in the cart</Text>
             ) : (
-              <div style={{ width: "830px", height: "250px", marginLeft: "200px", paddingTop: "23px" }}>
+              <div style={{ width: "830px", height: "250px", marginLeft: "100px", paddingTop: "23px" }}>
                 <Row gutter={[16, 16]} justify="center">
                   <Col xs={24} sm={12} md={8} lg={8} style={{ display: "flex", justifyContent: "center" }}>
                     <Card
@@ -140,7 +140,7 @@ const CartView = () => {
                       border: '1px solid rgba(0, 0, 0, 0.1)',
                       padding: '20px',
                       width: "830px",
-                      marginLeft: "200px",
+                      marginLeft: "100px",
                       marginBottom: "2px",
                     }}
                   >
@@ -214,7 +214,7 @@ const CartView = () => {
                 textAlign: 'left',
                 backgroundColor: '#f8f9fa',
                 height: 'fit-content',
-                marginTop: "103px"
+                marginTop: "105px",
               }}
             >
               <Title level={3} style={{ textAlign: 'center' }}>Order Summary</Title>
