@@ -9,7 +9,7 @@ import LayoutNew from '../Layout';
 
 const { Title } = Typography;
 
-const BreadManagementPage = () => {
+const Dashboard = () => {
 
 
   return (
@@ -25,4 +25,4 @@ const BreadManagementPage = () => {
   );
 };
 
-export default BreadManagementPage;
+export default Dashboard;

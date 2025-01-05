@@ -9,6 +9,7 @@ import videoSrc from '../../Video/video.mp4';
 import { useCart } from '../cart/CartContext';
 
 import SecondLayout from './Layouts/SecondaryBanner'
+import PrimaryLayout from './Layouts/PrimaryBanner'
 
 // Import images for the carousel
 import p1 from "../../Images/p1.jpg";
@@ -147,7 +148,7 @@ const HomePage = () => {
         </div>
        
         <br/>
-
+        <PrimaryLayout/>
         <SecondLayout/>
 
         <br/>

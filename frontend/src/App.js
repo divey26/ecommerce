@@ -15,7 +15,9 @@ import Sign from "./common/Auth/Sign";
 import Banner from "./common/Home/banner";
 import All from "./common/Products/AllProducts";
 import CartView from "./common/cart/CartView";
-import Summa from "./utils/summa";
+import Summa from "./common/Home/summa";
+
+import Lala from "./common/Home/summa"
 
 import Checkout from "./common/Payment/Checkout";
 
@@ -35,6 +37,9 @@ function App() {
               <Route path="/all-pro" element={<All />} />
               <Route path="/cart" element={<CartView />} />
               <Route path="/summa" element={<Summa />} />
+             
+             
+              <Route path="/lala" element={<Lala />} />
 
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/product/:productId" element={<SingleProduct />} />
