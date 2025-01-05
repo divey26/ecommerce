@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Row, Col, Typography, Skeleton, message, Card, Button } from 'antd';
 import LayoutNew from '../../Layout';
 import { AuthContext } from '../../utils/AuthContext';
+import { useCart } from '../cart/CartContext'; // Import CartContext
 
 import sell from "../../Images/sell.png";
 import trolly from "../../Images/trolly.png";
@@ -17,7 +18,8 @@ const SingleProduct = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { userDetails } = useContext(AuthContext);  // Access user details from the context
+  const { userDetails,authenticated } = useContext(AuthContext);  // Access user details from the context
+  const { addToCart } = useCart(); // Access addToCart function
   
 
   useEffect(() => {
@@ -105,9 +107,41 @@ const SingleProduct = () => {
 
                 <Text>{product.description}</Text>
                 <div style={{ marginTop: '20px' }}>
-                    <Button size="large" style={{ color:'white',background: '#004f9a' }}>
-                    Add to Cart
-                    </Button>
+
+               {authenticated ? (
+                  <Button
+                    style={{
+                      marginTop: 'auto',
+                      borderRadius: '40px',
+                      color: 'white',
+                      backgroundColor: authenticated ? '#004f9a' : '#a0a0a0',
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card onClick from being triggered
+                      if (authenticated) {
+                        addToCart(product);
+                        message.success(`${product.itemName} added to the cart`);
+                      }
+                    }}
+                    disabled={!authenticated}
+                  >
+                    {authenticated ? '+ ADD' : 'Login to Add'}
+                  </Button>
+
+                ) : (
+                  <Button
+                    style={{
+                      marginTop: 'auto',
+                      borderRadius: '40px',
+                      color: 'white',
+                      backgroundColor: '#a0a0a0',
+                    }}
+                    disabled
+                  >
+                    Login to Add
+                  </Button>
+                )}
+
                 </div>
                 </Col>
 

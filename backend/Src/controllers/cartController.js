@@ -26,6 +26,7 @@ exports.addItemToCart = async (req, res) => {
             description: product.description,
             price: product.price,
             imageURL: product.imageURL,
+            discount:product.discount,
             quantity,
           },
         ],
@@ -44,6 +45,7 @@ exports.addItemToCart = async (req, res) => {
           description: product.description,
           price: product.price,
           imageURL: product.imageURL,
+          discount:product.discount,
           quantity,
         });
       }

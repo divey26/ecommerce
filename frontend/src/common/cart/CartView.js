@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext,useEffect } from 'react';
 import { Layout, Col, Row, Card, Button, Typography, InputNumber, List } from 'antd';
 import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
@@ -13,17 +13,28 @@ const { Title, Text } = Typography;
 const { Content } = Layout;
 
 const CartView = () => {
-  const { cart, removeFromCart, updateQuantity } = useCart(); // Access cart context
+  const { cart, removeFromCart, updateQuantity ,reloadCart} = useCart(); // Access cart context
   const { userDetails } = useContext(AuthContext);  // Access user details from the context
   const { deadline } = useDeadline(); // Access deadline from shared state
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    // Reload cart data when the component mounts
+    reloadCart && reloadCart(); // Optional if reloadCart is defined in useCart
+  }, []);
+  
+
+
+
+  
   const trimDescription = (description, maxLength = 50) => {
     if (description.length > maxLength) {
       return description.substring(0, maxLength) + '...';
     }
     return description;
   };
+
 
   // Calculate Subtotal and Savings based on quantity
   const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
@@ -41,8 +52,8 @@ const CartView = () => {
   return (
     <LayoutNew>
       <Layout>
-        <div style={{ display: 'flex', padding: '20px' }}>
-          <div style={{ flex: 2, marginRight: '1px' }}>
+        <div style={{ display: 'flex', paddingRight: '90px' }}>
+          <div style={{ flex: 1, marginRight: '50px' }}>
             <Title level={2}>Your Cart</Title>
             {cart.length === 0 ? (
               <Text>No items in the cart</Text>
@@ -214,7 +225,7 @@ const CartView = () => {
                 textAlign: 'left',
                 backgroundColor: '#f8f9fa',
                 height: 'fit-content',
-                marginTop: "105px",
+                marginTop: "103px"
               }}
             >
               <Title level={3} style={{ textAlign: 'center' }}>Order Summary</Title>

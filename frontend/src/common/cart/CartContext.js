@@ -14,10 +14,8 @@ export const CartProvider = ({ children }) => {
         console.log('Stored userId:', localStorage.getItem('userId'));
 
         const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
-       // console.log('API Response:', response.data);
 
         setCart(response.data.items); // Assuming 'items' is an array of cart items
-        //console.error("id ",userId);
 
       } catch (error) {
         console.error('Failed to fetch cart:', error);
@@ -38,6 +36,9 @@ export const CartProvider = ({ children }) => {
         userId,
         productId: product._id, // Assuming _id is the product identifier
         quantity: 1,
+        discount:1,
+        
+        
       });
       setCart(response.data.cart.items); // Update cart from the backend response
 
@@ -65,6 +66,8 @@ export const CartProvider = ({ children }) => {
         userId,
         productId,
         quantity,
+        discount:1,
+
       });
       setCart(response.data.cart.items); // Update cart from the backend response
     } catch (error) {
@@ -72,8 +75,24 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const reloadCart = async () => {
+    setLoading(true);
+    try {
+      const userId = localStorage.getItem('userId');
+      const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
+      setCart(response.data.items); // Assuming 'items' is the array of cart items
+    } catch (error) {
+      console.error('Failed to reload cart:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  
+
   return (
-    <CartContext.Provider value={{ cart, loading, addToCart, removeFromCart, updateQuantity }}>
+    <CartContext.Provider value={{ cart, loading, addToCart, removeFromCart, updateQuantity,reloadCart  }}>
       {children}
     </CartContext.Provider>
   );

@@ -48,7 +48,12 @@ const HomePage = () => {
   const [visible, setVisible] = useState(false);  // Drawer visibility state
   const { logout } = useContext(AuthContext); // Access the logout function from context
   const navigate = useNavigate();
-  const { cart } = useCart();
+  const { reloadCart } = useCart();
+
+    useEffect(() => {
+      // Reload cart data when the component mounts
+      reloadCart && reloadCart(); // Optional if reloadCart is defined in useCart
+    }, []);
 
   const handleHeaderClick = (key) => {
     if (key === "6") {
