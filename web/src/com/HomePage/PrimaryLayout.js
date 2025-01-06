@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Input, Button, Form, message, Select, Table, Modal } from 'antd';
 import axios from 'axios';
 import { storage } from '../../Firebase/firebaseConfig';
@@ -11,8 +11,10 @@ const AdminPage = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [layout, setLayout] = useState('default');
   const [cards, setCards] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
-  const [existingLayouts, setExistingLayouts] = useState(new Set()); // To store unique layouts
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [existingLayouts, setExistingLayouts] = useState(new Set());
+  const [form] = Form.useForm(); // Ant Design form instance
+  const fileInputRef = useRef(null); // Ref for file input
 
   // Columns for the Table
   const columns = [
@@ -42,23 +44,19 @@ const AdminPage = () => {
   // Fetch stored cards and update existing layouts
   const fetchCards = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/card');
+      const response = await axios.get('http://localhost:5000/api/pricard');
       setCards(response.data);
-
-      // Extract and store the unique layouts of the existing cards
-      const layouts = new Set(response.data.map(card => card.layout));
+      const layouts = new Set(response.data.map((card) => card.layout));
       setExistingLayouts(layouts);
     } catch (error) {
       console.log('Failed to fetch cards');
     }
   };
 
-  // UseEffect to fetch cards when the component mounts
   useEffect(() => {
     fetchCards();
   }, []);
 
-  // Handle image file upload
   const handleImageUpload = async (file) => {
     const supportedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!supportedTypes.includes(file.type)) {
@@ -94,7 +92,6 @@ const AdminPage = () => {
     }
   };
 
-  // Handle form submit
   const handleSubmit = async () => {
     if (!title || !description || !image || !layout) {
       message.error('Please fill all fields');
@@ -104,11 +101,13 @@ const AdminPage = () => {
     const data = { title, description, image, layout };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/card', data);
+      await axios.post('http://localhost:5000/api/pricard', data);
       message.success('Card saved successfully');
+      form.resetFields(); // Reset form fields
+      setImage(null); // Clear image state
+      if (fileInputRef.current) fileInputRef.current.value = ''; // Clear file input
       setTitle('');
       setDescription('');
-      setImage(null);
       setLayout('default');
       fetchCards();
       setIsModalVisible(false); // Close modal after successful submission
@@ -118,24 +117,20 @@ const AdminPage = () => {
     }
   };
 
-  // Disable the "Add New Card" button if all 5 layouts already exist
-  const isAddButtonDisabled = existingLayouts.size === 5;
+  const isAddButtonDisabled = existingLayouts.size === 10;
 
-  // Filter available layout options based on existing layouts
-  const availableLayouts = ['Left', 'Right', 'M1', 'M2', 'M3'].filter(
+  const availableLayouts = Array.from({ length: 10 }, (_, i) => `L${i + 1}`).filter(
     (layout) => !existingLayouts.has(layout)
   );
 
   return (
     <>
-
-      {/*Primary  */}
-      <div style={{ padding: '20px',borderTop:'2px solid gray' }}>
+      <div style={{ padding: '20px', borderTop: '2px solid gray' }}>
         <h2>Primary Layout</h2>
         <Button
           type="primary"
           onClick={() => setIsModalVisible(true)}
-          disabled={isAddButtonDisabled} // Disable button if all layouts are present
+          disabled={isAddButtonDisabled}
         >
           Add +
         </Button>
@@ -146,7 +141,7 @@ const AdminPage = () => {
           onCancel={() => setIsModalVisible(false)}
           footer={null}
         >
-          <Form onFinish={handleSubmit}>
+          <Form form={form} onFinish={handleSubmit}>
             <Form.Item label="Title" name="title">
               <Input value={title} onChange={(e) => setTitle(e.target.value)} />
             </Form.Item>
@@ -174,6 +169,7 @@ const AdminPage = () => {
                 type="file"
                 onChange={(e) => handleImageUpload(e.target.files[0])}
                 accept="image/*"
+                ref={fileInputRef} // Assign ref to input
               />
             </Form.Item>
 
@@ -184,15 +180,9 @@ const AdminPage = () => {
         </Modal>
 
         <div style={{ marginTop: '20px' }}>
-          <Table
-            columns={columns}
-            dataSource={cards}
-            rowKey="_id"
-          />
+          <Table columns={columns} dataSource={cards} rowKey="_id" />
         </div>
       </div>
-
-    
     </>
   );
 };

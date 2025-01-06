@@ -149,8 +149,6 @@ const HomePage = () => {
        
         <br/>
         <PrimaryLayout/>
-        <SecondLayout/>
-
         <br/>
 
         {/* Banner Section */}
@@ -176,6 +174,8 @@ const HomePage = () => {
           </Content>
 
         <TopRated/>
+
+        <SecondLayout/>
 
         {/* Video and Image Side by Side */}
         <VideoAndImageContainer>

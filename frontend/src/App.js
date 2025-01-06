@@ -5,9 +5,8 @@ import { AuthContext, AuthProvider } from './utils/AuthContext';
 import { CartProvider } from './common/cart/CartContext'; // Import CartContext
 import { DeadlineProvider } from "./common/DeadlineContext/DeadlineContext";
 
-import ProductsList from './common/Products/AllProList'
-import SingleProduct from './common/Products/SingleProduct'
 
+import SingleProduct from './common/Products/SingleProduct'
 import About from "./common/About";
 import HomePage from './common/Home/HomePage';
 import Login from "./common/Auth/Login";
@@ -16,9 +15,6 @@ import Banner from "./common/Home/banner";
 import All from "./common/Products/AllProducts";
 import CartView from "./common/cart/CartView";
 import Summa from "./common/Home/summa";
-
-import Lala from "./common/Home/summa"
-
 import Checkout from "./common/Payment/Checkout";
 
 function App() {
@@ -37,10 +33,6 @@ function App() {
               <Route path="/all-pro" element={<All />} />
               <Route path="/cart" element={<CartView />} />
               <Route path="/summa" element={<Summa />} />
-             
-             
-              <Route path="/lala" element={<Lala />} />
-
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/product/:productId" element={<SingleProduct />} />
 

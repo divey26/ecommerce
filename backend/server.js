@@ -13,6 +13,7 @@ const webhookRoutes = require('./Src/routes/webhook');
 const cartRoutes = require('./Src/routes/cartRoutes');
 const userRoutes = require('./Src/routes//userRoutes'); // New route for user-related operations
 const cardRoutes = require('./Src/routes/cardRoutes');
+const pricardRoutes = require('./Src/routes/PriCardRoutes');
 
 
 dotenv.config();
@@ -60,6 +61,7 @@ app.use('/api', webhookRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/user', userRoutes); // User routes
 app.use('/api/card', cardRoutes);
+app.use('/api/pricard', pricardRoutes);
 
 
 
