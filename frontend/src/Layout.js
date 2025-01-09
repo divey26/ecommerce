@@ -6,6 +6,7 @@ import {
 } from "@ant-design/icons";
 import { Layout, Button, Badge, Select } from "antd";
 import { FloatButton } from "antd";
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 import imageSrc from "./Images/logo.png";
 import { TextField } from "@mui/material"; // MUI TextField for the search bar
@@ -13,9 +14,13 @@ import Flag from "react-world-flags"; // Import Flag component
 import styled from 'styled-components';
 import { useCart } from './common/cart/CartContext';
 
+import './locales/i18n';  // Import the i18n configuration
+
+
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
+
 
 const App = ({ children, userType }) => {
   const navigate = useNavigate();
@@ -23,9 +28,10 @@ const App = ({ children, userType }) => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [language, setLanguage] = useState("en"); // Default language is English
   const { cart } = useCart();
+  const { i18n } = useTranslation(); // Initialize useTranslation hook
 
 
-
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,9 +67,10 @@ const App = ({ children, userType }) => {
 
   const handleLanguageChange = (value) => {
     setLanguage(value);
-    console.log("Selected Language:", value); // You can also implement language change functionality here
+    i18n.changeLanguage(value);  // Change language dynamically
   };
 
+  
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Layout>
@@ -99,10 +106,13 @@ const App = ({ children, userType }) => {
               color: "#F3C623",
             }}
           >
-            HALO
+          {t('HALO')}
+
           </span>
         </a>
           </div>
+
+
 
           {/* Delivery text */}
           <div
@@ -181,35 +191,35 @@ const App = ({ children, userType }) => {
               }}
               onChange={handleLanguageChange}
             >
-              <Option value="en">
+              <Option value="en" label="en">
                 <Flag code="US" style={{ width: "20px", marginRight: "10px" }} />
                 EN
               </Option>
-              <Option value="ta">
+              <Option value="ta" label="ta">
                 <Flag code="IN" style={{ width: "20px", marginRight: "10px" }} />
                 TAM
               </Option>
-              <Option value="zh">
+              <Option value="zh" label="zh">
                 <Flag code="CN" style={{ width: "20px", marginRight: "10px" }} />
                 ZH
               </Option>
-              <Option value="fr">
+              <Option value="fr" label="fr">
                 <Flag code="FR" style={{ width: "20px", marginRight: "10px" }} />
                 FR
               </Option>
-              <Option value="si">
+              <Option value="si" label="si">
                 <Flag code="LK" style={{ width: "20px", marginRight: "10px" }} />
                 SI
               </Option>
-              <Option value="de">
+              <Option value="de" label="de">
                 <Flag code="DE" style={{ width: "20px", marginRight: "10px" }} />
                 DE
               </Option>
-              <Option value="es">
+              <Option value="es" label="es">
                 <Flag code="ES" style={{ width: "20px", marginRight: "10px" }} />
                 ES
               </Option>
-              <Option value="it">
+              <Option value="it" label="it">
                 <Flag code="IT" style={{ width: "20px", marginRight: "10px" }} />
                 IT
               </Option>

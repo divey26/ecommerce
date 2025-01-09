@@ -8,8 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import videoSrc from '../../Video/video.mp4';
 import { useCart } from '../cart/CartContext';
 
+import { useTranslation } from 'react-i18next';
+import '../../locales/i18n';  // Import the i18n configuration
+
+
 import SecondLayout from './Layouts/SecondaryBanner'
 import PrimaryLayout from './Layouts/PrimaryBanner'
+
+
 
 // Import images for the carousel
 import p1 from "../../Images/p1.jpg";
@@ -50,6 +56,8 @@ const HomePage = () => {
   const { logout } = useContext(AuthContext); // Access the logout function from context
   const navigate = useNavigate();
   const { reloadCart } = useCart();
+  const { t } = useTranslation();
+  
 
     useEffect(() => {
       // Reload cart data when the component mounts
@@ -144,6 +152,7 @@ const HomePage = () => {
 
         <Banner/>
 
+        {t('HALO')}
 
         </div>
        

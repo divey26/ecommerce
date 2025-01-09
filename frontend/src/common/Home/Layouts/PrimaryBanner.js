@@ -10,10 +10,11 @@ const CardContainer = styled.div`
   overflow: hidden;
   width: 100%;
   height: ${(props) => props.height || '260px'};
-  color: rgb(255, 0, 0);
   text-align: left;
+  color: #004f9a;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  
 `;
 
 const CardImage = styled.img`
@@ -25,24 +26,31 @@ const CardImage = styled.img`
   left: 0;
   z-index: 1;
 `;
-
 const TextContainer = styled.div`
   position: relative;
   z-index: 3;
   padding: 15px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100%;
+  
 
-  h1, h2, h3, p {
-    color: #004f9a; /* Updated color */
+  h1 {
+    color: #004f9a;
+    margin-bottom: 5px; /* Reduce gap between title and description */
+  }
+
+  h2 {
+    color: #004f9a;
+    margin: 0; /* Remove default margin */
+    font-size: 54px; /* Increase font size for title */
+
+  }
+
+  p {
+    color: #004f9a;
   }
 `;
-
-// Define different layout components
-
-
 
 // Add more layouts (L4, etc.) as needed...
 
@@ -60,9 +68,10 @@ const Page1 = () => {
 
     <CardContainer height="300px" onClick={handleCardClick}>
       <CardImage src={card.image} alt={card.title} />
-      <TextContainer>
+      <TextContainer >
         <h1>{card.title}</h1>
-        <p>{card.description}</p>
+        
+        <div style={{ marginTop:'12px', fontSize:'19px'}}>{card.description}</div>
       </TextContainer>
     </CardContainer>
   );

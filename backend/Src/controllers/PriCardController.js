@@ -29,4 +29,28 @@ const getAllCards = async (req, res) => {
   }
 };
 
-module.exports = { saveCardData, getAllCards };
+
+// Update card data
+const updateCardData = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, image } = req.body;
+
+  try {
+    const updatedCard = await Card.findByIdAndUpdate(
+      id,
+      { title, description, image },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedCard) {
+      return res.status(404).json({ success: false, message: 'Card not found' });
+    }
+
+    res.status(200).json({ success: true, message: 'Card updated successfully', updatedCard });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+
+};
+
+module.exports = { saveCardData, getAllCards, updateCardData };

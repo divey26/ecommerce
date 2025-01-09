@@ -12,6 +12,8 @@ const AdminPage = () => {
   const [layout, setLayout] = useState('default');
   const [cards, setCards] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [editingCard, setEditingCard] = useState(null); // Card being edited
   const [existingLayouts, setExistingLayouts] = useState(new Set());
   const [form] = Form.useForm(); // Ant Design form instance
   const fileInputRef = useRef(null); // Ref for file input
@@ -39,9 +41,15 @@ const AdminPage = () => {
       dataIndex: 'layout',
       key: 'layout',
     },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (_, record) => (
+        <Button onClick={() => handleEdit(record)}>Edit</Button>
+      ),
+    },
   ];
 
-  // Fetch stored cards and update existing layouts
   const fetchCards = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/pricard');
@@ -103,25 +111,49 @@ const AdminPage = () => {
     try {
       await axios.post('http://localhost:5000/api/pricard', data);
       message.success('Card saved successfully');
-      form.resetFields(); // Reset form fields
-      setImage(null); // Clear image state
-      if (fileInputRef.current) fileInputRef.current.value = ''; // Clear file input
+      form.resetFields();
+      setImage(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
       setTitle('');
       setDescription('');
       setLayout('default');
       fetchCards();
-      setIsModalVisible(false); // Close modal after successful submission
+      setIsModalVisible(false);
     } catch (error) {
       console.log('Error during form submission:', error);
       message.error('Failed to save card');
     }
   };
 
-  const isAddButtonDisabled = existingLayouts.size === 10;
+  const handleEditSubmit = async () => {
+    if (!title || !description || !image) {
+      message.error('Please fill all fields');
+      return;
+    }
 
-  const availableLayouts = Array.from({ length: 10 }, (_, i) => `L${i + 1}`).filter(
-    (layout) => !existingLayouts.has(layout)
-  );
+    const updatedData = { title, description, image };
+
+    try {
+      await axios.put(`http://localhost:5000/api/pricard/${editingCard._id}`, updatedData);
+      message.success('Card updated successfully');
+      fetchCards();
+      setIsEditModalVisible(false);
+      setEditingCard(null);
+      setImage(null);
+    } catch (error) {
+      console.log('Error updating card:', error);
+      message.error('Failed to update card');
+    }
+  };
+
+  const handleEdit = (record) => {
+    setEditingCard(record);
+    setTitle(record.title);
+    setDescription(record.description);
+    setImage(record.image);
+    setLayout(record.layout);
+    setIsEditModalVisible(true);
+  };
 
   return (
     <>
@@ -130,7 +162,7 @@ const AdminPage = () => {
         <Button
           type="primary"
           onClick={() => setIsModalVisible(true)}
-          disabled={isAddButtonDisabled}
+          disabled={existingLayouts.size === 10}
         >
           Add +
         </Button>
@@ -145,36 +177,59 @@ const AdminPage = () => {
             <Form.Item label="Title" name="title">
               <Input value={title} onChange={(e) => setTitle(e.target.value)} />
             </Form.Item>
-
             <Form.Item label="Description" name="description">
               <Input value={description} onChange={(e) => setDescription(e.target.value)} />
             </Form.Item>
-
             <Form.Item label="Layout" name="layout">
               <Select
                 value={layout}
                 onChange={(value) => setLayout(value)}
                 style={{ width: '100%' }}
               >
-                {availableLayouts.map((layout) => (
+                {Array.from({ length: 10 }, (_, i) => `L${i + 1}`).map((layout) => (
                   <Select.Option key={layout} value={layout}>
                     {layout} card
                   </Select.Option>
                 ))}
               </Select>
             </Form.Item>
-
             <Form.Item label="Image">
               <input
                 type="file"
                 onChange={(e) => handleImageUpload(e.target.files[0])}
                 accept="image/*"
-                ref={fileInputRef} // Assign ref to input
+                ref={fileInputRef}
               />
             </Form.Item>
-
             <Button type="primary" htmlType="submit" loading={isUploading}>
               Save
+            </Button>
+          </Form>
+        </Modal>
+
+        <Modal
+          title="Edit Card"
+          open={isEditModalVisible}
+          onCancel={() => setIsEditModalVisible(false)}
+          footer={null}
+        >
+          <Form form={form} onFinish={handleEditSubmit}>
+            <Form.Item label="Title" name="title">
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Description" name="description">
+              <Input value={description} onChange={(e) => setDescription(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Image">
+              <input
+                type="file"
+                onChange={(e) => handleImageUpload(e.target.files[0])}
+                accept="image/*"
+                ref={fileInputRef}
+              />
+            </Form.Item>
+            <Button type="primary" htmlType="submit" loading={isUploading}>
+              Update
             </Button>
           </Form>
         </Modal>
