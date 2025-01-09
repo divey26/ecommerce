@@ -7,15 +7,11 @@ import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import videoSrc from '../../Video/video.mp4';
 import { useCart } from '../cart/CartContext';
-
 import { useTranslation } from 'react-i18next';
-import '../../locales/i18n';  // Import the i18n configuration
-
 
 import SecondLayout from './Layouts/SecondaryBanner'
 import PrimaryLayout from './Layouts/PrimaryBanner'
-
-
+import '../../locales/i18n';  // Import the i18n configuration
 
 // Import images for the carousel
 import p1 from "../../Images/p1.jpg";
@@ -40,15 +36,8 @@ import {
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
-const headerItem = [
-  { key: "1", text: "All", icon: <BarsOutlined /> },
-  { key: "2", text: "Catagory" },
-  { key: "3", text: "All Products" },
-  { key: "4", text: "Help & Support" },
-  { key: "5", text: "log out" },
-  { key: "6", text: "Sign up", icon: <UserSwitchOutlined /> },
 
-];
+
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
@@ -63,6 +52,15 @@ const HomePage = () => {
       // Reload cart data when the component mounts
       reloadCart && reloadCart(); // Optional if reloadCart is defined in useCart
     }, []);
+
+    const headerItem = [
+      { key: "1", text: t("Category"), icon: <BarsOutlined /> },
+      { key: "2", text: t("Category") },
+      { key: "3", text: t("All Products") },
+      { key: "4", text: t("Help & Support") },
+      { key: "5", text: t("log out") },
+      { key: "6", text: t("Sign up"), icon: <UserSwitchOutlined /> },
+    ];
 
   const handleHeaderClick = (key) => {
     if (key === "6") {
@@ -117,7 +115,7 @@ const HomePage = () => {
             onClick={showSlider} 
                       >
             <a></a>
-            <BarsOutlined /> All
+            <BarsOutlined /> {t('All')}
           </Button>
        </div>
 
@@ -145,14 +143,13 @@ const HomePage = () => {
        <div> {/* Discount and Banner Section */}
         <StyledHeader>
           <h1>
-            UP TO 40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY (12.02.2024) - Hurry, grab your favorite items now! 
-            <span style={{ marginLeft: '300px' }}>FREE DELIVERY for purchase above 100$</span>
+            {t('UP TO 40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY')} (12.02.2024) - Hurry, grab your favorite items now! 
+            <span style={{ marginLeft: '300px' }}>{t('FREE DELIVERY for purchase above')} 100$</span>
           </h1>
         </StyledHeader>
 
         <Banner/>
 
-        {t('HALO')}
 
         </div>
        

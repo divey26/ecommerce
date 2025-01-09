@@ -13,7 +13,6 @@ import { TextField } from "@mui/material"; // MUI TextField for the search bar
 import Flag from "react-world-flags"; // Import Flag component
 import styled from 'styled-components';
 import { useCart } from './common/cart/CartContext';
-
 import './locales/i18n';  // Import the i18n configuration
 
 
@@ -261,9 +260,9 @@ const App = ({ children, userType }) => {
 
         <StyledFooter>
         <div >
-        We’d love to hear what you think!
+        {t('We’d love to hear what you think!')}
         <br/><br/>
-        <Button style={{color:"#004f9a",borderColor:"#004f9a",borderRadius:"50px"}}>  Give feedback</Button>
+        <Button style={{color:"#004f9a",borderColor:"#004f9a",borderRadius:"50px"}}>  {t('Give feedback')}</Button>
 
         </div>
       </StyledFooter>
@@ -277,8 +276,8 @@ const App = ({ children, userType }) => {
             fontSize: "14px",
           }}
         >
-          <p>&copy; 2024 HALO. All rights reserved.</p>
-          <p>Powered by Your Dvenoph </p>
+          <p>&copy; {t('2024 HALO. All rights reserved.')}.</p>
+          <p>{t('Powered by')}  Dvenoph </p>
           
           
         </Footer>
