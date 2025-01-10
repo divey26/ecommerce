@@ -11,9 +11,11 @@ import { useTranslation } from 'react-i18next';
 
 import SecondLayout from './Layouts/SecondaryBanner'
 import PrimaryLayout from './Layouts/PrimaryBanner'
-import '../../locales/i18n';  // Import the i18n configuration
+import Categories from './Layouts/categories'
 
-// Import images for the carousel
+import '../../locales/i18n'; 
+
+
 import p1 from "../../Images/p1.jpg";
 import p2 from "../../Images/p2.jpg";
 import p3 from "../../Images/p3.jpg";
@@ -40,7 +42,6 @@ const { Title } = Typography;
 
 
 const HomePage = () => {
-  const [categories, setCategories] = useState([]);
   const [visible, setVisible] = useState(false);  // Drawer visibility state
   const { logout } = useContext(AuthContext); // Access the logout function from context
   const navigate = useNavigate();
@@ -77,19 +78,6 @@ const HomePage = () => {
     }
   };
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/cat');
-      setCategories(response.data); // Store categories from the API
-    } catch (error) {
-      console.error('Error fetching categories:', error.response ? error.response.data : error.message);
-      message.error('Failed to fetch categories. Please try again.');
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories(); // Fetch categories on component mount
-  }, []);
 
   const showSlider = () => setVisible(true);
   const closeSlider = () => setVisible(false);
@@ -162,22 +150,7 @@ const HomePage = () => {
           <img src={banner1} style={{ width: "100%", height: "10%" }} />
         </div>
 
-        {/* Display Categories */}
-          <Content style={{ marginTop: "15px", marginBottom: "20px",marginTop:"50px" }}>
-          <Row gutter={[16, 16]} justify="center">
-            {categories.map((category) => (
-              <Col xs={12} sm={10} md={8} lg={6} xl={3} key={category.categoryId}>
-                <StyledCard
-                  hoverable
-                  cover={<img alt={category.categoryName} src={category.imageURL} />}
-                >
-                  <TitleStyle level={5} style={{color:"black",fontSize:"16px"}}>{category.categoryName}</TitleStyle>
-                </StyledCard>
-              </Col>
-            ))}
-          </Row>
-
-          </Content>
+      <Categories/>
 
         <TopRated/>
 

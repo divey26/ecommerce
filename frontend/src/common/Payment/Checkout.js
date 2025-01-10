@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Result } from 'antd';
+import { Layout, Result, Modal } from 'antd';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useCart } from '../cart/CartContext';
 import LayoutNew from '../../Layout';
-import imageSrc from '../../Images/logo.png'
-import StripImageSrc from '../../Images/StripeLogo.jpeg'
+import imageSrc from '../../Images/logo.png';
+import StripImageSrc from '../../Images/StripeLogo.jpeg';
+import { useNavigate } from 'react-router-dom';
+
 
 const stripePromise = loadStripe('pk_test_51QaAO003ldnatOZanoghUvQrw76T9rnCg0YxqQaPffhxmc2LCX5rA2iKSu1p74ApieFr76sZBeDg7dyH8rMBzIOu00XLfTyJPL');
 
 const CheckoutForm = () => {
   const { cart } = useCart();
   const [clientSecret, setClientSecret] = useState('');
-  const [paymentStatus, setPaymentStatus] = useState(''); // State to track payment status
+  const [paymentStatus, setPaymentStatus] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const stripe = useStripe();
   const elements = useElements();
+  const { reloadCart } = useCart();
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     const totalAmount = cart.reduce((total, item) => total + item.price * 100, 0);
@@ -39,7 +45,7 @@ const CheckoutForm = () => {
 
     const cardNumber = elements.getElement(CardNumberElement);
 
-    setPaymentStatus('Processing...'); // Set status to processing
+    setPaymentStatus('Processing...');
 
     const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -49,12 +55,32 @@ const CheckoutForm = () => {
     });
 
     if (error) {
-      setPaymentStatus(`Error: ${error.message}`); // Display error message
+      setPaymentStatus(`Error: ${error.message}`);
     } else if (paymentIntent.status === 'succeeded') {
-      setPaymentStatus('success'); // Set to success for Ant Design Result component
+      setPaymentStatus('success');
+      setIsModalVisible(true); // Show success modal
+
+      try {
+        const userId = localStorage.getItem('userId');
+        await fetch('http://localhost:5000/api/cart/clear', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId }),
+        });
+
+        reloadCart();
+      } catch (error) {
+        console.error('Failed to clear cart:', error);
+      }
     } else {
-      setPaymentStatus('Payment failed. Please try again.'); // Fallback for other statuses
+      setPaymentStatus('Payment failed. Please try again.');
     }
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    navigate('/home'); 
+
   };
 
   const cardStyle = {
@@ -75,47 +101,27 @@ const CheckoutForm = () => {
     },
   };
 
-  if (paymentStatus === 'success') {
-    return (
-      <Result
-        status="success"
-        title="Payment Successful!"
-        subTitle="Your payment has been processed successfully."
-        extra={[
-          <button
-            style={{ ...payButtonStyles, backgroundColor: '#28a745' }}
-            onClick={() => window.location.reload()}
-          >
-            Make Another Payment
-          </button>,
-
-          <a href=" /home" >Visit Example</a>
-
-        ]}
-      />
-    );
-  }
-
   return (
     <LayoutNew>
       <Layout>
-        <br/>
+        <br />
         <form onSubmit={handleSubmit} style={formStyles}>
           <div style={{ width: '400px', height: '500px', textAlign: 'left' }}>
-            <div style={{  marginBottom:"30px"}}>
+            <div style={{ marginBottom: '30px' }}>
               <img
                 src={imageSrc}
                 alt="Logo"
-                style={{ marginLeft: "15px",marginBottom:"3px", width: "100px", height: "100px" }}
+                style={{ marginLeft: '15px', marginBottom: '3px', width: '100px', height: '100px' }}
               />
-              <span><img
-                src={StripImageSrc}
-                alt="Logo"
-                style={{   marginLeft:"100px",width: "180px", height: "100px" }}
-              /></span>
-              
+              <span>
+                <img
+                  src={StripImageSrc}
+                  alt="Logo"
+                  style={{ marginLeft: '100px', width: '180px', height: '100px' }}
+                />
+              </span>
             </div>
-            
+
             <div style={formGroupStyles}>
               <label htmlFor="card-element" style={labelStyles}>Card Number</label>
               <CardNumberElement id="card-element" options={cardStyle} style={cardElementStyles} />
@@ -132,15 +138,27 @@ const CheckoutForm = () => {
               Pay Now
             </button>
           </div>
-          {/* Display payment status */}
           {paymentStatus && paymentStatus !== 'Processing...' && (
             <p style={statusStyles}>{paymentStatus}</p>
           )}
-
-          <div style={{ textAlign: 'center' }}>
-
-            </div>
         </form>
+
+        {/* Success Modal */}
+        <Modal
+          title="Payment Successful"
+          open={isModalVisible}
+          onOk={handleModalClose}
+          onCancel={handleModalClose}
+          footer={null}
+        >
+          <p>Your payment has been processed successfully.</p>
+          <button
+            style={{ ...payButtonStyles, backgroundColor: '#28a745' }}
+            onClick={handleModalClose}
+          >
+            Close
+          </button>
+        </Modal>
       </Layout>
     </LayoutNew>
   );
@@ -165,7 +183,7 @@ const formStyles = {
   borderRadius: '8px',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   fontSize: '20px',
-  textAlign: 'left', // Align everything to the left
+  textAlign: 'left',
 };
 
 const formGroupStyles = {
@@ -177,7 +195,6 @@ const labelStyles = {
   display: 'block',
   marginBottom: '20px',
   fontWeight: 'normal',
-  
 };
 
 const cardElementStyles = {
