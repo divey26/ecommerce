@@ -17,6 +17,7 @@ import CartView from "./common/cart/CartView";
 import Summa from "./common/Home/summa";
 import Checkout from "./common/Payment/Checkout";
 
+
 function App() {
   return (
     <AuthProvider>
@@ -30,12 +31,12 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/about" element={<ProtectedRoute Component={About} />} />
               <Route path="/ban" element={<Banner />} />
-              <Route path="/all-pro" element={<All />} />
+              <Route path="/all-pro/:categoryId" element={<All />} />
               <Route path="/cart" element={<CartView />} />
               <Route path="/summa" element={<Summa />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/product/:productId" element={<SingleProduct />} />
-
+            
               <Route path="*" element={<NotFound />} />
 
             </Routes>

@@ -100,4 +100,14 @@ exports.getProducts = async (req, res) => {
     }
   };
   
+
+  exports.getprocate = async (req, res) => {
+    const { categoryId } = req.query;
+    try {
+      const products = await Product.find({ categoryId });
+      res.json({ products });
+    } catch (error) {
+      res.status(500).send('Error fetching products');
+    }
+  };
   

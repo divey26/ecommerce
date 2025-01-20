@@ -7,9 +7,27 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (max-width: 768px) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
+  }
+  .header { /* Adjust header styles */
+    font-size: 14px;
+  }
+  .carousel img {
+    height: auto; /* Ensure proper scaling */
+  }
+  .card {
+    margin: 10px 0; /* Reduce spacing between cards */
+  }
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .card {
+    width: 100%;
+    max-width: 300px;
   }
 }
 

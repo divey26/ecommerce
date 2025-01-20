@@ -124,18 +124,9 @@ const App = ({ children, userType }) => {
             }}
           >
             <EnvironmentOutlined
-              style={{ color: "#F3C623", fontSize: "30px", marginRight: "20px" }}
+              style={{ color: "#F3C623", fontSize: "30px" }}
             />
-            Delivery to
-            <span
-              style={{
-                fontWeight: "bold",
-                fontSize: "15px",
-                marginLeft: "5px",
-              }}
-            >
-              SRILANKA
-            </span>
+            Delivery to SRILANKA
           </div>
 
           {/* Search Bar and Language Selector in the middle */}

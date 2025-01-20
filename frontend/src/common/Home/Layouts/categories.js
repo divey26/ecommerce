@@ -1,27 +1,28 @@
-import React, { useState, useContext,useEffect } from 'react'; // For useState and useEffect
+import React, { useState, useEffect } from 'react'; // For useState and useEffect
 import { Row, Col, Card as AntCard, message, Typography } from 'antd';
 import styled from 'styled-components';
 import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 const Categories = () => {
-    const [categories, setCategories] = useState([]);
-    
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
-    const fetchCategories = async () => {
-        try {
-          const response = await axios.get('http://localhost:5000/api/cat');
-          setCategories(response.data); // Store categories from the API
-        } catch (error) {
-          console.error('Error fetching categories:', error.response ? error.response.data : error.message);
-          message.error('Failed to fetch categories. Please try again.');
-        }
-      };
-    
-      useEffect(() => {
-        fetchCategories(); // Fetch categories on component mount
-      }, []);
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/cat');
+      setCategories(response.data); // Store categories from the API
+    } catch (error) {
+      console.error('Error fetching categories:', error.response ? error.response.data : error.message);
+      message.error('Failed to fetch categories. Please try again.');
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories(); // Fetch categories on component mount
+  }, []);
 
   return (
     <ContentWrapper>
@@ -31,6 +32,7 @@ const Categories = () => {
             <StyledCard
               hoverable
               cover={<img alt={category.categoryName} src={category.imageURL} />}
+              onClick={() => navigate(`/all-pro/${category.categoryId}`)} // Navigate to Pro.js with category ID
             >
               <TitleStyle level={5}>{category.categoryName}</TitleStyle>
             </StyledCard>

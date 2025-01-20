@@ -108,10 +108,10 @@ const HomePage = () => {
        </div>
 
 
-          <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           {headerItem
-        .filter((item) => item.key !== "1") // Exclude the "Category" button
-        .map((item) => (
+            .filter((item) => item.key !== "1") // Exclude the "Category" button
+            .map((item) => (
               <Button
                 key={item.key}
                 type="text"
@@ -131,7 +131,7 @@ const HomePage = () => {
        <div> {/* Discount and Banner Section */}
         <StyledHeader>
           <h1>
-            {t('UP TO 40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM TODAY')} (12.02.2024) - Hurry, grab your favorite items now! 
+            {t('UP TO 40% DISCOUNT FOR THE PURCHASE BEFORE 5.00 PM ')} (12.02.2024) - Hurry, grab your favorite items now! 
             <span style={{ marginLeft: '300px' }}>{t('FREE DELIVERY for purchase above')} 100$</span>
           </h1>
         </StyledHeader>
