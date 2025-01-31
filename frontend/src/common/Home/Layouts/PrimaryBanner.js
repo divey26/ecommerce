@@ -29,7 +29,8 @@ const CardImage = styled.img`
 const TextContainer = styled.div`
   position: relative;
   z-index: 3;
-  padding: 15px;
+  padding: 2px;
+  padding-left: 12px;
   display: flex;
   flex-direction: column;
   height: 100%;

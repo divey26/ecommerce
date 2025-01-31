@@ -46,11 +46,17 @@ const adminUserItems = [
   },
   
   {
-  key: "addpro",
-  icon: <HomeOutlined />,
-  label: "Add Products",
-
-},
+    key: "addpro",
+    icon: <HomeOutlined />,
+    label: "Add Products",
+  
+  },
+  {
+    key: "addLay",
+    icon: <HomeOutlined />,
+    label: "Home Layouts",
+  
+  },
   
   
 ];
@@ -108,6 +114,9 @@ const App = ({ children, userType }) => {
     }
     if (item.key === "addpro") {
       navigate("/add-product");
+    }
+    if (item.key === "addLay") {
+      navigate("/add");
     }
 
   };

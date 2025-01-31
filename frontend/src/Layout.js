@@ -4,22 +4,19 @@ import {
   EnvironmentOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Layout, Button, Badge, Select } from "antd";
+import { Layout, Button, Badge, Select, Input } from "antd";
 import { FloatButton } from "antd";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 import imageSrc from "./Images/logo.png";
-import { TextField } from "@mui/material"; // MUI TextField for the search bar
 import Flag from "react-world-flags"; // Import Flag component
 import styled from 'styled-components';
 import { useCart } from './common/cart/CartContext';
 import './locales/i18n';  // Import the i18n configuration
 
 
-
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
-
 
 const App = ({ children, userType }) => {
   const navigate = useNavigate();
@@ -28,7 +25,6 @@ const App = ({ children, userType }) => {
   const [language, setLanguage] = useState("en"); // Default language is English
   const { cart } = useCart();
   const { i18n } = useTranslation(); // Initialize useTranslation hook
-
 
   const { t } = useTranslation();
 
@@ -46,18 +42,12 @@ const App = ({ children, userType }) => {
     };
   }, []);
 
-  const handleSearch = (event) => {
-    const value = event.target.value;
+  const handleSearch = (value) => {
     setSearchLoading(true);
     setTimeout(() => {
       console.log("Search:", value);
       setSearchLoading(false);
-    }, 1000); // Simulate search loading for 1 second
-  };
-
-  const handleSearchButtonClick = () => {
-    console.log("Search Button Clicked");
-    // Handle search button action, e.g., trigger the same search functionality
+    }, 1000); // Simulate search loading
   };
 
   const handleNavigateToCart = () => {
@@ -69,7 +59,6 @@ const App = ({ children, userType }) => {
     i18n.changeLanguage(value);  // Change language dynamically
   };
 
-  
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Layout>
@@ -91,27 +80,24 @@ const App = ({ children, userType }) => {
         >
           {/* Logo and HALO text on the left */}
           <div style={{ display: "flex", alignItems: "center" }}>
-          <a href="/home" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-          <img
-            src={imageSrc}
-            alt="Logo"
-            style={{ marginLeft: "10px", width: "50px", height: "50px" }}
-          />
-          <span
-            style={{
-              fontSize: "24px",
-              fontWeight: "bold",
-              marginLeft: "15px",
-              color: "#F3C623",
-            }}
-          >
-          {t('HALO')}
-
-          </span>
-        </a>
+            <a href="/home" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+              <img
+                src={imageSrc}
+                alt="Logo"
+                style={{ marginLeft: "10px", width: "50px", height: "50px" }}
+              />
+              <span
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "bold",
+                  marginLeft: "15px",
+                  color: "#F3C623",
+                }}
+              >
+                {t('HALO')}
+              </span>
+            </a>
           </div>
-
-
 
           {/* Delivery text */}
           <div
@@ -120,12 +106,10 @@ const App = ({ children, userType }) => {
               alignItems: "center",
               color: "white",
               fontSize: "15px",
-              marginLeft: "150px", // Reduced margin to move it closer to the search bar
+              marginLeft: "150px", // Adjusted margin to make room for the search bar
             }}
           >
-            <EnvironmentOutlined
-              style={{ color: "#F3C623", fontSize: "30px" }}
-            />
+            <EnvironmentOutlined style={{ color: "#F3C623", fontSize: "30px" }} />
             Delivery to SRILANKA
           </div>
 
@@ -134,50 +118,53 @@ const App = ({ children, userType }) => {
             style={{
               display: "flex",
               alignItems: "center",
-              flexGrow: 1,
               justifyContent: "center",
+              backgroundColor: "#004f9a",
+              padding: "5px",
+              borderRadius: "30px",
+              width: "100%",
+              maxWidth: "900px",
             }}
           >
-            <TextField
-              label="Search"
-              variant="outlined"
-              onChange={handleSearch}
+            <Input
+              placeholder="Search everything at HALO"
+              allowClear
+              size="large"
+              onPressEnter={(e) => handleSearch(e.target.value)}
               style={{
-                width: "60%",
-                backgroundColor: "white",
-                borderRadius: "2px",
-                marginTop: "10px",
-                marginBottom: "10px",
-              }}
-              InputProps={{
-                endAdornment: searchLoading && (
-                  <SearchOutlined style={{ color: "#1890ff" }} />
-                ),
+                border: "none",
+                borderRadius: "30px",
+                width: "100%",
+                fontSize: "16px",
+                height: "45px",
+                paddingLeft: "20px",
               }}
             />
-            {/* Search Button */}
             <Button
               type="primary"
-              icon={<SearchOutlined style={{ fontSize: "24px" }} />}
-              onClick={handleSearchButtonClick}
+              shape="circle"
+              icon={<SearchOutlined />}
+              onClick={() => handleSearch()}
               style={{
-                backgroundColor: "#79D7BE",
-                borderColor: "#79D7BE",
-                height: "56px",
-                width: "70px",
-                borderTopLeftRadius: "0px",
-                borderBottomLeftRadius: "0px",
+                marginLeft: "-40px",
+                backgroundColor: "#ffc221",
+                border: "none",
+                width: "35px",
+                height: "35px",
               }}
-            ></Button>
+            />
+          </div>
 
-            {/* Language Selector */}
-            <Select
+
+          <div>
+              {/* Language Selector */}
+              <Select
               defaultValue={language}
               style={{
                 width: 90,
-                marginLeft: "60px",
                 height: "40px",
                 fontSize: "16px",
+                marginLeft: "10px",
               }}
               onChange={handleLanguageChange}
             >
@@ -237,7 +224,6 @@ const App = ({ children, userType }) => {
               minHeight: 360,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              
             }}
           >
             {isBackTopVisible && (
@@ -250,16 +236,17 @@ const App = ({ children, userType }) => {
         </Content>
 
         <StyledFooter>
-        <div >
-        {t('We’d love to hear what you think!')}
-        <br/><br/>
-        <Button style={{color:"#004f9a",borderColor:"#004f9a",borderRadius:"50px"}}>  {t('Give feedback')}</Button>
+          <div>
+            {t('We’d love to hear what you think!')}
+            <br /><br />
+            <Button style={{ color: "#004f9a", borderColor: "#004f9a", borderRadius: "50px" }}>
+              {t('Give feedback')}
+            </Button>
+          </div>
+        </StyledFooter>
 
-        </div>
-      </StyledFooter>
-        {/* Footer */}
         <Footer
-         style={{
+          style={{
             textAlign: "center",
             backgroundColor: "#004f9a",
             color: "white",
@@ -268,15 +255,12 @@ const App = ({ children, userType }) => {
           }}
         >
           <p>&copy; {t('2024 HALO. All rights reserved.')}.</p>
-          <p>{t('Powered by')}  Dvenoph </p>
-          
-          
+          <p>{t('Powered by')} Dvenoph</p>
         </Footer>
       </Layout>
     </Layout>
   );
 };
-
 
 const StyledFooter = styled(Header)`
   background-color: rgb(224, 245, 249);

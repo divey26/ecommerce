@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Typography,Button, message } from 'antd';
+import { Row, Col, Card, Typography, Button, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -7,41 +7,33 @@ import { useContext } from 'react';
 import { AuthContext } from '../../../utils/AuthContext';
 import { useCart } from '../../cart/CartContext'; // Import CartContext
 
+const { Title, Text } = Typography;
 
-const { Title,Text } = Typography;
-
-const TopRated = () => {
-  const [topRatedProducts, setTopRatedProducts] = useState([]);
+const Rated = () => {
+  const [randomProducts, setRandomProducts] = useState([]);
   const navigate = useNavigate();
   const { addToCart } = useCart(); // Access addToCart function
   const { authenticated } = useContext(AuthContext); // Access authenticated state
-  
 
   useEffect(() => {
-    const fetchTopRatedProducts = async () => {
+    const fetchRandomProducts = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/products');
         const allProducts = response.data.products || [];
-        const topRated = allProducts
-          .filter((product) => product.rating === 5)
-          .slice(0, 6); // Limit to 6 products
-        setTopRatedProducts(topRated);
+        
+        // Shuffle array and pick 6 random products
+        const shuffledProducts = allProducts.sort(() => 0.5 - Math.random());
+        const selectedProducts = shuffledProducts.slice(0, 6);
+        
+        setRandomProducts(selectedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
-        message.error('Failed to fetch top-rated products.');
+        message.error('Failed to fetch products.');
       }
     };
 
-    fetchTopRatedProducts();
+    fetchRandomProducts();
   }, []);
-
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 0; i < 5; i++) {
-      stars.push(i < rating ? '⭐' : '☆');
-    }
-    return stars.join(' ');
-  };
 
   const trimDescription = (description, maxLength = 50) => {
     if (description.length > maxLength) {
@@ -50,17 +42,14 @@ const TopRated = () => {
     return description;
   };
 
-
   return (
-    <div >
-      {/* Other content of your HomePage */}
-
+    <div>
       <TopRatedSection>
         <Title level={2} style={{ textAlign: 'center', margin: '20px 0' }}>
-          Top Rated Products
+          Featured Products
         </Title>
         <Row gutter={[16, 16]} justify="center">
-          {topRatedProducts.map((product) => (
+          {randomProducts.map((product) => (
             <Col xs={24} sm={12} md={8} lg={4} xl={4} key={product.productId}>
               <Card
                 hoverable
@@ -84,8 +73,7 @@ const TopRated = () => {
                   justifyContent: 'space-between',
                   padding: '10px',
                 }}
-                onClick={() => navigate(`/product/${product.productId}`)} // Navigate on card click
-
+                onClick={() => navigate(`/product/${product.productId}`)}
               >
                 <div>
                   <Row align="middle" justify="start" style={{ marginBottom: '10px' }}>
@@ -130,32 +118,24 @@ const TopRated = () => {
                   >
                     {product.itemName} | {trimDescription(product.description)}
                   </p>
-
-                  <Text style={{ fontSize: '15px' }}>
-                    {renderStars(product.rating)} {product.rating}
-                  </Text>
                 </div>
 
-            {authenticated ? (
-                <Button
+                {authenticated ? (
+                  <Button
                     style={{
-                        marginTop: 'auto',
-                        borderRadius: '40px',
-                        color: 'white',
-                        backgroundColor: authenticated ? '#004f9a' : '#a0a0a0',
+                      marginTop: 'auto',
+                      borderRadius: '40px',
+                      color: 'white',
+                      backgroundColor: authenticated ? '#004f9a' : '#a0a0a0',
                     }}
                     onClick={(e) => {
-                        e.stopPropagation(); // Prevent card onClick from being triggered
-                        if (authenticated) {
-                        addToCart(product);
-                        message.success(`${product.itemName} added to the cart`);
-                        }
+                      e.stopPropagation();
+                      addToCart(product);
+                      message.success(`${product.itemName} added to the cart`);
                     }}
-                    disabled={!authenticated}
-                    >
-                    {authenticated ? '+ ADD' : 'Login to Add'}
-                    </Button>
-
+                  >
+                    + ADD
+                  </Button>
                 ) : (
                   <Button
                     style={{
@@ -185,4 +165,4 @@ const TopRatedSection = styled.div`
   margin-top: 40px;
 `;
 
-export default TopRated;
+export default Rated;

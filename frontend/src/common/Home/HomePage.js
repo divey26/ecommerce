@@ -23,6 +23,7 @@ import p4 from "../../Images/p4.jpg";
 import prod1 from "../../Images/prod1.png"
 import banner1 from "../../Images/valBanner.jpg"
 
+import RatedPro from "./Layouts/RatedPro"
 import Banner from "./banner" 
 import Shorts from "./Layouts/ProShorts"
 import TopRated from "./Layouts/TopRated" 
@@ -175,7 +176,7 @@ const HomePage = () => {
         
         <Shorts/>
 
-        <TopRated/>
+        <RatedPro/>
 
         {/* Carousel Component */}
         <Carousel autoplay dotPosition="bottom" autoplaySpeed={2000}>
