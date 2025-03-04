@@ -98,6 +98,21 @@ const ProductsList = () => {
       key: 'discount',
     },
     {
+      title: 'Inital Stocks',
+      dataIndex: 'initialStocks',
+      key: 'initialStocks',
+    },
+    {
+      title: 'Current Stocks',
+      dataIndex: 'currentStocks',
+      key: 'currentStocks',
+      render: (stocks) => (
+        <span style={{ color: stocks < 5 ? "red" : "green", fontWeight: "bold" }}>
+          {stocks}
+        </span>
+      ),  
+    },
+    {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
@@ -166,8 +181,15 @@ const ProductsList = () => {
             placeholder="Description"
             style={{ marginTop: 10 }}
           />
+          <Input
+            value={editingProduct?.currentStocks}
+            onChange={(e) => setEditingProduct({ ...editingProduct, currentStocks: e.target.value })}
+            placeholder="Current Stocks"
+            style={{ marginTop: 10 }}
+          />
         </div>
       </Modal>
+
     </div>
   );
 };

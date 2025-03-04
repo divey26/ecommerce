@@ -2,7 +2,7 @@ const Product = require('../models/productModel');
 
 exports.createProduct = async (req, res) => {
   try {
-    const { productId, itemName, category, subcategory, price, rating, offerName, discount, description, imageURL } = req.body;
+    const { productId, itemName, category, subcategory, price, rating, offerName, discount, description, imageURL, initialStocks, currentStocks } = req.body;
 
     const newProduct = new Product({
       productId,
@@ -15,6 +15,8 @@ exports.createProduct = async (req, res) => {
       discount,
       description,
       imageURL,
+      initialStocks,
+      currentStocks,
     });
 
     await newProduct.save();
@@ -24,6 +26,7 @@ exports.createProduct = async (req, res) => {
     res.status(500).json({ message: 'Error saving product data' });
   }
 };
+
 
 exports.getProducts = async (req, res) => {
     try {
