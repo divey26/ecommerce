@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Select, Space, Typography, Modal, Button, Form, Row, Col, Input, Upload, message } from 'antd';
+import { Layout, Select, Space, Typography, Modal, Button, Form, Row, Col, Input, Upload, message, Radio } from 'antd';
 import axios from 'axios';
-import { StockOutlined } from '@ant-design/icons';
+import { StockOutlined, UploadOutlined } from '@ant-design/icons';
 import { storage } from '../Firebase/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import 'antd/dist/reset.css';
@@ -20,6 +20,9 @@ const CategoryModal = () => {
   const [file, setFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null); // State to track product being edited
+  const [discountType, setDiscountType] = useState('fixed'); // New state for discount type
+  const [isDiscountHidden, setIsDiscountHidden] = useState(false); // State to track if discount input should be hidden
+  const [discountValue, setDiscountValue] = useState(0); // State to track the discount value
 
   // Fetch categories from the backend
   useEffect(() => {
@@ -114,6 +117,9 @@ const CategoryModal = () => {
       setSelectedCategory(product.category);
       setSelectedSubcategory(product.subcategory);
       setFile(null); // Optional, reset file
+      setDiscountType(product.discountType || 'percentage'); // Set discount type from the product data
+      setDiscountValue(product.discount || 0); // Set discount value
+      setIsDiscountHidden(product.discountType === 'hide'); // Set visibility of discount input
     }
   };
 
@@ -124,10 +130,15 @@ const CategoryModal = () => {
     setSelectedSubcategory('');
     setFile(null);
     setProductToEdit(null); // Reset product to edit
+    setDiscountType('percentage'); // Reset discount type
+    setIsDiscountHidden(false); // Reset discount hidden state
+    setDiscountValue(0); // Reset discount value
   };
 
   // Handle save or update product
   const handleSave = async (values) => {
+    const discountPercentageToSave = isDiscountHidden ? calculateDynamicDiscount(values) : discountValue; // Use dynamic discount percentage if hidden
+  
     const imageURL = await handleUpload(file);
     if (imageURL) {
       const productData = {
@@ -138,15 +149,18 @@ const CategoryModal = () => {
         price: values.price,
         rating: values.rating,
         offerName: values.offerName,
-        discount: values.discount,
+        discount: discountPercentageToSave, // Store discount percentage here
+        discountType, // Save discount type (percentage or fixed)
         description: values.description,
         imageURL: imageURL || productToEdit?.imageURL, // Use existing image URL if no new image is uploaded
+        initialStocks: values.initialStocks, // Add initialStocks here
+        currentStocks: values.currentStocks, // Add currentStocks here
       };
-
+  
       try {
         const apiUrl = productToEdit ? `http://localhost:5000/api/products/${productToEdit.productId}` : 'http://localhost:5000/api/products';
         const method = productToEdit ? 'put' : 'post';
-
+  
         const response = await axios({ method, url: apiUrl, data: productData });
         console.log('Product saved successfully:', response.data);
         setIsModalOpen(false);
@@ -157,6 +171,20 @@ const CategoryModal = () => {
       message.error('Image upload failed. Please try again.');
     }
   };
+  
+
+// Calculate dynamic discount percentage based on stock levels
+const calculateDynamicDiscount = (values) => {
+  const { initialStocks, currentStocks } = values;
+  const stockPercentage = (currentStocks / initialStocks) * 100;
+
+  if (stockPercentage > 75) return 0; // No discount
+  if (stockPercentage > 50) return 5; // 5% discount
+  if (stockPercentage > 25) return 8; // 8% discount
+  if (stockPercentage > 15) return 10; // 10% discount
+  return 12; // 12% discount
+};
+
 
   return (
     <LayoutNew>
@@ -167,7 +195,7 @@ const CategoryModal = () => {
               background: "rgb(224, 245, 249)",
               color: "black",
               padding: "12px",
-              border:"1px solid rgba(30, 96, 157, 0.13)",
+              border: "1px solid rgba(30, 96, 157, 0.13)",
               borderRadius: "8px",
               justifyContent: "space-between",
               display: "flex",
@@ -179,15 +207,13 @@ const CategoryModal = () => {
                 Products
               </Title>
             </Space>
-            {/* Button to Open Modal */}
-            <Button type="primary" onClick={() => showModal()} style={{backgroundColor:"#ffc221",color:"black",fontSize:"16px"}}>
+            <Button type="primary" onClick={() => showModal()} style={{ backgroundColor: "#ffc221", color: "black", fontSize: "16px" }}>
               Add products
             </Button>
           </Space>
 
           <br />
 
-          {/* Modal */}
           <Modal
             title={productToEdit ? "Edit Product" : "Add New Product"}
             open={isModalOpen}
@@ -233,11 +259,10 @@ const CategoryModal = () => {
                       value={selectedSubcategory}
                       onChange={handleSubcategoryChange}
                       placeholder="Select Subcategory"
-                      disabled={!subcategories.length}
                     >
-                      {subcategories.map(subcategory => (
-                        <Option key={subcategory} value={subcategory}>
-                          {subcategory}
+                      {subcategories.map((sub, index) => (
+                        <Option key={index} value={sub}>
+                          {sub}
                         </Option>
                       ))}
                     </Select>
@@ -247,22 +272,13 @@ const CategoryModal = () => {
 
               <Row gutter={[16, 16]}>
                 <Col span={12}>
-                <Form.Item
-                  name="price"
-                  label="Price"
-                  rules={[{ required: true, message: 'Please input the item price!' }]}
-                >
-                  <Input
-                    type="number"
-                    step="0.01"
-                    min={0}
-                    onBlur={(e) => {
-                      const value = parseFloat(e.target.value).toFixed(2);
-                      e.target.value = value; // Format input to `.00` on blur
-                    }}
-                  />
-                </Form.Item>
-
+                  <Form.Item
+                    name="price"
+                    label="Price"
+                    rules={[{ required: true, message: 'Please input the price!' }]}
+                  >
+                    <Input type="number" />
+                  </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
@@ -270,39 +286,52 @@ const CategoryModal = () => {
                     label="Rating"
                     rules={[{ required: true, message: 'Please input the rating!' }]}
                   >
-                    <Input type="number" step="0.1" max={5} min={1} />
+                    <Input type="number" min={0} max={5} />
                   </Form.Item>
                 </Col>
               </Row>
 
               <Row gutter={[16, 16]}>
                 <Col span={12}>
-                  <Form.Item
-                    name="offerName"
-                    label="Offer Name"
-                    rules={[{ required: true, message: 'Please input the offer name!' }]}
-                  >
+                  <Form.Item name="offerName" label="Offer Name">
                     <Input />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item
-                    name="discount"
-                    label="Discount"
-                    rules={[{ required: true, message: 'Please input the discount!' }]}
-                  >
-                    <Input type="number" max={100} min={0} />
+                  <Form.Item name="discountType" label="Discount Type">
+                    <Radio.Group value={discountType} onChange={(e) => {
+                      setDiscountType(e.target.value);
+                      setIsDiscountHidden(e.target.value === 'hide'); // Hide discount input if dynamic
+                    }}>
+                      <Radio value="fixed">Fixed</Radio>
+                      <Radio value="hide">Dynamic</Radio>
+                    </Radio.Group>
                   </Form.Item>
                 </Col>
               </Row>
 
+              {(discountType === 'percentage' || discountType === 'fixed') && !isDiscountHidden && (
+                <Row gutter={[16, 16]}>
+                  <Col span={24}>
+                    <Form.Item
+                      name="discount"
+                      label="Discount"
+                      rules={[{ required: discountType !== 'hide', message: 'Please input a discount value!' }]}
+                    >
+                      <Input
+                        type="number"
+                        value={discountValue}
+                        onChange={(e) => setDiscountValue(e.target.value)}
+                        placeholder="Enter discount value"
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              )}
+
               <Row gutter={[16, 16]}>
                 <Col span={24}>
-                  <Form.Item
-                    name="description"
-                    label="Description"
-                    rules={[{ required: true, message: 'Please input a description!' }]}
-                  >
+                  <Form.Item name="description" label="Description">
                     <Input.TextArea rows={4} />
                   </Form.Item>
                 </Col>
@@ -310,27 +339,43 @@ const CategoryModal = () => {
 
               <Row gutter={[16, 16]}>
                 <Col span={24}>
-                  <Upload
-                    beforeUpload={() => false}
-                    onChange={handleFileChange}
-                    fileList={file ? [{ originFileObj: file, uid: '1', name: file.name }] : []}
-                  >
-                    <Button>Select Image</Button>
-                  </Upload>
+                  <Form.Item name="image" label="Product Image">
+                    <Upload beforeUpload={() => false} fileList={file ? [file] : []} onChange={handleFileChange}>
+                      <Button icon={<UploadOutlined />} />
+                    </Upload>
+                  </Form.Item>
                 </Col>
               </Row>
 
-              <Row justify="end">
-                <Col>
-                  <Button type="primary" htmlType="submit" loading={isUploading}>
-                    Save
-                  </Button>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  <Form.Item
+                    name="initialStocks"
+                    label="Initial Stocks"
+                    rules={[{ required: true, message: 'Please input the initial stock count!' }]}
+                  >
+                    <Input type="number" />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="currentStocks"
+                    label="Current Stocks"
+                    rules={[{ required: true, message: 'Please input the current stock count!' }]}
+                  >
+                    <Input type="number" />
+                  </Form.Item>
                 </Col>
               </Row>
+
+              <Button type="primary" htmlType="submit" block>
+                Save Product
+              </Button>
             </Form>
           </Modal>
-          <ProductList />
         </div>
+        <ProductList onEditProduct={showModal} />
+
       </Layout>
     </LayoutNew>
   );

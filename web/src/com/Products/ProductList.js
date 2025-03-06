@@ -9,6 +9,19 @@ const ProductsList = () => {
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [hideDiscount, setHideDiscount] = useState(false);
+
+  // Calculate dynamic discount percentage based on stock levels
+  const calculateDynamicDiscount = (values) => {
+    const { initialStocks, currentStocks } = values;
+    const stockPercentage = (currentStocks / initialStocks) * 100;
+
+    if (stockPercentage > 75) return 0; // No discount
+    if (stockPercentage > 50) return 5; // 5% discount
+    if (stockPercentage > 25) return 8; // 8% discount
+    if (stockPercentage > 15) return 10; // 10% discount
+    return 12; // 12% discount
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -25,13 +38,11 @@ const ProductsList = () => {
     fetchProducts();
   }, []);
 
-  // Handle Edit button click
   const handleEditClick = (product) => {
     setEditingProduct(product);
     setIsEditing(true);
   };
 
-  // Handle Save Edit
   const handleSaveEdit = async () => {
     try {
       const updatedProduct = await axios.put(
@@ -48,7 +59,6 @@ const ProductsList = () => {
     }
   };
 
-  // Handle Delete button click
   const handleDeleteClick = async (productId) => {
     try {
       await axios.delete(`http://localhost:5000/api/products/${productId}`);
@@ -59,7 +69,12 @@ const ProductsList = () => {
     }
   };
 
-  // Define columns for the table
+  const handleCurrentStockChange = (e) => {
+    const updatedProduct = { ...editingProduct, currentStocks: e.target.value };
+    updatedProduct.discount = calculateDynamicDiscount(updatedProduct);
+    setEditingProduct(updatedProduct);
+  };
+
   const columns = [
     {
       title: 'Product ID',
@@ -72,35 +87,22 @@ const ProductsList = () => {
       key: 'itemName',
     },
     {
-      title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-    },
-    {
-      title: 'Subcategory',
-      dataIndex: 'subcategory',
-      key: 'subcategory',
-    },
-    {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-      render: (text) => `$${text}`, // Format price as currency
+      render: (text) => `$${text}`,
     },
     {
-      title: 'Rating',
-      dataIndex: 'rating',
-      key: 'rating',
-    },
-    {
-      title: 'Discount',
+      title: 'Dis',
       dataIndex: 'discount',
       key: 'discount',
+      render: (text) => `${text}`,
     },
     {
-      title: 'Inital Stocks',
+      title: 'Initial Stocks',
       dataIndex: 'initialStocks',
       key: 'initialStocks',
+      render: (text) => `$${text}`,
     },
     {
       title: 'Current Stocks',
@@ -110,18 +112,7 @@ const ProductsList = () => {
         <span style={{ color: stocks < 5 ? "red" : "green", fontWeight: "bold" }}>
           {stocks}
         </span>
-      ),  
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
-      title: 'Image',
-      dataIndex: 'imageURL',
-      key: 'imageURL',
-      render: (imageURL) => <img src={imageURL} alt="Product" style={{ width: 50, height: 50 }} />,
+      ),
     },
     {
       title: 'Actions',
@@ -142,54 +133,68 @@ const ProductsList = () => {
   return (
     <div style={{ padding: '20px' }}>
       <Title level={2}>Products List</Title>
-      <Table
-        columns={columns}
-        dataSource={products}
-        rowKey="productId"
-        loading={loading}
-        pagination={{ pageSize: 10 }}
-      />
+      <Table columns={columns} dataSource={products} rowKey="productId" loading={loading} pagination={{ pageSize: 10 }} />
 
-      {/* Modal for Editing Product */}
-      <Modal
-        title="Edit Product"
-        open={isEditing}
-        onCancel={() => setIsEditing(false)}
-        onOk={handleSaveEdit}
-      >
+      <Modal title="Edit Product" open={isEditing} onCancel={() => setIsEditing(false)} onOk={handleSaveEdit}>
         <div>
-          <Input
-            value={editingProduct?.itemName}
-            onChange={(e) => setEditingProduct({ ...editingProduct, itemName: e.target.value })}
-            placeholder="Item Name"
-          />
-          <Input
-            value={editingProduct?.price}
-            onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
-            placeholder="Price"
-            style={{ marginTop: 10 }}
-          />
-          <Input
-            value={editingProduct?.discount}
-            onChange={(e) => setEditingProduct({ ...editingProduct, discount: e.target.value })}
-            placeholder="Discount"
-            style={{ marginTop: 10 }}
-          />
-          <Input
-            value={editingProduct?.description}
-            onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
-            placeholder="Description"
-            style={{ marginTop: 10 }}
-          />
-          <Input
-            value={editingProduct?.currentStocks}
-            onChange={(e) => setEditingProduct({ ...editingProduct, currentStocks: e.target.value })}
-            placeholder="Current Stocks"
-            style={{ marginTop: 10 }}
-          />
+          <div style={{ marginBottom: 10 }}>
+            <label>Item Name</label>
+            <Input
+              value={editingProduct?.itemName}
+              onChange={(e) => setEditingProduct({ ...editingProduct, itemName: e.target.value })}
+              placeholder="Item Name"
+            />
+          </div>
+
+          <div style={{ marginBottom: 10 }}>
+            <label>Price</label>
+            <Input
+              value={editingProduct?.price}
+              onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
+              placeholder="Price"
+            />
+          </div>
+
+          {!hideDiscount && (
+            <div style={{ marginBottom: 10 }}>
+              <label>Discount</label>
+              <Input
+                value={editingProduct?.discount}
+                onChange={(e) => setEditingProduct({ ...editingProduct, discount: e.target.value })}
+                placeholder="Discount"
+                disabled
+              />
+            </div>
+          )}
+
+          <div style={{ marginBottom: 10 }}>
+            <label>Description</label>
+            <Input
+              value={editingProduct?.description}
+              onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
+              placeholder="Description"
+            />
+          </div>
+
+          <div style={{ marginBottom: 10 }}>
+            <label>Initial Stocks</label>
+            <Input
+              value={editingProduct?.initialStocks}
+              disabled
+              placeholder="Initial Stocks"
+            />
+          </div>
+
+          <div style={{ marginBottom: 10 }}>
+            <label>Current Stocks</label>
+            <Input
+              value={editingProduct?.currentStocks}
+              onChange={handleCurrentStockChange}
+              placeholder="Current Stocks"
+            />
+          </div>
         </div>
       </Modal>
-
     </div>
   );
 };
