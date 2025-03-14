@@ -29,14 +29,15 @@ exports.createProduct = async (req, res) => {
 
 
 exports.getProducts = async (req, res) => {
-    try {
-      const products = await Product.find();
-      res.status(200).json({ products });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error fetching products' });
-    }
-  };
+  try {
+    const products = await Product.find();
+    res.status(200).json({ products });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching products' });
+  }
+};
+
 
   exports.getProductById = async (req, res) => {
     const { productId } = req.params; // Get productId from the URL
@@ -83,7 +84,6 @@ exports.getProducts = async (req, res) => {
     }
   };
   
-  // productController.js
 
   exports.deleteProduct = async (req, res) => {
     const { productId } = req.params; // Get productId from the URL
@@ -104,6 +104,40 @@ exports.getProducts = async (req, res) => {
   };
   
 
+  
+  // productController.js
+  exports.updateStock = async (req, res) => {
+    const { productId } = req.params;
+    const { quantitySold } = req.body;
+    
+    console.log(`Updating stock for Product ID: ${productId} with quantity: ${quantitySold}`);
+  
+    try {
+      const product = await Product.findOne({ productId });
+  
+      if (!product) {
+        console.log('Product not found');
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+      if (product.currentStocks < quantitySold) {
+        console.log('Insufficient stock');
+        return res.status(400).json({ message: 'Insufficient stock' });
+      }
+  
+      product.currentStocks -= quantitySold;
+      await product.save();
+      
+      console.log(`Stock updated successfully: New stock = ${product.currentStocks}`);
+      res.status(200).json({ message: 'Stock updated successfully', product });
+    } catch (error) {
+      console.error('Error updating stock:', error);
+      res.status(500).json({ message: 'Error updating stock' });
+    }
+  };
+  
+
+
   exports.getprocate = async (req, res) => {
     const { categoryId } = req.query;
     try {
@@ -113,4 +147,3 @@ exports.getProducts = async (req, res) => {
       res.status(500).send('Error fetching products');
     }
   };
-  
