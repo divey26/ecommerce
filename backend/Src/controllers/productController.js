@@ -1,4 +1,5 @@
 const Product = require('../models/productModel');
+const mongoose = require('mongoose');
 
 exports.createProduct = async (req, res) => {
   try {
@@ -16,8 +17,9 @@ exports.createProduct = async (req, res) => {
       description,
       imageURL,
       initialStocks,
-      currentStocks,
-    });
+      currentStocks: initialStocks,  // Ensure both values match at creation
+  });
+  
 
     await newProduct.save();
     res.status(201).json({ message: 'Product saved successfully!', product: newProduct });
@@ -107,28 +109,29 @@ exports.getProducts = async (req, res) => {
   
   // productController.js
   exports.updateStock = async (req, res) => {
-    const { productId } = req.params;
-    const { quantitySold } = req.body;
+    const { productId } = req.params; // productId from URL parameter
+    const { quantitySold } = req.body; // quantitySold from request body
     
-    console.log(`Updating stock for Product ID: ${productId} with quantity: ${quantitySold}`);
-  
+   // console.log('Received productId:', productId);  // Log the received productId
+    const objectId = new mongoose.Types.ObjectId(productId);
+
     try {
-      const product = await Product.findOne({ productId });
-  
+      const product = await Product.findById(objectId);
+    
       if (!product) {
         console.log('Product not found');
         return res.status(404).json({ message: 'Product not found' });
       }
-  
+    
       if (product.currentStocks < quantitySold) {
         console.log('Insufficient stock');
         return res.status(400).json({ message: 'Insufficient stock' });
       }
-  
+    
       product.currentStocks -= quantitySold;
       await product.save();
       
-      console.log(`Stock updated successfully: New stock = ${product.currentStocks}`);
+     // console.log(`Stock updated successfully: New stock = ${product.currentStocks}`);
       res.status(200).json({ message: 'Stock updated successfully', product });
     } catch (error) {
       console.error('Error updating stock:', error);

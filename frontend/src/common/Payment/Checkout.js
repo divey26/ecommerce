@@ -82,17 +82,17 @@ const CheckoutForm = () => {
         }));
         
         const totalAmount = cart.reduce((total, item) => {
-          console.log("Item:", item);
+//          console.log("Item:", item);
           return total + (item.total || (item.price * item.quantity) || 0);
         }, 0);
         
-          console.log('Sending Order Data:', {
+        /*  console.log('Sending Order Data:', {
             userId,
             cartItems: cartWithTotals,
             paymentIntentId: paymentIntent.id,
             totalAmount, 
             paymentStatus: paymentIntent.status,
-          });
+          });*/
 
           const response = await fetch('http://localhost:5000/api/order/create', {
             method: 'POST',
@@ -108,29 +108,28 @@ const CheckoutForm = () => {
 
         
         const result = await response.json();
-        console.log(result); // Log response for debugging
+       // console.log(result); // Log response for debugging
   
-        // Reduce stock after successful payment
-        for (const item of cartWithTotals) {
-          try {
-            const response = await fetch(`http://localhost:5000/api/products/update-stock/${item.productId}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ quantitySold: item.quantity }),
-            });
-        
-            const data = await response.json();
-        
-            if (response.ok) {
-              console.log(`Stock updated successfully for ${item.itemName}. New stock: ${data.product.currentStocks}`);
-            } else {
-              console.error(`Failed to update stock for ${item.itemName}: ${data.message}`);
-            }
-          } catch (error) {
-            console.error(`Error updating stock for ${item.itemName}:`, error);
-          }
-        }
-        
+       // Reduce stock after successful payment
+await Promise.all(
+  cartWithTotals.map(async (item) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/products/updateStock/${item.productId._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quantitySold: item.quantity }),
+      });
+      //console.log("Updating stock for:", item.productId);
+
+      const data = await response.json();
+
+
+    } catch (error) {
+      console.error(`Error updating stock for ${item.itemName}:`, error);
+    }
+  })
+);
+
   
         // Clear the cart
         await fetch('http://localhost:5000/api/cart/clear', {

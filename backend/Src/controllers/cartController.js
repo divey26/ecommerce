@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 exports.addItemToCart = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
-    console.log("cart body", req.body);
+    //console.log("cart body", req.body);
 
     // Check if product exists
     const product = await Product.findById(productId);

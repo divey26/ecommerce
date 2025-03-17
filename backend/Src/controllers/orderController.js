@@ -4,7 +4,7 @@ exports.createOrder = async (req, res) => {
   try {
     const { userId, cartItems, paymentIntentId, paymentStatus, totalAmount, shippingAddress } = req.body;
 
-    console.log('Received Order Data:', { userId, cartItems, paymentIntentId, paymentStatus, totalAmount, shippingAddress });
+//    console.log('Received Order Data:', { userId, cartItems, paymentIntentId, paymentStatus, totalAmount, shippingAddress });
 
     // Validate required fields
     if (!userId || !cartItems || cartItems.length === 0 || !paymentIntentId || !totalAmount || isNaN(totalAmount) || !paymentStatus) {
