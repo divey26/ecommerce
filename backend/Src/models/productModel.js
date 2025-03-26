@@ -11,8 +11,9 @@ const productSchema = new mongoose.Schema({
   discount: { type: Number, required: true },
   description: { type: String, required: true },
   imageURL: { type: String, required: true },
-  initialStocks: { type: Number, required: true, default: 0 },  // New attribute
-  currentStocks: { type: Number, required: true, default: 0 },  // New attribute
+  initialStocks: { type: Number, required: true, default: 0 },
+  currentStocks: { type: Number, required: true, default: 0 },
+  sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller', required: true }, // New field
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);

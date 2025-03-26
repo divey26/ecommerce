@@ -37,6 +37,8 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/product/:productId" element={<SingleProduct />} />
             
+
+
               <Route path="*" element={<NotFound />} />
 
             </Routes>
