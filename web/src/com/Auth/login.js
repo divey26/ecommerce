@@ -20,11 +20,15 @@ const LoginForm = () => {
       const { sellerId, sellerObjectId, message } = response.data;
 
           // Store sellerId and ObjectId in local storage
-    localStorage.setItem('sellerId', sellerId);
-    localStorage.setItem('sellerObjectId', sellerObjectId);
+          localStorage.setItem('sellerId', sellerId);
+          localStorage.setItem('sellerObjectId', sellerObjectId);
 
-    console.log("Seller ID:", localStorage.getItem('sellerId'));
-    console.log("Seller Object ID:", localStorage.getItem('sellerObjectId'));
+          if (sellerId.startsWith("SE")) {
+            localStorage.setItem('usertype', 'seller');
+          }
+            console.log("Seller ID:", localStorage.getItem('sellerId'));
+            console.log("User Type:", localStorage.getItem('usertype'));
+            console.log("Seller Object ID:", localStorage.getItem('sellerObjectId'));
 
       setMessage(response.data.message);
       setError('');

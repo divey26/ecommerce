@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'FormData', required: true },
   cartItems: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
@@ -16,8 +16,8 @@ const OrderSchema = new mongoose.Schema({
   orderDate: { type: Date, default: Date.now },
   shippingAddress: {
     address: { type: String },
-    city: { type: String  },
-    postalCode: { type: String},
+    city: { type: String },
+    postalCode: { type: String },
     country: { type: String },
   },
 });

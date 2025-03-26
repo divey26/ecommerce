@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import imageSrc from "./logo.png";
 
 const { Header, Content, Footer, Sider } = Layout;
-const loggedInUserType = localStorage.getItem("loggedInUserType");
+const loggedInUserType = localStorage.getItem("usertype");
 
 const adminUserItems = [
   {
@@ -24,41 +24,54 @@ const adminUserItems = [
     icon: <HomeOutlined />,
     label: "Home",
   },
-
   {
     key: "categories",
     icon: <HomeOutlined />,
     label: "Category",
   },
   {
-
     key: "shorts",
     icon: <HomeOutlined />,
     label: "Shorts",
-  
   },
-
   {
     key: "timer",
     icon: <HomeOutlined />,
     label: "Timer",
-  
   },
-  
   {
     key: "addpro",
     icon: <HomeOutlined />,
     label: "Add Products",
-  
   },
   {
     key: "addLay",
     icon: <HomeOutlined />,
     label: "Home Layouts",
-  
   },
-  
-  
+];
+
+const sellerItems = [
+  {
+    key: "dashboard",
+    icon: <HomeOutlined />,
+    label: "Home",
+  },
+  {
+    key: "shorts",
+    icon: <HomeOutlined />,
+    label: "Shorts",
+  },
+  {
+    key: "timer",
+    icon: <HomeOutlined />,
+    label: "Timer",
+  },
+  {
+    key: "addpro",
+    icon: <HomeOutlined />,
+    label: "Add Products",
+  },
 ];
 
 const headerIteam = [
@@ -75,8 +88,7 @@ const App = ({ children, userType }) => {
       localStorage.setItem("authToken", null);
       localStorage.setItem("loggedInUserType", null);
       navigate("/sign");
-    }
-    else if(key=='2'){
+    } else if (key === "2") {
       localStorage.setItem("authToken", null);
       localStorage.setItem("loggedInUserType", null);
       navigate("/login");
@@ -118,7 +130,6 @@ const App = ({ children, userType }) => {
     if (item.key === "addLay") {
       navigate("/add");
     }
-
   };
 
   const {
@@ -132,16 +143,21 @@ const App = ({ children, userType }) => {
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
         width={200}
-        style={{ backgroundColor: "#004f9a", overflow: "hidden", position: "fixed", height: "100vh", left: 0 }}
+        style={{
+          backgroundColor: "#004f9a",
+          overflow: "hidden",
+          position: "fixed",
+          height: "100vh",
+          left: 0,
+        }}
       >
         <div style={{ textAlign: "center", padding: "20px 0" }}>
           <img src={imageSrc} alt="Logo" style={{ width: "30%" }} />
         </div>
         <Menu
           theme="light"
-         // defaultSelectedKeys={}
           mode="inline"
-          items={userType === "admin" ? adminUserItems : adminUserItems}
+          items={loggedInUserType === "admin" ? adminUserItems : sellerItems}
           onClick={handleMenuClick}
           style={{ backgroundColor: "#ffc221" }}
         />
@@ -184,7 +200,7 @@ const App = ({ children, userType }) => {
           </div>
         </Header>
 
-        <Content style={{ marginTop: 64, padding: 24  }}>
+        <Content style={{ marginTop: 64, padding: 24 }}>
           <div
             style={{
               padding: 0,

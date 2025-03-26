@@ -9,8 +9,11 @@ import StartPage from './com/StartPage'
 import Shorts from './com/Shorts/Shorts'
 import Timer from './com/Timer/Timer'
 import HomeLayoutPage from './com/HomePage/HomeLayout'
+import Orders from './com/Orders/ViewOrders'
 
-import Sellersign from "../../web/src/com/seller/sellerSignup";
+
+import Sellersign from "./com/seller/sellerSignup";
+import SellerProductPage from './com/seller/SellerProductList';
 
 
 
@@ -26,7 +29,10 @@ function App() {
         <Route path="/timer" element={<Timer/>} />
         <Route path="/add-product" element={<ProductPage/>} />
         <Route path="/add" element={<HomeLayoutPage/>} />
+        <Route path="/order" element={<Orders/>} />
 
+
+        <Route path="/selpro" element={<SellerProductPage/>} />
         <Route path="/sellerS" element={<Sellersign />} />
       
 

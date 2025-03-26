@@ -150,3 +150,28 @@ exports.getProducts = async (req, res) => {
       res.status(500).send('Error fetching products');
     }
   };
+
+  exports.getProductByObjectId = async (req, res) => {
+    const { objectId } = req.params; // Get objectId from the URL
+    
+    try {
+      const product = await Product.findById(objectId); // Use the ObjectId to find the product
+  
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+//      console.log('Fetched product details:', product); // Log product details
+      
+      res.status(200).json({ product });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error fetching product by ObjectId' });
+    }
+  };
+  
+
+
+
+
+
