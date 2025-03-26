@@ -4,13 +4,16 @@ import axios from 'axios';
 
 const { Title } = Typography;
 
-const SellerProductsList = ({ sellerId }) => {
+const SellerProductsList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [hideDiscount, setHideDiscount] = useState(false);
 
+  // Retrieve the seller ID from localStorage
+  const sellerOId = localStorage.getItem('sellerObjectId');
+  
   // Calculate dynamic discount percentage based on stock levels
   const calculateDynamicDiscount = (values) => {
     const { initialStocks, currentStocks } = values;
@@ -26,8 +29,11 @@ const SellerProductsList = ({ sellerId }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/seller/${sellerId}`);
-        setProducts(response.data.products);
+        const response = await axios.get('http://localhost:5000/api/products');
+        const filteredProducts = response.data.products.filter(
+          (product) => product.sellerId === sellerOId
+        );
+        setProducts(filteredProducts);
         setLoading(false);
       } catch (error) {
         message.error('Error fetching products');
@@ -36,7 +42,7 @@ const SellerProductsList = ({ sellerId }) => {
     };
 
     fetchProducts();
-  }, [sellerId]); // Trigger the effect when the sellerId changes
+  }, [sellerOId]);
 
   const handleEditClick = (product) => {
     setEditingProduct(product);
@@ -114,6 +120,7 @@ const SellerProductsList = ({ sellerId }) => {
         </span>
       ),
     },
+
     {
       title: 'Actions',
       key: 'actions',

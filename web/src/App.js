@@ -14,6 +14,7 @@ import Orders from './com/Orders/ViewOrders'
 
 import Sellersign from "./com/seller/sellerSignup";
 import SellerProductPage from './com/seller/SellerProductList';
+import SellProductPage from './com/seller/SellerProducts';
 
 
 
@@ -34,6 +35,8 @@ function App() {
 
         <Route path="/selpro" element={<SellerProductPage/>} />
         <Route path="/sellerS" element={<Sellersign />} />
+        <Route path="/addsellpro" element={<SellProductPage/>} />
+
       
 
         </Routes>

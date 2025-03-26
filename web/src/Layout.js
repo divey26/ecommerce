@@ -68,7 +68,7 @@ const sellerItems = [
     label: "Timer",
   },
   {
-    key: "addpro",
+    key: "selleraddpro",
     icon: <HomeOutlined />,
     label: "Add Products",
   },
@@ -126,6 +126,9 @@ const App = ({ children, userType }) => {
     }
     if (item.key === "addpro") {
       navigate("/add-product");
+    }
+    if (item.key === "selleraddpro") {
+      navigate("/selpro");
     }
     if (item.key === "addLay") {
       navigate("/add");

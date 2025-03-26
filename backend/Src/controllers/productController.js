@@ -3,9 +3,16 @@ const mongoose = require('mongoose');
 
 exports.createProduct = async (req, res) => {
   try {
-    const { productId, itemName, category, subcategory, price, rating, offerName, discount, description, imageURL, initialStocks, currentStocks } = req.body;
+    const { sellerId, productId, itemName, category, subcategory, price, rating, offerName, discount, description, imageURL, initialStocks } = req.body;
 
+    // Ensure required fields exist
+    if (!sellerId || !productId || !itemName || !category || !subcategory || !price || !rating || !offerName || !discount || !description || !imageURL || initialStocks === undefined) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Create a new product with correct fields
     const newProduct = new Product({
+      sellerId,  // Ensure sellerId is stored
       productId,
       itemName,
       category,
@@ -17,17 +24,18 @@ exports.createProduct = async (req, res) => {
       description,
       imageURL,
       initialStocks,
-      currentStocks: initialStocks,  // Ensure both values match at creation
-  });
-  
+      currentStocks: initialStocks,  // Ensure currentStocks is set properly
+    });
 
     await newProduct.save();
     res.status(201).json({ message: 'Product saved successfully!', product: newProduct });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error saving product data' });
   }
 };
+
 
 
 exports.getProducts = async (req, res) => {

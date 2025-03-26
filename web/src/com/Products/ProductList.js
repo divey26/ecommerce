@@ -115,6 +115,11 @@ const ProductsList = () => {
       ),
     },
     {
+      title: 'Seller ID',  // New column for seller ID
+      dataIndex: 'sellerId',
+      key: 'sellerId',
+    },
+    {
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (

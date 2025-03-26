@@ -4,7 +4,11 @@ import { Table, Spin, Alert, Collapse, Row, Col, Card, Tag, Button } from 'antd'
 import { ShoppingCartOutlined, DollarCircleOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Progress } from 'antd';
 import { jsPDF } from "jspdf";
+import "jspdf-autotable"; // Import the plugin
+import Layout from '../../Layout'
+
 const { Panel } = Collapse;
+
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -122,14 +126,13 @@ const OrderList = () => {
         <Collapse defaultActiveKey={[]} expandIconPosition="right">
           <Panel header={<span><ShoppingCartOutlined /> View Products</span>} key="4" style={{ background: 'linear-gradient(to right, #9d50bb, #6e48aa)', borderRadius: '10px' }}>
             {order.cartItems.map((item, index) => (
-              <Card key={index} style={{ marginBottom: '15px', background: '#fff' }} >
+              <Card key={item._id || index} style={{ marginBottom: '15px', background: '#fff' }} >
                 <Row>
                   <Col span={24}>
                     <strong>Product:</strong>
                     <br></br>
-                     {item.productDetails ? item.productDetails.itemName : 'Loading...'}
+                    {item.productDetails ? item.productDetails.itemName : 'Loading...'}
                   </Col>
-
                 </Row>
                 <Row>
                   <Col span={12}>
@@ -148,102 +151,94 @@ const OrderList = () => {
     {
       title: 'Actions',
       key: 'actions',
-      render: () => (
-        <Button type="primary" onClick={handleDownloadPdf}>Download as PDF</Button>
+      render: (order) => (
+        <Button type="primary" onClick={() => handleDownloadPdf(order)}>
+          Download as PDF
+        </Button>
       ),
-    },
+    }
+    
   ];
-
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = (order) => {
     const doc = new jsPDF();
     let y = 20; // Initial vertical position
-  
+    
     doc.setFontSize(16);
-    doc.text('All Orders', 20, y);
+    doc.text(`Order ID: ${order._id}`, 20, y);
     y += 10;
   
-    orders.forEach((order, index) => {
-      // Order ID and other details
-      doc.setFontSize(12);
-      doc.text(`Order ID: ${order._id}`, 20, y);
-      doc.text(`Total Amount: $${order.totalAmount}`, 20, y + 5);
-      doc.text(`Payment Status: ${order.paymentStatus}`, 20, y + 10);
-      doc.text(`Order Date: ${new Date(order.orderDate).toLocaleString()}`, 20, y + 15);
-      doc.text(
-        `Shipping Address: ${
-          order.shippingAddress
-            ? `${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.country}`
-            : 'N/A'
-        }`,
-        20,
-        y + 20
-      );
-      y += 30; // Move down before listing user details
+    // Order details
+    doc.setFontSize(12);
+    doc.text(`Total Amount: $${order.totalAmount}`, 20, y);
+    doc.text(`Payment Status: ${order.paymentStatus}`, 20, y + 5);
+    doc.text(`Order Date: ${new Date(order.orderDate).toLocaleString()}`, 20, y + 10);
+    doc.text(
+      `Shipping Address: ${
+        order.shippingAddress
+          ? `${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.country}`
+          : 'N/A'
+      }`,
+      20,
+      y + 15
+    );
+    y += 30;
+    
+    // User details
+    doc.setFontSize(14);
+    doc.text('User Details:', 20, y);
+    y += 5;
+    doc.setFontSize(12);
+    doc.text(`Name: ${order.userId ? `${order.userId.firstname} ${order.userId.lastname}` : 'N/A'}`, 20, y);
+    doc.text(`Email: ${order.userId ? order.userId.email : 'N/A'}`, 20, y + 5);
+    doc.text(`Phone: ${order.userId ? order.userId.phone : 'N/A'}`, 20, y + 10);
+    y += 20;
+    
+    // Products Table
+    const products = order.cartItems.map((item) => ({
+      productName: item.productDetails ? item.productDetails.itemName : 'Unknown Product',
+      price: `$${item.price}`,
+      quantity: item.quantity,
+      total: `$${item.total}`,
+    }));
   
-      // User details (Firstname, Lastname, Email, Phone)
-      doc.setFontSize(14);
-      doc.text('User Details:', 20, y);
-      y += 5;
-      doc.setFontSize(12);
-      doc.text(`Name: ${order.userId ? `${order.userId.firstname} ${order.userId.lastname}` : 'N/A'}`, 20, y);
-      doc.text(`Email: ${order.userId ? order.userId.email : 'N/A'}`, 20, y + 5);
-      doc.text(`Phone: ${order.userId ? order.userId.phone : 'N/A'}`, 20, y + 10);
-      y += 20;
-  
-      // Listing the products in the cart
-      doc.setFontSize(14);
-      doc.text('Products:', 20, y);
-      y += 5;
-      
-      order.cartItems.forEach((item, itemIndex) => {
-        const productName = item.productDetails ? item.productDetails.itemName : 'Unknown Product';
-        doc.setFontSize(12);
-        doc.text(`- Product: ${productName}`, 25, y);
-        doc.text(`  Price: $${item.price} | Quantity: ${item.quantity} | Total: $${item.total}`, 25, y + 5);
-        y += 10;
-  
-        // Avoid writing beyond page limit
-        if (y > 270 && index !== orders.length - 1) {
-          doc.addPage();
-          y = 20; // Reset y position for new page
-        }
-      });
-  
-      y += 10; // Space before next order
+    doc.autoTable({
+      startY: y,
+      head: [['Product', 'Price', 'Quantity', 'Total']],
+      body: products.map((product) => [
+        product.productName,
+        product.price,
+        product.quantity,
+        product.total,
+      ]),
+      margin: { top: 10, left: 20, right: 20 },
+      styles: {
+        fontSize: 12,
+        cellPadding: 4,
+      },
     });
   
-    doc.save('orders.pdf');
+    doc.save(`order_${order._id}.pdf`);
   };
   
-  if (loading) {
-    return (
-      <div style={{ textAlign: 'center', marginTop: '50px' }}>
-        <Spin size="large" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div style={{ margin: '20px' }}>
-        <Alert message={error} type="error" showIcon />
-      </div>
-    );
-  }
+  
 
   return (
-    <div className="order-list" style={{ padding: '30px', background: '#f4f4f4' }}>
-      <h2 style={{ textAlign: 'center', color: '#1890ff', fontSize: '32px', fontWeight: 'bold' }}>All Orders</h2>
-      <Table
-        dataSource={orders}
-        columns={columns}
-        rowKey="_id"
-        pagination={{ pageSize: 10 }}
-        style={{ marginTop: '20px', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
-        bordered
-        rowClassName="order-table-row"
-      />
+    <Layout>
+    <div>
+      {loading ? (
+        <Spin size="large" />
+      ) : error ? (
+        <Alert message="Error" description={error} type="error" />
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={orders}
+          rowKey="_id"
+          pagination={{ pageSize: 10 }}
+        />
+      )}
     </div>
+    </Layout>
   );
 };
 
