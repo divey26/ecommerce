@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Typography, Alert, Spin } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import imageSrc from "../Images/logo.png";
 
 const { Title, Text } = Typography;
@@ -17,22 +17,23 @@ const LoginForm = () => {
     setLoading(true);
     try {
       const response = await axios.post('http://localhost:5000/api/sellers/login', values);
-      const { sellerId, sellerObjectId, message } = response.data;
+      const { sellerId, sellerObjectId, token } = response.data;
 
-          // Store sellerId and ObjectId in local storage
-          localStorage.setItem('sellerId', sellerId);
-          localStorage.setItem('sellerObjectId', sellerObjectId);
+      // Store sellerId and ObjectId in local storage
+      localStorage.setItem('sellerId', sellerId);
+      localStorage.setItem('sellerObjectId', sellerObjectId);
+      localStorage.setItem('token', token);
 
-          if (sellerId.startsWith("SE")) {
-            localStorage.setItem('usertype', 'seller');
-          }
-            console.log("Seller ID:", localStorage.getItem('sellerId'));
-            console.log("User Type:", localStorage.getItem('usertype'));
-            console.log("Seller Object ID:", localStorage.getItem('sellerObjectId'));
+      if (sellerId.startsWith("SE")) {
+        localStorage.setItem('usertype', 'seller');
+      }
+      
+      console.log("Seller ID:", localStorage.getItem('sellerId'));
+      console.log("User Type:", localStorage.getItem('usertype'));
+      console.log("Seller Object ID:", localStorage.getItem('sellerObjectId'));
 
       setMessage(response.data.message);
       setError('');
-      localStorage.setItem('token', response.data.token);
       navigate('/dash');
     } catch (error) {
       setError(error.response?.data?.message || 'Something went wrong');
@@ -81,6 +82,12 @@ const LoginForm = () => {
             </Button>
           </Form.Item>
         </Form>
+
+        {/* Don't have an account? Sign Up */}
+        <div style={{ textAlign: 'center', marginTop: 15 }}>
+          <Text style={{ color: 'wheat' }}>Don't have an account? </Text>
+          <Link to="/sellers" style={{ color: "#F3C623", fontWeight: "bold" }}>Sign Up</Link>
+        </div>
       </div>
     </div>
   );

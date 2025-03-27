@@ -12,6 +12,7 @@ import HomeLayoutPage from './com/HomePage/HomeLayout'
 import Orders from './com/Orders/ViewOrders'
 
 
+import SellerProfile from "./com/seller/seller";
 import Sellersign from "./com/seller/sellerSignup";
 import SellerProductPage from './com/seller/SellerProductList';
 import SellProductPage from './com/seller/SellerProducts';
@@ -33,6 +34,7 @@ function App() {
         <Route path="/order" element={<Orders/>} />
 
 
+        <Route path="/seller" element={<SellerProfile/>} />
         <Route path="/selpro" element={<SellerProductPage/>} />
         <Route path="/sellerS" element={<Sellersign />} />
         <Route path="/addsellpro" element={<SellProductPage/>} />

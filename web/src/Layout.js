@@ -75,7 +75,7 @@ const sellerItems = [
 ];
 
 const headerIteam = [
-  { key: "1", text: "Sign up", icon: <UserSwitchOutlined /> },
+  { key: "1", text: "profile", icon: <UserSwitchOutlined /> },
   { key: "2", text: "Login", icon: <LogoutOutlined /> },
 ];
 
@@ -85,9 +85,7 @@ const App = ({ children, userType }) => {
 
   const handleHeaderClick = (key) => {
     if (key === "1") {
-      localStorage.setItem("authToken", null);
-      localStorage.setItem("loggedInUserType", null);
-      navigate("/sign");
+      navigate("/seller");
     } else if (key === "2") {
       localStorage.setItem("authToken", null);
       localStorage.setItem("loggedInUserType", null);
@@ -133,6 +131,7 @@ const App = ({ children, userType }) => {
     if (item.key === "addLay") {
       navigate("/add");
     }
+    
   };
 
   const {

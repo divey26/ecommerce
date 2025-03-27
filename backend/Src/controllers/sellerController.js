@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const Seller = require('../models/sellerModel'); // Assuming the Seller model is in the 'models' folder
+const jwt = require('jsonwebtoken'); // Assuming JWT is being used for authentication
+
 
 // Get the next seller ID
 const getSellerId = async (req, res) => {
@@ -55,8 +57,6 @@ const createSeller = async (req, res) => {
   }
 };
 
-
-
 // Login a seller
 const loginSeller = async (req, res) => {
   try {
@@ -81,13 +81,20 @@ const loginSeller = async (req, res) => {
       return res.status(401).json({ message: 'Invalid password. Please try again' });
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { sellerId: seller.sellerId, sellerObjectId: seller._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
     // If login is successful, return seller details (excluding password)
     res.status(200).json({ 
       message: 'Login successful', 
       sellerId: seller.sellerId, 
       shopName: seller.shopName,
-      sellerObjectId: seller._id // Include ObjectId
-
+      sellerObjectId: seller._id, // Include ObjectId
+      token // Send the token to the frontend
     });
 
   } catch (error) {
@@ -96,4 +103,27 @@ const loginSeller = async (req, res) => {
   }
 };
 
-module.exports = { getSellerId, createSeller, loginSeller };
+const getSellerProfile = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1]; // Get token from Authorization header
+    if (!token) {
+      return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token using secret
+    const sellerId = decoded.sellerId; // Assuming 'sellerId' is stored in token payload
+
+    // Find seller by ID
+    const seller = await Seller.findOne({ sellerId });
+    if (!seller) {
+      return res.status(404).json({ message: 'Seller not found' });
+    }
+
+    res.status(200).json({ seller });
+  } catch (error) {
+    console.error('Error fetching seller profile:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+module.exports = { getSellerId, createSeller, loginSeller, getSellerProfile };

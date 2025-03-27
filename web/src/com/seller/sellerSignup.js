@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, message, Card } from 'antd';
+import { Form, Input, Button, message, Alert, Spin, Typography, Row, Col } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import axios from 'axios';
+
+const { Title, Text } = Typography;
 
 const SellerSignup = () => {
   const [formData, setFormData] = useState({
@@ -14,20 +18,18 @@ const SellerSignup = () => {
   });
 
   const [error, setError] = useState('');
-  const [form] = Form.useForm();  // Initialize the form instance
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
 
-  // Fetch the seller ID when the component mounts
   useEffect(() => {
     const fetchSellerId = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/sellers/getSellerId'); // Add the appropriate route for getting the seller ID
+        const response = await fetch('http://localhost:5000/api/sellers/getSellerId');
         const data = await response.json();
         if (response.ok) {
-          setFormData((prevData) => ({
-            ...prevData,
-            sellerId: data.sellerId, // Set the sellerId to the fetched value
-          }));
-          form.setFieldsValue({ sellerId: data.sellerId }); // Set the form value directly
+          setFormData((prevData) => ({ ...prevData, sellerId: data.sellerId }));
+          form.setFieldsValue({ sellerId: data.sellerId });
         } else {
           setError(data.message);
           message.error(data.message);
@@ -39,136 +41,116 @@ const SellerSignup = () => {
     };
 
     fetchSellerId();
-  }, [form]); // Added 'form' as a dependency to avoid stale closures
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  }, [form]);
 
   const handleSubmit = async (values) => {
-    const { password, confirmPassword } = values;
-
-    // Password validation
-    if (password !== confirmPassword) {
+    if (values.password !== values.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
     setError('');
-
+    setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/sellers/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        message.success('Seller registered successfully!');
-        // Redirect or reset the form
-      } else {
-        setError(result.message);
-        message.error(result.message);
-      }
+      const response = await axios.post('http://localhost:5000/api/sellers/signup', values);
+      setMessage(response.data.message);
+      message.success('Seller registered successfully!');
     } catch (error) {
-      setError('Error during signup.');
-      message.error('Error during signup.');
+      setError(error.response?.data?.message || 'Something went wrong');
+      setMessage('');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
-      <Card
-        title="Seller Signup"
-        bordered={false}
-        style={{ width: 400, padding: '32px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
-      >
-        {error && <p style={{ color: 'red', marginBottom: '16px' }}>{error}</p>}
-        <Form
-          form={form} // Pass the form instance to the Form component
-          name="sellerSignup"
-          onFinish={handleSubmit}
-          initialValues={formData}
-          layout="vertical"
-        >
-          <Form.Item
-            label="Seller ID"
-            name="sellerId"
-            rules={[{ required: true, message: 'Please input your Seller ID!' }]}
-          >
-            <Input name="sellerId" value={formData.sellerId} disabled onChange={handleChange} />
-          </Form.Item>
+    <div style={styles.container}>
+      <div style={styles.form}>
+        <Title level={3} style={{ color: "#F3C623", textAlign: "center" }}>HALO</Title>
+        <Title level={4} style={{ textAlign: 'center', color: 'wheat' }}>Seller Signup</Title>
 
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[{ required: true, message: 'Please input your name!' }]}
-          >
-            <Input name="name" onChange={handleChange} />
-          </Form.Item>
+        {error && <Alert message={error} type="error" showIcon style={{ marginBottom: 10 }} />}
+        {message && <Alert message={message} type="success" showIcon style={{ marginBottom: 10 }} />}
 
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'Please input a valid email!' }]}
-          >
-            <Input name="email" onChange={handleChange} />
-          </Form.Item>
+        <Form form={form} name="sellerSignup" onFinish={handleSubmit} layout="vertical">
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label={<Text style={{ color: 'wheat' }}>Seller ID</Text>} name="sellerId">
+                <Input style={{color:"White",backgroundColor:"grey"}} disabled />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label={<Text style={{ color: 'wheat' }}>Name</Text>} name="name" rules={[{ required: true, message: 'Please input your name!' }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
 
-          <Form.Item
-            label="Phone"
-            name="phone"
-            rules={[{ required: true, message: 'Please input your phone number!' }]}
-          >
-            <Input name="phone" onChange={handleChange} />
-          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label={<Text style={{ color: 'wheat' }}>Email</Text>} name="email" rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'Please input a valid email!' }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label={<Text style={{ color: 'wheat' }}>Phone</Text>} name="phone" rules={[{ required: true, message: 'Please input your phone number!' }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
 
-          <Form.Item
-            label="Address"
-            name="address"
-            rules={[{ required: true, message: 'Please input your address!' }]}
-          >
-            <Input name="address" onChange={handleChange} />
-          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label={<Text style={{ color: 'wheat' }}>Address</Text>} name="address" rules={[{ required: true, message: 'Please input your address!' }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label={<Text style={{ color: 'wheat' }}>Shop Name</Text>} name="shopName" rules={[{ required: true, message: 'Please input your shop name!' }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
 
-          <Form.Item
-            label="Shop Name"
-            name="shopName"
-            rules={[{ required: true, message: 'Please input your shop name!' }]}
-          >
-            <Input name="shopName" onChange={handleChange} />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-            hasFeedback
-          >
-            <Input.Password name="password" onChange={handleChange} />
-          </Form.Item>
-
-          <Form.Item
-            label="Confirm Password"
-            name="confirmPassword"
-            rules={[{ required: true, message: 'Please confirm your password!' }]}
-            hasFeedback
-          >
-            <Input.Password name="confirmPassword" onChange={handleChange} />
-          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label={<Text style={{ color: 'wheat' }}>Password</Text>} name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Input.Password iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label={<Text style={{ color: 'wheat' }}>Confirm Password</Text>} name="confirmPassword" rules={[{ required: true, message: 'Please confirm your password!' }]}>
+                <Input.Password iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
+              </Form.Item>
+            </Col>
+          </Row>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Sign Up
+            <Button type="primary" htmlType="submit" block disabled={loading} style={{ backgroundColor: "#F3C623", color: "blue", fontSize: "20px" }}>
+              {loading ? <Spin /> : 'Sign Up'}
             </Button>
           </Form.Item>
         </Form>
-      </Card>
+      </div>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    backgroundColor: 'rgb(76, 149, 163)',
+  },
+  form: {
+    maxWidth: '500px',
+    width: '100%',
+    padding: '40px',
+    backgroundColor: '#004f9a',
+    borderRadius: '8px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+  },
 };
 
 export default SellerSignup;
