@@ -16,6 +16,7 @@ import All from "./common/Products/AllProducts";
 import CartView from "./common/cart/CartView";
 import Summa from "./common/Home/summa";
 import Checkout from "./common/Payment/Checkout";
+import Feed from "./common/Feedback/feedback";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
               <Route path="/all-pro/:categoryId" element={<All />} />
               <Route path="/cart" element={<CartView />} />
               <Route path="/summa" element={<Summa />} />
+              <Route path="/feed" element={<Feed />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/product/:productId" element={<SingleProduct />} />
             

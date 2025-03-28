@@ -72,6 +72,16 @@ const sellerItems = [
     icon: <HomeOutlined />,
     label: "Add Products",
   },
+  {
+    key: "addLay",
+    icon: <HomeOutlined />,
+    label: "Home Layouts",
+  },
+  {
+    key: "selorder",
+    icon: <HomeOutlined />,
+    label: "All Orders",
+  },
 ];
 
 const headerIteam = [
@@ -126,10 +136,13 @@ const App = ({ children, userType }) => {
       navigate("/add-product");
     }
     if (item.key === "selleraddpro") {
-      navigate("/selpro");
+      navigate("/addsellpro");
     }
     if (item.key === "addLay") {
       navigate("/add");
+    }
+    if (item.key === "selorder") {
+      navigate("/order");
     }
     
   };

@@ -84,6 +84,7 @@ const HomePage = () => {
   const closeSlider = () => setVisible(false);
 
 
+
   return (
     <LayoutNew>
       <Layout>

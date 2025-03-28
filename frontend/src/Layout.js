@@ -53,6 +53,10 @@ const App = ({ children, userType }) => {
   const handleNavigateToCart = () => {
     navigate("/cart");
   };
+  
+  const handleNavigateToFeed = () => {
+    navigate("/feed");
+  };
 
   const handleLanguageChange = (value) => {
     setLanguage(value);
@@ -233,7 +237,7 @@ const App = ({ children, userType }) => {
           <div>
             {t('We’d love to hear what you think!')}
             <br /><br />
-            <Button style={{ color: "#004f9a", borderColor: "#004f9a", borderRadius: "50px" }}>
+            <Button style={{ color: "#004f9a", borderColor: "#004f9a", borderRadius: "50px" }} onClick={handleNavigateToFeed}>
               {t('Give feedback')}
             </Button>
           </div>
