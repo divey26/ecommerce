@@ -117,3 +117,24 @@ exports.updateUserProfile = async (req, res) => {
     res.status(500).json({ error: 'Error updating profile' });
   }
 };
+
+
+// Remove User
+exports.removeUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Check if the user exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete the user from the database
+    await User.findByIdAndDelete(userId);
+
+    res.json({ message: 'User removed successfully!' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error removing user' });
+  }
+};

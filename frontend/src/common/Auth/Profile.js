@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Avatar, Descriptions, Button, Modal, Form, Input, message } from "antd";
-import { UserOutlined, EditOutlined } from "@ant-design/icons";
+import { UserOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import Layout from "../../Layout";
+import { useNavigate } from "react-router-dom";  // Import useNavigate
 
 const Profile = () => {
   const [profile, setProfile] = useState({
@@ -13,8 +14,10 @@ const Profile = () => {
     email: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);  // State for delete confirmation modal
   const [form] = Form.useForm();
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();  // Initialize useNavigate
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -44,6 +47,28 @@ const Profile = () => {
     }
   };
 
+  const handleRemoveUser = async () => {
+    try {
+      const res = await axios.delete(`http://localhost:5000/api/user/remove/${profile._id}`, {
+        headers: { Authorization: token },
+      });
+      message.success(res.data.message);
+
+      // Logout the user by removing tokens from localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userAddress');
+      localStorage.removeItem('userPhone');
+
+      // Navigate to the login page after logout
+      navigate("/");
+    } catch (error) {
+      message.error("Error removing user");
+    }
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <Layout>
       <Card style={{ maxWidth: 500, margin: "auto", marginTop: 50, textAlign: "center" }}>
@@ -57,6 +82,14 @@ const Profile = () => {
         </Descriptions>
         <Button type="primary" icon={<EditOutlined />} onClick={() => setIsModalOpen(true)} style={{ marginTop: 20 }}>
           Edit Profile
+        </Button>
+        <Button
+          type="danger"
+          icon={<DeleteOutlined />}
+          onClick={() => setIsDeleteModalOpen(true)}
+          style={{ marginTop: 10, marginLeft: 10 }}
+        >
+          Remove User
         </Button>
       </Card>
 
@@ -88,10 +121,7 @@ const Profile = () => {
           <Form.Item
             label="Address"
             name="address"
-            rules={[
-              { required: true, message: "Address is required" },
-             
-            ]}
+            rules={[{ required: true, message: "Address is required" }]}
           >
             <Input />
           </Form.Item>
@@ -113,6 +143,18 @@ const Profile = () => {
             </Button>
           </Form.Item>
         </Form>
+      </Modal>
+
+      {/* Modal for Confirming User Deletion */}
+      <Modal
+        title="Are you sure?"
+        open={isDeleteModalOpen}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        onOk={handleRemoveUser}
+        okText="Yes, remove"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to remove your account? This action cannot be undone.</p>
       </Modal>
     </Layout>
   );
