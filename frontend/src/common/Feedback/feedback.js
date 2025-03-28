@@ -171,6 +171,7 @@ const OrderList = () => {
     }
     
   ];
+/*
   const handleDownloadPdf = (order) => {
     const doc = new jsPDF();
     let y = 20; // Initial vertical position
@@ -212,7 +213,8 @@ const OrderList = () => {
       quantity: item.quantity,
       total: `$${item.total}`,
     }));
-  
+    console.log(doc); // Check if the autoTable method exists
+
     doc.autoTable({
       startY: y,
       head: [['Product', 'Price', 'Quantity', 'Total']],
@@ -231,6 +233,19 @@ const OrderList = () => {
   
     doc.save(`order_${order._id}.pdf`);
   };
+   */
+  const handleDownloadPdf = () => {
+    const doc = new jsPDF();
+    doc.autoTable({
+      head: [['Name', 'Age', 'Country']],
+      body: [
+        ['John', 30, 'USA'],
+        ['Jane', 25, 'Canada'],
+      ],
+    });
+    doc.save('table.pdf');
+  };
+  
   
   
 
