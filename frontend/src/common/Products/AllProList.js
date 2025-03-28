@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
 import { useCart } from '../cart/CartContext'; // Import CartContext
+import LayoutNew from '../../Layout';
 
 const { Title, Text } = Typography;
 
@@ -76,6 +77,7 @@ const ProductsList = () => {
   }
 
   return (
+    <LayoutNew>
     <div style={{ padding: '20px' }}>
       <Title level={2}>{categoryName || 'All Products'}</Title> {/* Display category name or 'Products' */}
       <Row gutter={[16, 16]} justify="start" align="top">
@@ -189,6 +191,8 @@ const ProductsList = () => {
         ))}
       </Row>
     </div>
+    </LayoutNew>
+
   );
 };
 
