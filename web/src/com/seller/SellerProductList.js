@@ -140,7 +140,7 @@ const SellerProductsList = () => {
       title: 'Initial Stocks',
       dataIndex: 'initialStocks',
       key: 'initialStocks',
-      render: (text) => `$${text}`,
+      render: (text) => `${text}`,
     },
     {
       title: 'Current Stocks',
