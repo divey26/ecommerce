@@ -51,18 +51,20 @@ const HomePage = () => {
   ];
 
   const handleHeaderClick = (key) => {
-    if (key === "6") {
-      navigate("/sign");
-    }
-    else if (key === '5') {
-      logout();  // Clear localStorage and update context state
-      navigate("/");
+    if (key === "3") {
+      navigate("/all");
     }
     else if (key === "2") {
       navigate("/profile");
     }
     else if (key === "4") {
       navigate("/try");
+    }
+    else if (key === '5') {// Clear localStorage and update context state
+      navigate("/");
+    }
+    else if (key === "6") {
+      navigate("/sign");
     }
   };
 
