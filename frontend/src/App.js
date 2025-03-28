@@ -12,7 +12,7 @@ import HomePage from './common/Home/HomePage';
 import Login from "./common/Auth/Login";
 import Sign from "./common/Auth/Sign";
 import Banner from "./common/Home/banner";
-import All from "./common/Products/AllProducts";
+import All from "./common/Products/AllProList";
 import CartView from "./common/cart/CartView";
 import Summa from "./common/Home/summa";
 import Checkout from "./common/Payment/Checkout";
@@ -36,6 +36,7 @@ function App() {
               <Route path="/cart" element={<CartView />} />
               <Route path="/summa" element={<Summa />} />
               <Route path="/feed" element={<Feed />} />
+              <Route path="/all" element={<All />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/product/:productId" element={<SingleProduct />} />
             

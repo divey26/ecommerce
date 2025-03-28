@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Typography, message, Modal, Input } from 'antd';
 import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const { Title } = Typography;
 
@@ -48,6 +50,31 @@ const SellerProductsList = () => {
     setEditingProduct(product);
     setIsEditing(true);
   };
+
+    // Export to PDF
+    const exportToPDF = () => {
+      const doc = new jsPDF();
+      doc.text('Products List', 20, 10);
+  
+      const tableColumn = ['Product ID', 'Item Name', 'Price', 'Discount', 'Initial Stocks', 'Current Stocks', 'Seller ID'];
+      const tableRows = products.map(({ productId, itemName, price, discount, initialStocks, currentStocks, sellerId }) => [
+        productId,
+        itemName,
+        `$${price}`,
+        `${discount}%`,
+        initialStocks,
+        currentStocks,
+        sellerId,
+      ]);
+  
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 20,
+      });
+  
+      doc.save('products_list.pdf');
+    };
 
   const handleSaveEdit = async () => {
     try {
@@ -140,6 +167,10 @@ const SellerProductsList = () => {
   return (
     <div style={{ padding: '20px' }}>
       <Title level={2}>Products List</Title>
+
+            <Button type="primary" onClick={exportToPDF} style={{ marginBottom: 10 }}>
+              Export to PDF
+            </Button>
       <Table columns={columns} dataSource={products} rowKey="productId" loading={loading} pagination={{ pageSize: 10 }} />
 
       <Modal title="Edit Product" open={isEditing} onCancel={() => setIsEditing(false)} onOk={handleSaveEdit}>

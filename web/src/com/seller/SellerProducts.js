@@ -329,8 +329,8 @@ const calculateDynamicDiscount = (values) => {
                       setIsDiscountHidden(e.target.value === 'hide'); // Hide discount input if dynamic
                     }}>
                       <Radio value="fixed">Fixed</Radio>
-                      <Radio value="hide">Dynamic</Radio>
-                    </Radio.Group>
+                      {/*<Radio value="hide">Dynamic</Radio>*/}
+                      </Radio.Group>
                   </Form.Item>
                 </Col>
               </Row>

@@ -5,7 +5,7 @@ import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStri
 import { useCart } from '../cart/CartContext';
 import LayoutNew from '../../Layout';
 import imageSrc from '../../Images/logo.png';
-import StripImageSrc from '../../Images/StripeLogo.jpeg';
+//import StripImageSrc from '../../Images/StripeLogo.jpeg';
 import { useNavigate } from 'react-router-dom';
 
 const stripePromise = loadStripe('pk_test_51QaAO003ldnatOZanoghUvQrw76T9rnCg0YxqQaPffhxmc2LCX5rA2iKSu1p74ApieFr76sZBeDg7dyH8rMBzIOu00XLfTyJPL');
@@ -178,18 +178,18 @@ await Promise.all(
         <form onSubmit={handleSubmit} style={formStyles}>
           <div style={{ width: '400px', height: '500px', textAlign: 'left' }}>
             <div style={{ marginBottom: '30px' }}>
-              <img
+            <img
                 src={imageSrc}
                 alt="Logo"
                 style={{ marginLeft: '15px', marginBottom: '3px', width: '100px', height: '100px' }}
               />
-              <span>
+          {/*      <span>
                 <img
                   src={StripImageSrc}
                   alt="Logo"
                   style={{ marginLeft: '100px', width: '180px', height: '100px' }}
                 />
-              </span>
+              </span>*/}
             </div>
 
             <div style={formGroupStyles}>

@@ -70,7 +70,7 @@ const sellerItems = [
   {
     key: "selleraddpro",
     icon: <HomeOutlined />,
-    label: "Add Products",
+    label: "Products",
   },
   {
     key: "addLay",
@@ -81,6 +81,11 @@ const sellerItems = [
     key: "selorder",
     icon: <HomeOutlined />,
     label: "All Orders",
+  },
+  {
+    key: "category",
+    icon: <HomeOutlined />,
+    label: "Category",
   },
 ];
 
@@ -124,7 +129,10 @@ const App = ({ children, userType }) => {
       navigate("/");
     }
     if (item.key === "categories") {
-      navigate("category");
+      navigate("/category");
+    }
+    if (item.key === "category") {
+      navigate("/category");
     }
     if (item.key === "shorts") {
       navigate("/shorts");

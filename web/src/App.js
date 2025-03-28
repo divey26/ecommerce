@@ -11,6 +11,8 @@ import Timer from './com/Timer/Timer'
 import HomeLayoutPage from './com/HomePage/HomeLayout'
 import Orders from './com/Orders/ViewOrders'
 
+//simport List from '../src/com/ProductList'
+
 
 import SellerProfile from "./com/seller/seller";
 import Sellersign from "./com/seller/sellerSignup";
@@ -33,6 +35,7 @@ function App() {
         <Route path="/add" element={<HomeLayoutPage/>} />
         <Route path="/order" element={<Orders/>} />
 
+{/*        <Route path="/list" element={<List/>} />   */}
 
         <Route path="/seller" element={<SellerProfile/>} />
         <Route path="/selpro" element={<SellerProductPage/>} />

@@ -59,7 +59,7 @@ const HomePage = () => {
       navigate("/");
     }
     else if (key === "3") {
-      navigate("/all-pro");
+      navigate("/all");
     }
   };
 
