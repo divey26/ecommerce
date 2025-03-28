@@ -131,7 +131,7 @@ const SellerProductsList = () => {
       render: (text) => `$${text}`,
     },
     {
-      title: 'Dis',
+      title: 'Discount',
       dataIndex: 'discount',
       key: 'discount',
       render: (text) => `${text}`,
