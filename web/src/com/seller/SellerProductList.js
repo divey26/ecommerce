@@ -12,6 +12,11 @@ const SellerProductsList = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [hideDiscount, setHideDiscount] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const Products = products.filter(product =>
+    product.itemName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   // Retrieve the seller ID from localStorage
   const sellerOId = localStorage.getItem('sellerObjectId');
@@ -166,12 +171,21 @@ const SellerProductsList = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <Title level={2}>Products List</Title>
+      <div style={{ display: 'flex', justifyContent: 'space-between',paddingLeft:"40%", alignItems: 'center' }}><Title level={2}>Products List</Title> 
+      <Input
+        placeholder="Search by Item Name"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: '20px', width: '300px' }}
+      />
+      <Button type="primary" onClick={exportToPDF} style={{ marginBottom: 20 }}>
+      Generate Report
+      </Button>
+   {/* Search Bar */}
+      
 
-            <Button type="primary" onClick={exportToPDF} style={{ marginBottom: 10 }}>
-              Export to PDF
-            </Button>
-      <Table columns={columns} dataSource={products} rowKey="productId" loading={loading} pagination={{ pageSize: 10 }} />
+      </div>
+      <Table columns={columns} dataSource={Products} rowKey="productId" loading={loading} pagination={{ pageSize: 10 }} />
 
       <Modal title="Edit Product" open={isEditing} onCancel={() => setIsEditing(false)} onOk={handleSaveEdit}>
         <div>
@@ -187,6 +201,7 @@ const SellerProductsList = () => {
           <div style={{ marginBottom: 10 }}>
             <label>Price</label>
             <Input
+              type='number'
               value={editingProduct?.price}
               onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
               placeholder="Price"
@@ -226,6 +241,7 @@ const SellerProductsList = () => {
           <div style={{ marginBottom: 10 }}>
             <label>Current Stocks</label>
             <Input
+              type='number'
               value={editingProduct?.currentStocks}
               onChange={handleCurrentStockChange}
               placeholder="Current Stocks"

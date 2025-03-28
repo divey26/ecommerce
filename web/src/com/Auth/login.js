@@ -27,6 +27,10 @@ const LoginForm = () => {
       if (sellerId.startsWith("SE")) {
         localStorage.setItem('usertype', 'seller');
       }
+      else{
+        localStorage.setItem('usertype', 'admin');
+
+      }
       
       console.log("Seller ID:", localStorage.getItem('sellerId'));
       console.log("User Type:", localStorage.getItem('usertype'));

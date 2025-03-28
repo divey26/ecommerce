@@ -162,8 +162,6 @@ const App = ({ children, userType }) => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-        collapsible
-        collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
         width={200}
         style={{
@@ -175,7 +173,7 @@ const App = ({ children, userType }) => {
         }}
       >
         <div style={{ textAlign: "center", padding: "20px 0" }}>
-          <img src={imageSrc} alt="Logo" style={{ width: "30%" }} />
+          <img src={imageSrc} alt="Logo" style={{ width: "50%" }} />
         </div>
         <Menu
           theme="light"
@@ -194,7 +192,7 @@ const App = ({ children, userType }) => {
             left: collapsed ? 80 : 200,
             width: `calc(100% - ${collapsed ? 80 : 200}px)`,
             height: "64px",
-            backgroundColor: "rgb(14, 193, 243)",
+            backgroundColor: "rgb(224, 245, 249)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",

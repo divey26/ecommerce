@@ -309,9 +309,11 @@ const calculateDynamicDiscount = (values) => {
                   <Form.Item
                     name="rating"
                     label="Rating"
-                    rules={[{ required: true, message: 'Please input the rating!' }]}
+                    rules={[{ required: true, message: 'Please input the rating!' },
+                      { pattern: /^(10|\d)$/, message: 'Rating must be a number between 0 and 10' },
+                    ]}
                   >
-                    <Input type="number" min={0} max={5} />
+                    <Input type="number" min={0} max={10} />
                   </Form.Item>
                 </Col>
               </Row>

@@ -12,11 +12,12 @@ import HomePage from './common/Home/HomePage';
 import Login from "./common/Auth/Login";
 import Sign from "./common/Auth/Sign";
 import Banner from "./common/Home/banner";
-import All from "./common/Products/AllProList";
+import All from "./common/Products/AllProducts";
 import CartView from "./common/cart/CartView";
 import Summa from "./common/Home/summa";
 import Checkout from "./common/Payment/Checkout";
 import Feed from "./common/Feedback/feedback";
+import Profile from "./common/Auth/Profile";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
               <Route path="/summa" element={<Summa />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/all" element={<All />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/product/:productId" element={<SingleProduct />} />
             

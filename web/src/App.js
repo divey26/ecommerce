@@ -39,7 +39,7 @@ function App() {
 
         <Route path="/seller" element={<SellerProfile/>} />
         <Route path="/selpro" element={<SellerProductPage/>} />
-        <Route path="/sellerS" element={<Sellersign />} />
+        <Route path="/sign" element={<Sellersign />} />
         <Route path="/addsellpro" element={<SellProductPage/>} />
 
       

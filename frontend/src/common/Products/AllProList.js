@@ -32,19 +32,14 @@ const ProductsList = () => {
     fetchCategories();
   }, []);
 
-  // Fetch products on category change
+  // Fetch products without filtering by categoryId
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/products');
         const data = await response.json();
 
-        // Filter products based on categoryId
-        const filteredProducts = data.products.filter(product => {
-          return product.category === categoryId;
-        });
-
-        setProducts(filteredProducts);
+        setProducts(data.products); // Set all products without filtering by categoryId
         setLoading(false);
       } catch (error) {
         message.error('Error fetching products');
@@ -77,12 +72,12 @@ const ProductsList = () => {
   if (loading) return <Text>Loading products...</Text>;
 
   if (products.length === 0) {
-    return <Text>No products available for this category.</Text>;
+    return <Text>No products available.</Text>;
   }
 
   return (
     <div style={{ padding: '20px' }}>
-      <Title level={2}>{categoryName || 'Products'}</Title> {/* Display category name or 'Products' */}
+      <Title level={2}>{categoryName || 'All Products'}</Title> {/* Display category name or 'Products' */}
       <Row gutter={[16, 16]} justify="start" align="top">
         {products.map((product) => (
           <Col xs={24} sm={12} md={8} lg={4} xl={4} key={product.productId}>

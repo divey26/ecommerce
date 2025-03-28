@@ -43,7 +43,7 @@ const HomePage = () => {
 
   const headerItem = [
     { key: "1", text: "Category", icon: <BarsOutlined /> },
-    { key: "2", text: "Category" },
+    { key: "2", text: "Profile" },
     { key: "3", text: "All Products" },
     { key: "4", text: "Help & Support" },
     { key: "5", text: "log out" },
@@ -58,8 +58,8 @@ const HomePage = () => {
       logout();  // Clear localStorage and update context state
       navigate("/");
     }
-    else if (key === "3") {
-      navigate("/all");
+    else if (key === "2") {
+      navigate("/profile");
     }
   };
 
