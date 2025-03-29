@@ -42,6 +42,8 @@ const Profile = () => {
       setProfile(values);
       message.success(res.data.message);
       setIsModalOpen(false);
+      window.location.reload(); // Refresh the page after updating profile
+
     } catch (error) {
       message.error("Error updating profile");
     }

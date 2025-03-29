@@ -91,6 +91,10 @@ const Login = () => {
         <Form.Item>
           <Button type="primary" htmlType="submit" style={{ width: '100%', backgroundColor: "#F3C623", color: "blue", fontSize: "20px" }}>Login</Button>
         </Form.Item>
+
+        <div style={{ textAlign: "center", marginTop: "10px", fontSize: "16px", color: "white" }}>
+          Don't have an account? <a href="/sign" style={{ color: "#F3C623", fontWeight: "bold" }}>Sign up</a>
+        </div>
       </Form>
     </div>
   );

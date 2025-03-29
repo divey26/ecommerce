@@ -40,7 +40,7 @@ const OrderList = () => {
         }));
   
         // Filter orders based on the logged-in userId
-        const filteredOrders = ordersWithDetails.filter(order => order.userId._id === loggedInUserId);
+        const filteredOrders = ordersWithDetails.filter(order => order.userId && order.userId._id === loggedInUserId);
         
         setOrders(filteredOrders); // Set filtered orders in the state
       } catch (err) {
