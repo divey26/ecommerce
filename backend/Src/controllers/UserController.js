@@ -138,3 +138,16 @@ exports.removeUser = async (req, res) => {
     res.status(500).json({ error: 'Error removing user' });
   }
 };
+
+// View all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find(); // Fetch all users from the database
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'No users found' });
+    }
+    res.json(users); // Return all users
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+};

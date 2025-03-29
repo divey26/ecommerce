@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Login from './com/Auth/login'
+import AllCustomers from './com/Auth/AllCustomers'
 
 import CategoryPage from './com/Category/Category';
 import ProductPage from './com/Products';
@@ -34,6 +35,8 @@ function App() {
         <Route path="/add-product" element={<ProductPage/>} />
         <Route path="/add" element={<HomeLayoutPage/>} />
         <Route path="/order" element={<Orders/>} />
+
+        <Route path="/allcus" element={<AllCustomers/>} />
 
 {/*        <Route path="/list" element={<List/>} />   */}
 

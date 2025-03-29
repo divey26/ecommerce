@@ -87,6 +87,11 @@ const sellerItems = [
     icon: <HomeOutlined />,
     label: "Category",
   },
+  {
+    key: "allcus",
+    icon: <HomeOutlined />,
+    label: "All Customers",
+  },
 ];
 
 const headerIteam = [
@@ -151,6 +156,9 @@ const App = ({ children, userType }) => {
     }
     if (item.key === "selorder") {
       navigate("/order");
+    }
+    if (item.key === "allcus") {
+      navigate("/allcus");
     }
     
   };
