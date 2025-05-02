@@ -45,7 +45,7 @@ const HomePage = () => {
     { key: "1", text: "Category", icon: <BarsOutlined /> },
     { key: "2", text: "Profile" },
     { key: "3", text: "All Products" },
-    { key: "4", text: "Try-on" },
+ //   { key: "4", text: "Try-on" },
     { key: "5", text: "log out" },
     { key: "6", text: "Sign up", icon: <UserSwitchOutlined /> },
   ];
