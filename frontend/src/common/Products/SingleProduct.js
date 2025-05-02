@@ -109,6 +109,13 @@ const SingleProduct = () => {
                 <Text>{product.description}</Text>
                 <div style={{ marginTop: '20px' }}>
 
+                <Title level={4}>
+                  <span style={{ color: "green" }}>{product.currentStocks}</span>
+                  {" of "}
+                  <span style={{ color: "#004f9a" }}>{product.initialStocks}</span>
+                  {" left"}
+                </Title>
+
                {authenticated ? (
                   <Button
                     style={{
